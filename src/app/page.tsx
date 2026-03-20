@@ -48,7 +48,7 @@ declare global {
 export const translations = {
   uz: {
     market: "Market",
-    gifts: "Sovg'alarim",
+    gifts: "Sovg'alar",
     leaderboard: "Leaderboard",
     profile: "Profil",
     language: "Til",
@@ -71,8 +71,8 @@ export const translations = {
     leaderboardTitle: "Eng yaxshi hamkorlar",
     communityGrowing: "Hamjamiyat o'smoqda",
     leaderboardDesc: "Leaderboard hozirda tasdiqlangan mutaxassislar bilan to'ldirilmoqda.",
-    myGiftsTitle: "Sovg'alar qutisi bo'sh",
-    myGiftsDesc: "Aktiv bo'ling va Tez Nft hamkorlaridan sovg'alarni qo'lga kiriting.",
+    myGiftsTitle: "Telegram sovg'alari bormi?",
+    myGiftsDesc: "Ularni bizning bot orqali qo'shishingiz mumkin.",
     listingEntry: "Marketga kirish",
     listingDesc: "Saytingiz yoki raqamli vositangizni Tez Nft tarmog'ida soting.",
     assetName: "Asset nomi",
@@ -90,11 +90,26 @@ export const translations = {
     selectWallet: "Hamyon usulini tanlang",
     walletDesc: "Bu standart sifatida ishlatiladi",
     save: "Saqlash",
-    anonymous: "Anonim"
+    anonymous: "Anonim",
+    offers: "Takliflar",
+    myActivity: "Faoliyatim",
+    unlisted: "Ro'yxatdan o'tmagan",
+    listed: "Ro'yxatdagi",
+    add: "Qo'shish",
+    withdraw: "Yechib olish",
+    sell: "Sotish",
+    send: "Yuborish",
+    quickFind: "Tezkor qidiruv",
+    collection: "Kolleksiya",
+    model: "Model",
+    back: "Orqaga",
+    anyTelegramGifts: "Telegram sovg'alari bormi?",
+    addGiftsViaBot: "Ularni bizning bot orqali qo'shishingiz mumkin",
+    howToAddGifts: "Sovg'alarni qanday qo'shaman?",
   },
   ru: {
     market: "Маркет",
-    gifts: "Мои подарки",
+    gifts: "Подарки",
     leaderboard: "Лидерборд",
     profile: "Профиль",
     language: "Язык",
@@ -117,8 +132,8 @@ export const translations = {
     leaderboardTitle: "Лучшие партнеры",
     communityGrowing: "Сообщество растет",
     leaderboardDesc: "Каталог в настоящее время наполняется проверенными специалистами.",
-    myGiftsTitle: "Коробка подарков пуста",
-    myGiftsDesc: "Будьте активны и получайте подарки от партнеров Tez Nft.",
+    myGiftsTitle: "Есть подарки из Telegram?",
+    myGiftsDesc: "Вы можете добавить их через нашего бота.",
     listingEntry: "Вход в маркет",
     listingDesc: "Продайте свой сайт или цифровой инструмент в сети Tez Nft.",
     assetName: "Название актива",
@@ -136,11 +151,26 @@ export const translations = {
     selectWallet: "Выберите способ оплаты",
     walletDesc: "Это будет использоваться по умолчанию",
     save: "Сохранить",
-    anonymous: "Аноним"
+    anonymous: "Аноним",
+    offers: "Предложения",
+    myActivity: "Моя активность",
+    unlisted: "Не в списке",
+    listed: "В списке",
+    add: "Добавить",
+    withdraw: "Вывести",
+    sell: "Продать",
+    send: "Отправить",
+    quickFind: "Быстрый поиск",
+    collection: "Коллекция",
+    model: "Модель",
+    back: "Назад",
+    anyTelegramGifts: "Есть подарки из Telegram?",
+    addGiftsViaBot: "Вы можете добавить их через нашего бота",
+    howToAddGifts: "Как добавить подарки?",
   },
   en: {
     market: "Market",
-    gifts: "My gifts",
+    gifts: "Gifts",
     leaderboard: "Leaderboard",
     profile: "Profile",
     language: "Language",
@@ -163,8 +193,8 @@ export const translations = {
     leaderboardTitle: "Top Partners",
     communityGrowing: "Community growing",
     leaderboardDesc: "The leaderboard is currently being populated with vetted talent.",
-    myGiftsTitle: "Gift box is empty",
-    myGiftsDesc: "Be active and receive gifts from Tez Nft partners.",
+    myGiftsTitle: "Any Telegram gifts?",
+    myGiftsDesc: "You can add them through our bot.",
     listingEntry: "Marketplace entry",
     listingDesc: "Sell your website or digital tool to the Tez Nft network.",
     assetName: "Asset name",
@@ -182,7 +212,22 @@ export const translations = {
     selectWallet: "Select wallet method",
     walletDesc: "This will be used as default",
     save: "Save",
-    anonymous: "Anonymous"
+    anonymous: "Anonymous",
+    offers: "Offers",
+    myActivity: "My activity",
+    unlisted: "Unlisted",
+    listed: "Listed",
+    add: "Add",
+    withdraw: "Withdraw",
+    sell: "Sell",
+    send: "Send",
+    quickFind: "Quick find",
+    collection: "Collection",
+    model: "Model",
+    back: "Back",
+    anyTelegramGifts: "Any Telegram gifts?",
+    addGiftsViaBot: "You can add them through our bot",
+    howToAddGifts: "How do I add gifts?",
   }
 };
 
@@ -245,7 +290,7 @@ export default function Home() {
               Tez Nft
             </h1>
             <p className="text-[10px] text-primary font-black tracking-[0.3em]">
-              {t.market}
+              {t.market.toUpperCase()}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -386,10 +431,10 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
         </div>
         
         <h2 className="text-2xl font-bold text-white tracking-tight">
-          {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}`.trim() : t.anonymous}
+          {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}`.trim() : t.name}
         </h2>
         <p className="text-white/40 text-xs font-bold tracking-widest mt-1">
-          {tgUser?.username ? `@${tgUser.username}` : t.anonymous.toLowerCase()}
+          {tgUser?.username ? `@${tgUser.username}` : t.anonymous}
         </p>
       </div>
 
