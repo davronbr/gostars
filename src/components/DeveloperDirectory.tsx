@@ -1,34 +1,51 @@
 "use client";
 
-import { Users, Star, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Star, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import dynamic from "next/dynamic";
 
-// Dynamically import Lottie to avoid hydration issues
+// Lottie kutubxonasini dinamik yuklash (SSR xatolarini oldini olish uchun)
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const DEVELOPERS: any[] = [];
 
 export function DeveloperDirectory() {
+  const [animationData, setAnimationData] = useState<any>(null);
+
+  // Animatsiya faylini yuklab olish
+  useEffect(() => {
+    fetch("https://lottie.host/8a420129-88f0-4890-905f-f323d6248971/sbbuM0ZAkG.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data))
+      .catch((err) => console.error("Lottie load error:", err));
+  }, []);
+
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="mb-8 mt-4 text-center sm:text-left">
         <h2 className="text-3xl font-bold mb-2 uppercase tracking-tighter">Build Partners</h2>
-        <p className="text-muted-foreground font-bold text-sm uppercase tracking-tight">Expert developers vetted for premium digital asset construction.</p>
+        <p className="text-muted-foreground font-bold text-sm uppercase tracking-tight">
+          Expert developers vetted for premium digital asset construction.
+        </p>
       </div>
 
       <div className="space-y-6">
         {DEVELOPERS.length === 0 ? (
           <div className="bg-secondary rounded-[2.5rem] p-12 text-center flex flex-col items-center gap-6 border border-white/5 shadow-2xl">
             <div className="w-48 h-48 flex items-center justify-center">
-              <Lottie 
-                animationData={null}
-                path="https://lottie.host/8a420129-88f0-4890-905f-f323d6248971/sbbuM0ZAkG.json"
-                loop={true} 
-                className="w-full h-full"
-              />
+              {animationData ? (
+                <Lottie 
+                  animationData={animationData}
+                  loop={true} 
+                  autoplay={true}
+                  className="w-full h-full"
+                />
+              ) : (
+                <div className="w-full h-full bg-white/5 rounded-full animate-pulse" />
+              )}
             </div>
             <div className="space-y-2">
               <h3 className="text-2xl font-black uppercase tracking-tight">Community Growing</h3>
