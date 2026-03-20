@@ -1,9 +1,9 @@
+
 "use client";
 
-import { useState } from "react";
-import { Search, SlidersHorizontal, PlusCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, SlidersHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,6 +11,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const WEBSITES: any[] = [];
 const CATEGORIES = ["All", "SaaS", "E-com", "Tool", "Social", "Portfolio"];
@@ -18,6 +21,14 @@ const CATEGORIES = ["All", "SaaS", "E-com", "Tool", "Social", "Portfolio"];
 export function Marketplace() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [animationData, setAnimationData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("https://lottie.host/584cf153-0667-47a3-a4ab-db613b6b46b6/5hnVllcoJz.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data))
+      .catch((err) => console.error("Market Lottie load error:", err));
+  }, []);
 
   return (
     <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -62,15 +73,24 @@ export function Marketplace() {
 
       <div className="px-4 mt-8">
         {WEBSITES.length === 0 ? (
-          <div className="bg-secondary rounded-3xl p-16 text-center flex flex-col items-center gap-6">
-            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
-              <PlusCircle className="w-10 h-10 text-primary" />
+          <div className="bg-secondary rounded-3xl p-16 text-center flex flex-col items-center gap-6 border border-white/5">
+            <div className="w-48 h-48 flex items-center justify-center">
+              {animationData ? (
+                <Lottie 
+                  animationData={animationData}
+                  loop={true} 
+                  autoplay={true}
+                  className="w-full h-full"
+                />
+              ) : (
+                <div className="w-20 h-20 bg-primary/10 rounded-full animate-pulse" />
+              )}
             </div>
             <div>
-              <h3 className="text-2xl font-bold mb-2">Market is Empty</h3>
-              <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto">Be the first to list a premium digital asset on Build io.</p>
+              <h3 className="text-2xl font-bold mb-2 uppercase tracking-tight">Market is Empty</h3>
+              <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto uppercase tracking-widest">Be the first to list a premium digital asset on Build io.</p>
             </div>
-            <Button className="rounded-full px-10 h-12 font-black bg-primary text-white hover:bg-primary/80 transition-all">
+            <Button className="rounded-full px-10 h-14 font-black bg-primary text-white hover:bg-primary/80 transition-all uppercase tracking-tight">
               Create Listing
             </Button>
           </div>

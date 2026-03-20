@@ -1,19 +1,31 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BottomNav } from "@/components/BottomNav";
 import { Marketplace } from "@/components/Marketplace";
 import { DeveloperDirectory } from "@/components/DeveloperDirectory";
 import { GlobalChat } from "@/components/GlobalChat";
 import { ListingForm } from "@/components/ListingForm";
 import { Toaster } from "@/components/ui/toaster";
-import { ShoppingBag, Plus, User, Settings, LogOut } from "lucide-react";
+import { ShoppingBag, User, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export type NavTab = "marketplace" | "global" | "directory" | "profile" | "listing";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>("marketplace");
+  const [headerPlusAnimation, setHeaderPlusAnimation] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("https://lottie.host/584cf153-0667-47a3-a4ab-db613b6b46b6/5hnVllcoJz.json")
+      .then(res => res.json())
+      .then(data => setHeaderPlusAnimation(data))
+      .catch(err => console.error("Header Lottie load error:", err));
+  }, []);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -50,10 +62,19 @@ export default function Home() {
             <Button 
               size="icon" 
               variant="secondary" 
-              className="bg-secondary rounded-full border-none h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all"
+              className="bg-secondary rounded-full border-none h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all overflow-hidden p-0"
               onClick={() => setActiveTab("listing")}
             >
-              <Plus className="w-5 h-5 text-white" />
+              {headerPlusAnimation ? (
+                <Lottie 
+                  animationData={headerPlusAnimation} 
+                  loop={true} 
+                  autoplay={true}
+                  className="w-full h-full scale-150"
+                />
+              ) : (
+                <div className="w-5 h-5 bg-white/10 rounded-full animate-pulse" />
+              )}
             </Button>
             <Button size="icon" variant="secondary" className="bg-secondary rounded-full border-none h-11 w-11 relative">
               <ShoppingBag className="w-5 h-5 text-white" />
