@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
 
 interface Message {
@@ -42,7 +43,12 @@ const MOCK_MESSAGES: Message[] = [
   },
 ];
 
-const STICKERS = ["🚀", "💎", "🔥", "⚡️", "🤖", "🎨", "💻", "📈", "✅", "🙌"];
+const TELEGRAM_EMOJIS = [
+  "😂", "😭", "😋", "😘", "😄", "😔", "🙈", "😌", "😆", "😁", "😐", "🔥", "😕", "😍", "🐣", "🐥", 
+  "👨‍💻", "🎗️", "🎀", "😢", "😮", "💧", "🏆", "💸", "🇺🇿", "🏇", "💀", "🥂", "😪", "❤️", "😊", "👍", 
+  "☺️", "😅", "💋", "😒", "😳", "😜", "😉", "🥲", "😝", "😱", "😡", "😏", "😚", "👌", "😇", "🤔",
+  "🤡", "🥳", "🤯", "🥶", "🥵", "🥺", "🤫", "🤥", "🤤", "🤢", "🤮", "🤧", "🤠", "🧐", "🤓", "😎"
+];
 
 interface GlobalChatProps {
   onBack?: () => void;
@@ -73,7 +79,7 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
-    setMessages([...messages, msg]);
+    setMessages((prev) => [...prev, msg]);
     setNewMessage("");
     setPendingImage(null);
   };
@@ -91,6 +97,8 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
       };
       reader.readAsDataURL(file);
     }
+    // Reset input so the same file can be selected again if needed
+    e.target.value = "";
   };
 
   return (
@@ -200,17 +208,22 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
                 <Smile className="w-5 h-5" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent side="top" align="start" className="w-64 bg-secondary border-white/10 p-2 rounded-2xl">
-              <div className="grid grid-cols-5 gap-2">
-                {STICKERS.map((s) => (
-                  <button 
-                    key={s} 
-                    className="text-2xl hover:bg-white/10 p-2 rounded-xl transition-all active:scale-90"
-                    onClick={() => handleSend(undefined, undefined, s)}
-                  >
-                    {s}
-                  </button>
-                ))}
+            <PopoverContent side="top" align="start" className="w-80 bg-secondary border-white/10 p-0 rounded-2xl overflow-hidden">
+              <ScrollArea className="h-64 p-3">
+                <div className="grid grid-cols-6 gap-2">
+                  {TELEGRAM_EMOJIS.map((emoji) => (
+                    <button 
+                      key={emoji} 
+                      className="text-3xl hover:bg-white/10 p-2 rounded-xl transition-all active:scale-90"
+                      onClick={() => handleSend(undefined, undefined, emoji)}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </ScrollArea>
+              <div className="bg-background/50 p-2 text-center">
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Emojis & Stickers</p>
               </div>
             </PopoverContent>
           </Popover>
