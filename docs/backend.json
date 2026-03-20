@@ -4,86 +4,55 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "User",
       "type": "object",
-      "description": "Represents a user account in the Build IO application, distinguishing between buyers and developers.",
+      "description": "Represents a user account in the Build IO application, capable of being a buyer, a developer, or both.",
       "properties": {
         "id": {
           "type": "string",
           "description": "Unique identifier for the User entity."
         },
-        "username": {
-          "type": "string",
-          "description": "A unique username chosen by the user."
-        },
         "email": {
           "type": "string",
-          "description": "The user's email address, used for communication and login.",
+          "description": "The unique email address of the user.",
           "format": "email"
         },
-        "role": {
+        "displayName": {
           "type": "string",
-          "description": "The role of the user, either 'buyer' or 'developer'."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp indicating when the user account was created.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp indicating the last time the user account was updated.",
-          "format": "date-time"
-        }
-      },
-      "required": [
-        "id",
-        "username",
-        "email",
-        "role",
-        "createdAt"
-      ]
-    },
-    "UserProfile": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "UserProfile",
-      "type": "object",
-      "description": "Contains additional personal details for a user, complementing the basic User entity.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the UserProfile entity."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Reference to the associated User. (Relationship: User 1:1 UserProfile)"
-        },
-        "firstName": {
-          "type": "string",
-          "description": "The user's first name."
-        },
-        "lastName": {
-          "type": "string",
-          "description": "The user's last name."
-        },
-        "bio": {
-          "type": "string",
-          "description": "A short biographical description of the user."
+          "description": "The name chosen by the user for public display."
         },
         "profileImageUrl": {
           "type": "string",
           "description": "URL to the user's profile picture.",
           "format": "uri"
+        },
+        "isDeveloper": {
+          "type": "boolean",
+          "description": "Indicates if the user has a developer profile and can list websites or offer services."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the user account was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the user account was last updated.",
+          "format": "date-time"
         }
       },
       "required": [
         "id",
-        "userId"
+        "email",
+        "displayName",
+        "isDeveloper",
+        "createdAt",
+        "updatedAt"
       ]
     },
     "DeveloperProfile": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "DeveloperProfile",
       "type": "object",
-      "description": "Stores specific information for users acting as developers, including their professional details and ratings.",
+      "description": "Contains professional details for users who act as developers or sellers on the marketplace.",
       "properties": {
         "id": {
           "type": "string",
@@ -91,37 +60,69 @@
         },
         "userId": {
           "type": "string",
-          "description": "Reference to the associated User who is a developer. (Relationship: User 1:1 DeveloperProfile)"
+          "description": "Reference to the User associated with this developer profile. (Relationship: User 1:1 DeveloperProfile)"
         },
-        "specialization": {
+        "bio": {
           "type": "string",
-          "description": "The primary area of expertise or specialization of the developer."
+          "description": "A short biographical summary or professional description of the developer."
+        },
+        "specializationTags": {
+          "type": "array",
+          "description": "A list of tags describing the developer's areas of expertise and specializations.",
+          "items": {
+            "type": "string"
+          }
         },
         "hourlyRate": {
           "type": "number",
-          "description": "The developer's hourly rate for services, in USD."
+          "description": "The developer's hourly rate for custom service engagements, if applicable."
         },
-        "experienceSummary": {
+        "experienceYears": {
+          "type": "number",
+          "description": "Number of years of professional experience as a developer."
+        },
+        "githubProfileUrl": {
           "type": "string",
-          "description": "A summary of the developer's professional experience and skills."
+          "description": "URL to the developer's GitHub profile.",
+          "format": "uri"
+        },
+        "linkedinProfileUrl": {
+          "type": "string",
+          "description": "URL to the developer's LinkedIn profile.",
+          "format": "uri"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "URL to the developer's personal website or a general portfolio.",
+          "format": "uri"
         },
         "averageRating": {
           "type": "number",
-          "description": "The average rating received by the developer from client reviews."
+          "description": "The average rating received by the developer, derived from reviews (0.0 to 5.0)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the developer profile was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the developer profile was last updated.",
+          "format": "date-time"
         }
       },
       "required": [
         "id",
         "userId",
-        "specialization",
-        "hourlyRate"
+        "createdAt",
+        "updatedAt"
       ]
     },
     "Technology": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Technology",
       "type": "object",
-      "description": "Represents a technology or framework used in website development (e.g., React, Node.js).",
+      "description": "Represents a technology or framework used in digital assets, such as programming languages, databases, or libraries.",
       "properties": {
         "id": {
           "type": "string",
@@ -129,7 +130,16 @@
         },
         "name": {
           "type": "string",
-          "description": "The name of the technology."
+          "description": "The name of the technology (e.g., 'React', 'Python', 'PostgreSQL')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the technology."
+        },
+        "iconUrl": {
+          "type": "string",
+          "description": "URL to an icon representing the technology.",
+          "format": "uri"
         }
       },
       "required": [
@@ -137,31 +147,31 @@
         "name"
       ]
     },
-    "WebsiteListing": {
+    "Website": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "WebsiteListing",
+      "title": "Website",
       "type": "object",
-      "description": "Details about a website listed for sale on the marketplace.",
+      "description": "Represents a digital website asset available for sale in the marketplace.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the WebsiteListing entity."
+          "description": "Unique identifier for the Website entity."
         },
-        "title": {
+        "sellerId": {
           "type": "string",
-          "description": "The title or name of the website being sold."
+          "description": "Reference to the User who is selling this website. This user must have an associated DeveloperProfile. (Relationship: User 1:N Website)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The display name of the website."
         },
         "description": {
           "type": "string",
-          "description": "A detailed description of the website, its features, and benefits."
+          "description": "A detailed description of the website's features, purpose, and benefits."
         },
         "price": {
           "type": "number",
-          "description": "The selling price of the website, in USD."
-        },
-        "sellerUserId": {
-          "type": "string",
-          "description": "Reference to the User who is selling this website. (Relationship: User 1:N WebsiteListing)"
+          "description": "The asking price for the website in the marketplace."
         },
         "demoUrl": {
           "type": "string",
@@ -170,205 +180,108 @@
         },
         "status": {
           "type": "string",
-          "description": "The current sales status of the website listing (e.g., 'available', 'sold', 'pending')."
-        },
-        "technologyIds": {
-          "type": "array",
-          "description": "References to Technologies used in the website. (Relationship: WebsiteListing N:N Technology)",
-          "items": {
-            "type": "string"
-          }
+          "description": "The current listing status of the website (e.g., 'available', 'pendingSale', 'sold', 'draft', 'archived')."
         },
         "imageUrls": {
           "type": "array",
-          "description": "URLs to images or screenshots illustrating the website.",
+          "description": "An array of URLs to high-resolution screenshots or visual assets of the website.",
           "items": {
             "type": "string"
           }
         },
-        "createdAt": {
+        "technologyIds": {
+          "type": "array",
+          "description": "References to the Technology entities used in building this website. (Relationship: Technology N:N Website)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "listedAt": {
           "type": "string",
-          "description": "Timestamp indicating when the website listing was created.",
+          "description": "Timestamp when the website was first listed for sale.",
           "format": "date-time"
         },
         "updatedAt": {
           "type": "string",
-          "description": "Timestamp indicating the last time the website listing was updated.",
+          "description": "Timestamp when the website listing was last updated.",
           "format": "date-time"
         }
       },
       "required": [
         "id",
-        "title",
+        "sellerId",
+        "name",
         "description",
         "price",
-        "sellerUserId",
         "status",
-        "technologyIds",
         "imageUrls",
-        "createdAt"
-      ]
-    },
-    "PortfolioItem": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "PortfolioItem",
-      "type": "object",
-      "description": "Represents a completed project or work sample displayed in a developer's portfolio.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the PortfolioItem entity."
-        },
-        "developerProfileId": {
-          "type": "string",
-          "description": "Reference to the DeveloperProfile to whom this portfolio item belongs. (Relationship: DeveloperProfile 1:N PortfolioItem)"
-        },
-        "title": {
-          "type": "string",
-          "description": "The title of the portfolio item or project."
-        },
-        "description": {
-          "type": "string",
-          "description": "A description of the project, including technologies used and the developer's role."
-        },
-        "projectUrl": {
-          "type": "string",
-          "description": "URL to the live project or a detailed case study.",
-          "format": "uri"
-        },
-        "imageUrls": {
-          "type": "array",
-          "description": "URLs to images or screenshots showcasing the portfolio item.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "completionDate": {
-          "type": "string",
-          "description": "The date when the project was completed.",
-          "format": "date"
-        }
-      },
-      "required": [
-        "id",
-        "developerProfileId",
-        "title",
-        "description",
-        "projectUrl",
-        "imageUrls",
-        "completionDate"
+        "listedAt",
+        "updatedAt"
       ]
     },
     "Order": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Order",
       "type": "object",
-      "description": "Tracks a transaction, either for a website purchase or a service engagement.",
+      "description": "Records a transaction for the purchase of a website asset.",
       "properties": {
         "id": {
           "type": "string",
           "description": "Unique identifier for the Order entity."
         },
-        "buyerUserId": {
+        "buyerId": {
           "type": "string",
-          "description": "Reference to the User who initiated the purchase or service request. (Relationship: User 1:N Order)"
+          "description": "Reference to the User who placed the order (buyer). (Relationship: User 1:N Order)"
         },
-        "sellerUserId": {
+        "websiteId": {
           "type": "string",
-          "description": "Reference to the User (seller of website or developer) involved in the transaction. (Relationship: User 1:N Order)"
+          "description": "Reference to the Website that was purchased. (Relationship: Website 1:1 Order - conceptually, for a single sale)"
         },
-        "websiteListingId": {
+        "sellerId": {
           "type": "string",
-          "description": "Optional reference to the WebsiteListing purchased if the order is for a website. (Relationship: WebsiteListing 1:1 Order)"
-        },
-        "serviceEngagementId": {
-          "type": "string",
-          "description": "Optional reference to the ServiceEngagement if the order is for a developer service. (Relationship: ServiceEngagement 1:1 Order)"
+          "description": "Reference to the User who sold the website (seller). Denormalized from Website for easy lookup. (Relationship: User 1:N Order - from seller perspective)"
         },
         "orderDate": {
           "type": "string",
-          "description": "Timestamp indicating when the order was placed.",
+          "description": "The date and time when the order was placed.",
           "format": "date-time"
         },
         "status": {
           "type": "string",
-          "description": "The current status of the order (e.g., 'pending', 'completed', 'cancelled', 'refunded')."
+          "description": "The current status of the order (e.g., 'pending', 'completed', 'cancelled', 'refunded', 'disputed')."
         },
-        "totalAmount": {
+        "amount": {
           "type": "number",
-          "description": "The total monetary amount of the order, in USD."
+          "description": "The final amount paid for the order."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the order record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the order record was last updated.",
+          "format": "date-time"
         }
       },
       "required": [
         "id",
-        "buyerUserId",
-        "sellerUserId",
+        "buyerId",
+        "websiteId",
+        "sellerId",
         "orderDate",
         "status",
-        "totalAmount"
-      ]
-    },
-    "ServiceEngagement": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ServiceEngagement",
-      "type": "object",
-      "description": "Details a specific service request or contract between a client and a developer.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the ServiceEngagement entity."
-        },
-        "developerProfileId": {
-          "type": "string",
-          "description": "Reference to the DeveloperProfile providing the service. (Relationship: DeveloperProfile 1:N ServiceEngagement)"
-        },
-        "clientId": {
-          "type": "string",
-          "description": "Reference to the User who requested the service. (Relationship: User 1:N ServiceEngagement)"
-        },
-        "description": {
-          "type": "string",
-          "description": "A detailed description of the service requested or agreed upon."
-        },
-        "startDate": {
-          "type": "string",
-          "description": "The planned start date for the service engagement.",
-          "format": "date"
-        },
-        "endDate": {
-          "type": "string",
-          "description": "The planned end date for the service engagement.",
-          "format": "date"
-        },
-        "status": {
-          "type": "string",
-          "description": "The current status of the service engagement (e.g., 'requested', 'in_progress', 'completed', 'cancelled', 'rejected')."
-        },
-        "agreedPrice": {
-          "type": "number",
-          "description": "The agreed-upon price for the service engagement, in USD."
-        },
-        "orderId": {
-          "type": "string",
-          "description": "Reference to the Order associated with this service engagement. (Relationship: Order 1:1 ServiceEngagement)"
-        }
-      },
-      "required": [
-        "id",
-        "developerProfileId",
-        "clientId",
-        "description",
-        "startDate",
-        "status",
-        "agreedPrice",
-        "orderId"
+        "amount",
+        "createdAt",
+        "updatedAt"
       ]
     },
     "Review": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Review",
       "type": "object",
-      "description": "Captures feedback and a rating provided by a user for a developer's services.",
+      "description": "Allows buyers to leave ratings and comments for developers.",
       "properties": {
         "id": {
           "type": "string",
@@ -378,30 +291,102 @@
           "type": "string",
           "description": "Reference to the DeveloperProfile being reviewed. (Relationship: DeveloperProfile 1:N Review)"
         },
-        "reviewerUserId": {
+        "reviewerId": {
           "type": "string",
           "description": "Reference to the User who submitted the review. (Relationship: User 1:N Review)"
         },
         "rating": {
           "type": "number",
-          "description": "The rating given by the reviewer, typically on a scale (e.g., 1 to 5)."
+          "description": "The star rating given by the reviewer (1 to 5)."
         },
         "comment": {
           "type": "string",
-          "description": "Textual feedback provided by the reviewer."
+          "description": "Optional textual comment from the reviewer."
         },
         "createdAt": {
           "type": "string",
-          "description": "Timestamp indicating when the review was submitted.",
+          "description": "Timestamp when the review was submitted.",
           "format": "date-time"
         }
       },
       "required": [
         "id",
         "developerProfileId",
-        "reviewerUserId",
+        "reviewerId",
         "rating",
         "createdAt"
+      ]
+    },
+    "PortfolioItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PortfolioItem",
+      "type": "object",
+      "description": "Represents a completed project or work sample by a developer, showcased in their portfolio.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the PortfolioItem entity."
+        },
+        "developerProfileId": {
+          "type": "string",
+          "description": "Reference to the DeveloperProfile that owns this portfolio item. (Relationship: DeveloperProfile 1:N PortfolioItem)"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title or name of the portfolio project."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the project, including its purpose, technologies used, and developer's role."
+        },
+        "projectUrl": {
+          "type": "string",
+          "description": "URL to the live project, demo, or relevant website.",
+          "format": "uri"
+        },
+        "repositoryUrl": {
+          "type": "string",
+          "description": "URL to the project's code repository (e.g., GitHub, GitLab).",
+          "format": "uri"
+        },
+        "imageUrls": {
+          "type": "array",
+          "description": "An array of URLs to screenshots or visual assets of the portfolio project.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "technologyIds": {
+          "type": "array",
+          "description": "References to the Technology entities used in this portfolio project. (Relationship: Technology N:N PortfolioItem)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "completionDate": {
+          "type": "string",
+          "description": "The date when the portfolio project was completed.",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the portfolio item was added.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the portfolio item was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "developerProfileId",
+        "title",
+        "description",
+        "imageUrls",
+        "createdAt",
+        "updatedAt"
       ]
     }
   },
@@ -414,174 +399,116 @@
   "firestore": {
     "structure": [
       {
-        "path": "/users/{userId}",
+        "path": "users/{userId}",
         "definition": {
           "entityName": "User",
           "schema": {
             "$ref": "#/backend/entities/User"
           },
-          "description": "Root collection for all user-related data, uniquely identified by their authentication UID. **Authorization is path-based: only the authenticated user can read/write their own document.**",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique ID of the user, corresponding to `request.auth.uid`."
-            }
-          ]
+          "description": "Stores core user profile data. `userId` in the path corresponds to `request.auth.uid`. May include a `telegramUserId` for integration."
         }
       },
       {
-        "path": "/users/{userId}/userProfile",
-        "definition": {
-          "entityName": "UserProfile",
-          "schema": {
-            "$ref": "#/backend/entities/UserProfile"
-          },
-          "description": "Contains additional personal details for a user. Stored as a subcollection under the user's path, inheriting strong ownership. **Authorization is path-based: only the authenticated user can read/write their own profile.**",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique ID of the user."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/users/{userId}/developerProfile",
+        "path": "developerProfiles/{developerId}",
         "definition": {
           "entityName": "DeveloperProfile",
           "schema": {
             "$ref": "#/backend/entities/DeveloperProfile"
           },
-          "description": "Stores professional information for users with the 'developer' role. This profile is publicly readable, but **only the authenticated developer (owner) can write/update it.** The document will contain `userId` matching the path for authorization independence.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique ID of the developer user."
-            }
-          ]
+          "description": "Stores developer-specific professional details. `developerId` in the path maps directly to the `User.id` of the developer, also present as the `userId` field within the document. Documents in this collection represent public developer profiles, implying `isDeveloper` is true for the associated user."
         }
       },
       {
-        "path": "/users/{developerUserId}/developerProfile/portfolioItems/{portfolioItemId}",
-        "definition": {
-          "entityName": "PortfolioItem",
-          "schema": {
-            "$ref": "#/backend/entities/PortfolioItem"
-          },
-          "description": "Represents a completed project in a developer's portfolio. Publicly readable for showcasing, but **only the owning developer can create, update, or delete their own portfolio items.** The document **includes a denormalized 'developerUserId'** for authorization independence, enabling rules without `get()` calls to the parent `developerProfile`.",
-          "params": [
-            {
-              "name": "developerUserId",
-              "description": "The unique ID of the developer user who owns this portfolio item."
-            },
-            {
-              "name": "portfolioItemId",
-              "description": "The unique ID of the portfolio item."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/users/{developerUserId}/developerProfile/reviews/{reviewId}",
-        "definition": {
-          "entityName": "Review",
-          "schema": {
-            "$ref": "#/backend/entities/Review"
-          },
-          "description": "Stores client reviews for a developer. Publicly readable to display developer ratings. **Only the `reviewerUserId` can create, update, or delete their review.** The document **includes denormalized 'developerUserId' and 'reviewerUserId'** for authorization independence.",
-          "params": [
-            {
-              "name": "developerUserId",
-              "description": "The unique ID of the developer being reviewed."
-            },
-            {
-              "name": "reviewId",
-              "description": "The unique ID of the review."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/technologies/{technologyId}",
+        "path": "technologies/{technologyId}",
         "definition": {
           "entityName": "Technology",
           "schema": {
             "$ref": "#/backend/entities/Technology"
           },
-          "description": "Global collection for predefined technologies used in website listings or developer profiles. **Publicly readable by all users, write access restricted to administrators.**",
-          "params": [
-            {
-              "name": "technologyId",
-              "description": "The unique ID of the technology."
-            }
-          ]
+          "description": "Stores globally available technology definitions. Publicly readable by all users."
         }
       },
       {
-        "path": "/websiteListings/{websiteListingId}",
+        "path": "websites/{websiteId}",
         "definition": {
-          "entityName": "WebsiteListing",
+          "entityName": "Website",
           "schema": {
-            "$ref": "#/backend/entities/WebsiteListing"
+            "$ref": "#/backend/entities/Website"
           },
-          "description": "Lists websites available for sale on the marketplace. **Publicly readable for browsing, but only the `sellerUserId` (owner) can create, update, or delete their listings.** The `sellerUserId` field is **denormalized within each document for authorization independence and QAPs** (Query-as-Prove-ability).",
+          "description": "Publicly viewable marketplace listings for websites (status: 'available', 'pendingSale', 'sold'). Includes denormalized `sellerId` for ownership-based authorization, avoiding `get()` calls. Supports QAPs by only containing publicly listed items."
+        }
+      },
+      {
+        "path": "users/{userId}/draftWebsites/{websiteId}",
+        "definition": {
+          "entityName": "Website",
+          "schema": {
+            "$ref": "#/backend/entities/Website"
+          },
+          "description": "Private drafts and archived website listings for a specific user (status: 'draft', 'archived'). `userId` in the path refers to the `sellerId` in the document. Achieves Authorization Independence via path-based ownership and denormalized `sellerId`. Supports QAPs for private listings, ensuring only the owner can list their own drafts.",
           "params": [
             {
-              "name": "websiteListingId",
-              "description": "The unique ID of the website listing."
+              "name": "userId",
+              "description": "The ID of the user (seller) who owns the draft website."
+            },
+            {
+              "name": "websiteId",
+              "description": "The ID of the specific draft website."
             }
           ]
         }
       },
       {
-        "path": "/orders/{orderId}",
+        "path": "orders/{orderId}",
         "definition": {
           "entityName": "Order",
           "schema": {
             "$ref": "#/backend/entities/Order"
           },
-          "description": "Records transactions between buyers and sellers/developers. **Access is restricted to either the `buyerUserId` or the `sellerUserId` involved in the transaction.** Both `buyerUserId` and `sellerUserId` are **denormalized within each document for authorization independence and QAPs**, allowing direct rule evaluation.",
+          "description": "Records all transactions for website purchases. Includes denormalized `buyerId` and `sellerId` for direct authorization checks and QAP-friendly queries for both parties."
+        }
+      },
+      {
+        "path": "developerProfiles/{developerId}/reviews/{reviewId}",
+        "definition": {
+          "entityName": "Review",
+          "schema": {
+            "$ref": "#/backend/entities/Review"
+          },
+          "description": "Reviews for a specific developer profile. Includes denormalized `developerProfileId` (from the parent path) and `reviewerId` for authorization independence. All users can read, only `reviewerId` can modify their own review. Supports QAPs for fetching all reviews for a developer.",
           "params": [
             {
-              "name": "orderId",
-              "description": "The unique ID of the order."
+              "name": "developerId",
+              "description": "The ID of the developer profile being reviewed."
+            },
+            {
+              "name": "reviewId",
+              "description": "The ID of the specific review."
             }
           ]
         }
       },
       {
-        "path": "/serviceEngagements/{serviceEngagementId}",
+        "path": "developerProfiles/{developerId}/portfolioItems/{portfolioItemId}",
         "definition": {
-          "entityName": "ServiceEngagement",
+          "entityName": "PortfolioItem",
           "schema": {
-            "$ref": "#/backend/entities/ServiceEngagement"
+            "$ref": "#/backend/entities/PortfolioItem"
           },
-          "description": "Details a service request or contract between a client and a developer. **Access is restricted to either the `clientId` or the `developerUserId` involved.** The document **includes denormalized 'clientId' and 'developerUserId'** for authorization independence and QAPs.",
+          "description": "Portfolio items showcasing a specific developer's work. Includes denormalized `developerProfileId` (from the parent path) for authorization independence. All users can read, only the `developerId` can modify their own portfolio items. Supports QAPs for fetching all portfolio items for a developer.",
           "params": [
             {
-              "name": "serviceEngagementId",
-              "description": "The unique ID of the service engagement."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/adminRoles/{uid}",
-        "definition": {
-          "entityName": "User",
-          "schema": {
-            "$ref": "#/backend/entities/User"
-          },
-          "description": "A collection used for **Database-Backed Access Control (DBAC)** to identify administrators. The mere **existence** of a document at `/adminRoles/{uid}` grants admin privileges to that `uid`. **This ensures authorization independence for global roles.** The schema refers to 'User' as it's primarily an identifier check.",
-          "params": [
+              "name": "developerId",
+              "description": "The ID of the developer profile that owns the portfolio item."
+            },
             {
-              "name": "uid",
-              "description": "The unique ID of a user with administrator privileges."
+              "name": "portfolioItemId",
+              "description": "The ID of the specific portfolio item."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore data structure for Build IO is designed with a strong emphasis on **Authorization Independence**, **Structural Segregation**, and **Query-as-Prove-ability (QAPs)**, adhering to the specified core design principles and strategy mandates. The goal is to simplify security rules, make authorization intent explicit, and ensure scalability and debuggability.\n\n**Authorization Independence via Denormalization:**\nCrucially, authorization context is denormalized across various collections to eliminate the need for `get()` calls in security rules. For instance:\n*   In `/websiteListings/{websiteListingId}`, the `sellerUserId` is embedded directly in the document. This allows a rule like `allow write: if request.auth.uid == resource.data.sellerUserId;` without having to look up a parent user document.\n*   Similarly, for `/orders/{orderId}` and `/serviceEngagements/{serviceEngagementId}`, both `buyerUserId` and `sellerUserId`/`clientId` and `developerUserId` are present in the document. This enables robust access control for multi-party transactions without complex lookups.\n*   For subcollections like `/users/{developerUserId}/developerProfile/portfolioItems/{portfolioItemId}` and `/users/{developerUserId}/developerProfile/reviews/{reviewId}`, the `developerUserId` and `reviewerUserId` (where applicable) are explicitly included in the subcollection document. This ensures that authorization can be evaluated solely based on the document itself and the authenticated user's ID, rather than relying on the parent path's ID.\n\n**Structural Segregation for Homogeneous Security Posture & QAPs:**\nCollections are structured to group documents with similar security requirements, greatly simplifying security rules and supporting QAPs:\n*   **Private User Data:** `/users/{userId}` and its immediate subcollections (`/userProfile`, `/developerProfile`) are primarily owned by the `request.auth.uid`, ensuring that sensitive user data is secured by path-based authorization.\n*   **Public/Marketplace Data with Owner Management:** `/websiteListings/{websiteListingId}` is a top-level collection. It's publicly readable, enabling direct queries for the marketplace (QAPs for `list` operations), while write/update access is strictly limited to the `sellerUserId` embedded within each listing document. This allows users to query the entire marketplace without pre-filtering on the client side, and rules ensure only authorized writes.\n*   **Global Read-Only Data:** `/technologies/{technologyId}` is a separate collection for static, global lookup data, easily allowing read-all access with admin-only write permissions.\n*   **Multi-Party Transaction Data:** `/orders/{orderId}` and `/serviceEngagements/{serviceEngagementId}` are top-level collections, explicitly containing all relevant `userId`s (`buyerUserId`, `sellerUserId`, `clientId`, `developerUserId`) for direct access control. This supports QAPs by allowing users to query their orders/engagements efficiently using `where('buyerUserId', '==', request.auth.uid)` or `where('sellerUserId', '==', request.auth.uid)` without breaking security.\n*   **DBAC for Global Roles:** A dedicated `/adminRoles/{uid}` collection is used for Database-Backed Access Control. The **existence** of a document at this path determines if a user is an admin, making admin checks simple and highly performant (QAPs on `get(/adminRoles/request.auth.uid)`).\n\nThis structure ensures that each document inherently carries the necessary authorization context, allowing for atomic operations and enabling secure `list` queries without `get()` calls in rules, thereby upholding the core design principles."
+    "reasoning": "The Firestore structure is designed following the core principles of Authorization Independence, Structural Segregation, and consistent Access Modeling to ensure robust security rules and efficient data access. \n\n**Authorization Independence via Denormalization:**\nEach document contains all necessary authorization context directly within its fields, eliminating the need for `get()` calls in security rules. For example:\n*   `websites/{websiteId}` documents include `sellerId` to authorize sellers for updates.\n*   `users/{userId}/draftWebsites/{websiteId}` documents implicitly authorize the `userId` in the path, which corresponds to the `sellerId` within the document.\n*   `orders/{orderId}` documents contain both `buyerId` and `sellerId`, allowing direct authorization checks for participants of a transaction.\n*   `developerProfiles/{developerId}/reviews/{reviewId}` and `developerProfiles/{developerId}/portfolioItems/{portfolioItemId}` documents include `developerProfileId` and `reviewerId` (for reviews), ensuring rules can validate ownership/access without cross-document lookups. The `developerId` in the path matches the `developerProfileId` in the document.\n\nThis approach ensures that operations like batch writes and transactions remain atomic and do not fail due to complex, cascading `get()` operations, improving reliability and debuggability.\n\n**Structural Segregation (Homogeneous Security Posture) for QAPs:**\nCrucially, this design separates data based on its security posture to enable Query-as-Permission (QAPs) and avoid rules acting as filters. This is most evident in the handling of `Website` entities:\n*   **Public Websites:** `/websites/{websiteId}` is a top-level collection containing only publicly listed websites (`status: 'available', 'pendingSale', 'sold'`). This allows any user to `list` and `get` these documents without security rules needing to filter by `status` or `sellerId` for read access, guaranteeing complete and secure query results.\n*   **Private Draft Websites:** `/users/{userId}/draftWebsites/{websiteId}` is a subcollection storing websites in a private state (`status: 'draft', 'archived'`). This ensures that a user can only query and access their own private listings (`request.auth.uid == userId`), making `list` operations secure and explicit. This prevents information leakage and simplifies rules for private content.\n\n**Access Modeling:**\n*   **Private User Data:** `/users/{userId}` and its subcollections (`/users/{userId}/draftWebsites/{websiteId}`) use path-based ownership, directly linking documents to the authenticated user (`request.auth.uid == userId`).\n*   **User 1:N & Nested Data:** For entities like `Review` and `PortfolioItem` which belong to a `DeveloperProfile`, a hierarchical structure (`/developerProfiles/{developerId}/reviews/{reviewId}`) is used. This maintains clear ownership and allows for efficient querying of all related sub-entities for a given parent, while `developerProfileId` and `reviewerId` (where applicable) are denormalized into the document for Authorization Independence.\n*   **Global Public Data:** Collections like `/technologies` are top-level and publicly readable, making their access rules straightforward.\n*   **Shared/Transactional Data:** `/orders/{orderId}` is a top-level collection where access is granted to both `buyerId` and `sellerId` (explicitly denormalized in the document), supporting queries from either party."
   }
 }

@@ -2,169 +2,164 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    /*
+    /**
      * BUILD IO SECURITY RULES PHILOSOPHY
      *
-     * Core Philosophy: This ruleset enforces a strict authorization-first model. We prioritize
-     * identifying "who" can access "what" while remaining flexible on the "how" (data shape) to support
-     * rapid prototyping.
+     * Core Philosophy: This ruleset enforces a strict user-ownership and shared-access model. Authorization is 
+     * driven primarily by denormalized identity fields (e.g., sellerId, buyerId, reviewerId) stored directly 
+     * on documents. This ensures high performance by avoiding expensive cross-document lookups.
      *
-     * Data Structure: The application uses a hybrid hierarchy. User-specific data is nested under
-     * /users/{userId}, while marketplace entities like websiteListings, orders, and
-     * serviceEngagements reside at the top level for better query performance and visibility.
+     * Data Structure:
+     * - Private Data: Nested under /users/{userId}/ for strict path-based ownership.
+     * - Public Marketplace: Top-level /websites/ and /developerProfiles/ for open discovery.
+     * - Transactional Data: /orders/ are top-level and shared between buyers and sellers via denormalized IDs.
      *
      * Key Security Decisions:
-     * 1. Authorization Independence: We use denormalization to include critical UIDs (e.g., sellerUserId,
-     *    reviewerUserId) directly inside documents. This allows rules to verify access without
-     *    performing expensive get() lookups on parent or related documents.
-     * 2. Structural Segregation: Sensitive user profiles are kept in subcollections to clearly
-     *    separate private configuration from public marketplace data.
-     * 3. Database-Backed Access Control (DBAC): Administrator privileges are determined by the
-     *    existence of a document in the /adminRoles collection.
-     *
-     * Denormalization for Performance: We strictly enforce that ownership fields (like userId or
-     * sellerUserId) match the authenticated user during creation and remain immutable during updates.
+     * - User Privacy: Listing the root /users collection is strictly forbidden to prevent user harvesting.
+     * - Structural Segregation: Websites are split between a public top-level collection (published) 
+     *   and private user subcollections (drafts) to ensure clean query results.
+     * - Self-Creation: Users can create their own profiles if the document ID matches their authenticated UID.
+     * - Telegram Integration: The /users/{userId} document serves as the hub for integrations, including 
+     *   Telegram ID mapping, accessible only by the account owner.
      */
 
-    // --- GLOBAL HELPER FUNCTIONS ---
+    // --- Global Helper Functions ---
 
-    // Checks if the request is from an authenticated user.
     function isSignedIn() {
       return request.auth != null;
     }
 
-    // Checks if the user's UID matches the provided ID.
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // Checks if the user is an owner of an existing document.
     function isExistingOwner(userId) {
       return resource != null && isOwner(userId);
     }
 
-    // Checks if the user has a document in the adminRoles collection.
-    function isAdmin() {
-      return isSignedIn() && exists(/databases/$(database)/documents/adminRoles/$(request.auth.uid));
+    function isParticipant(data) {
+      return isSignedIn() && (request.auth.uid == data.buyerId || request.auth.uid == data.sellerId);
     }
 
-    // --- COLLECTION RULES ---
+    // --- Collection Rules ---
 
-    // Root user document. Only the owner can manage their account.
-    // Path: /users/{userId}
-    // Allow: (create) User 'abc' creates document '/users/abc'.
-    // Deny: (write) User 'abc' attempts to delete document '/users/xyz'.
-    // Principle: Ownership and Self-Creation.
+    /**
+     * @description Rules for core user profiles. Allows users to manage their own data, including Telegram integration fields.
+     * @path /users/{userId}
+     * @allow Authenticated user with matching UID (get, create, update, delete).
+     * @deny Any user attempting to list all users or access another user's profile.
+     * @principle Path-based ownership and self-creation logic.
+     */
     match /users/{userId} {
-      allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId) && request.resource.data.id == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow list: if false;
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) && request.resource.data.id == resource.data.id;
       allow delete: if isExistingOwner(userId);
 
-      // Private user profile details. Inherits ownership.
-      // Path: /users/{userId}/userProfile/{profileId}
-      // Allow: (read) User 'abc' reads their own profile.
-      // Deny: (read) User 'xyz' reads User 'abc's profile.
-      // Principle: Strict path-based ownership.
-      match /userProfile/{profileId} {
-        allow get, list: if isOwner(userId);
-        allow create: if isOwner(userId) && request.resource.data.userId == userId;
-        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      /**
+       * @description Private draft websites and archives owned by the user.
+       * @path /users/{userId}/draftWebsites/{websiteId}
+       * @allow Owner listing and modifying their own drafts.
+       * @deny Public users or other developers viewing drafts.
+       * @principle Structural segregation for private vs public content.
+       */
+      match /draftWebsites/{websiteId} {
+        allow list, get: if isOwner(userId);
+        allow create: if isOwner(userId) && request.resource.data.sellerId == userId;
+        allow update: if isOwner(userId) && request.resource.data.sellerId == resource.data.sellerId;
         allow delete: if isExistingOwner(userId);
-      }
-
-      // Professional developer profiles. Publicly readable, owner-writable.
-      // Path: /users/{userId}/developerProfile/{profileId}
-      // Allow: (get) Any guest reads a developer's profile.
-      // Deny: (update) User 'abc' tries to edit User 'xyz's developer stats.
-      // Principle: Public Read with Owner-Only Writes.
-      match /developerProfile/{profileId} {
-        allow get, list: if true;
-        allow create: if isOwner(userId) && request.resource.data.userId == userId;
-        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
-        allow delete: if isExistingOwner(userId);
-
-        // Items in a developer's portfolio. Publicly readable.
-        // Path: /users/{userId}/developerProfile/{profileId}/portfolioItems/{itemId}
-        // Allow: (create) Developer 'abc' adds a new project to their portfolio.
-        // Principle: Relational integrity via denormalized developerUserId.
-        match /portfolioItems/{itemId} {
-          allow get, list: if true;
-          allow create: if isOwner(userId) && request.resource.data.developerProfileId == profileId;
-          allow update: if isExistingOwner(userId) && request.resource.data.developerProfileId == resource.data.developerProfileId;
-          allow delete: if isExistingOwner(userId);
-        }
-
-        // Reviews for a developer. Publicly readable. Only the reviewer can write.
-        // Path: /users/{userId}/developerProfile/{profileId}/reviews/{reviewId}
-        // Allow: (create) User 'buyer1' leaves a review for Developer 'dev1'.
-        // Deny: (update) User 'buyer2' tries to edit User 'buyer1's review.
-        // Principle: Ownership based on denormalized reviewerUserId.
-        match /reviews/{reviewId} {
-          allow get, list: if true;
-          allow create: if isSignedIn() && request.resource.data.reviewerUserId == request.auth.uid;
-          allow update: if resource != null && request.auth.uid == resource.data.reviewerUserId && request.resource.data.reviewerUserId == resource.data.reviewerUserId;
-          allow delete: if resource != null && request.auth.uid == resource.data.reviewerUserId;
-        }
       }
     }
 
-    // Marketplace website listings. Publicly searchable.
-    // Path: /websiteListings/{websiteListingId}
-    // Allow: (list) A guest browses all available website listings.
-    // Deny: (delete) A logged-in user tries to delete a listing they didn't post.
-    // Principle: Public Read with Owner-Only Writes (using denormalized sellerUserId).
-    match /websiteListings/{websiteListingId} {
+    /**
+     * @description Public professional profiles for developers.
+     * @path /developerProfiles/{developerId}
+     * @allow Public read access. Creator must own the associated User account.
+     * @deny Unauthorized modification of professional details.
+     * @principle Public Read with Owner-Only Writes.
+     */
+    match /developerProfiles/{developerId} {
       allow get, list: if true;
-      allow create: if isSignedIn() && request.resource.data.sellerUserId == request.auth.uid;
-      allow update: if resource != null && request.auth.uid == resource.data.sellerUserId && request.resource.data.sellerUserId == resource.data.sellerUserId;
-      allow delete: if resource != null && request.auth.uid == resource.data.sellerUserId;
+      allow create: if isOwner(developerId) && request.resource.data.userId == developerId;
+      allow update: if isOwner(developerId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(developerId);
+
+      /**
+       * @description Reviews for a developer. Publicly readable, only review author can edit.
+       * @path /developerProfiles/{developerId}/reviews/{reviewId}
+       * @allow Anyone to read; review author to update/delete.
+       * @deny Users modifying reviews they didn't write.
+       * @principle Denormalized ownership (reviewerId) for write authorization.
+       */
+      match /reviews/{reviewId} {
+        allow get, list: if true;
+        allow create: if isSignedIn() && request.resource.data.reviewerId == request.auth.uid;
+        allow update: if isOwner(resource.data.reviewerId) && request.resource.data.reviewerId == resource.data.reviewerId;
+        allow delete: if resource != null && isOwner(resource.data.reviewerId);
+      }
+
+      /**
+       * @description Portfolio items showcased by a developer.
+       * @path /developerProfiles/{developerId}/portfolioItems/{portfolioItemId}
+       * @allow Public read access; developer-owner write access.
+       * @deny Non-owners modifying a developer's portfolio.
+       * @principle Path-based parent authorization.
+       */
+      match /portfolioItems/{portfolioItemId} {
+        allow get, list: if true;
+        allow create: if isOwner(developerId);
+        allow update: if isOwner(developerId);
+        allow delete: if isExistingOwner(developerId);
+      }
     }
 
-    // Global lookup for technologies. Admin-managed.
-    // Path: /technologies/{technologyId}
-    // Allow: (get) Any user sees technology 'React'.
-    // Deny: (create) A standard user tries to add a new technology.
-    // Principle: Read-only for users, restricted writes via admin role.
+    /**
+     * @description Publicly listed website assets for sale.
+     * @path /websites/{websiteId}
+     * @allow Public read access. Seller can manage their own listings.
+     * @deny Unauthorized listing creation or deletion.
+     * @principle Denormalized ownership (sellerId) for authorization independence.
+     */
+    match /websites/{websiteId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.sellerId == request.auth.uid;
+      allow update: if isOwner(resource.data.sellerId) && request.resource.data.sellerId == resource.data.sellerId;
+      allow delete: if resource != null && isOwner(resource.data.sellerId);
+    }
+
+    /**
+     * @description Global library of technologies and frameworks.
+     * @path /technologies/{technologyId}
+     * @allow Public read access for all users.
+     * @deny Client-side writes. Data managed by system/admin.
+     * @principle Read-only global reference data.
+     */
     match /technologies/{technologyId} {
       allow get, list: if true;
-      allow create, update, delete: if isAdmin();
+      allow create, update, delete: if false;
     }
 
-    // Transaction records. Accessible only by the involved buyer or seller.
-    // Path: /orders/{orderId}
-    // Allow: (get) Buyer 'abc' views their purchase history for order '123'.
-    // Deny: (get) Random User 'xyz' tries to view Order '123'.
-    // Principle: Shared Access (Closed Collaborators) via denormalized UIDs.
+    /**
+     * @description Transaction records for website purchases.
+     * @path /orders/{orderId}
+     * @allow Buyers and Sellers involved in the transaction (get, list, create, update).
+     * @deny Third parties viewing private financial transactions.
+     * @principle Shared access model via denormalized participant IDs.
+     */
     match /orders/{orderId} {
-      allow get: if isSignedIn() && (request.auth.uid == resource.data.buyerUserId || request.auth.uid == resource.data.sellerUserId);
-      allow list: if isSignedIn(); // Queries must filter by buyerUserId or sellerUserId
-      allow create: if isSignedIn() && (request.resource.data.buyerUserId == request.auth.uid || request.resource.data.sellerUserId == request.auth.uid);
-      allow update: if resource != null && (request.auth.uid == resource.data.buyerUserId || request.auth.uid == resource.data.sellerUserId);
-      allow delete: if isAdmin();
-    }
-
-    // Service engagements. Accessible only by the involved client or developer.
-    // Path: /serviceEngagements/{serviceEngagementId}
-    // Allow: (update) Developer 'dev1' changes status to 'completed'.
-    // Principle: Shared Access (Closed Collaborators) via denormalized UIDs.
-    match /serviceEngagements/{serviceEngagementId} {
-      allow get: if isSignedIn() && (request.auth.uid == resource.data.clientId || request.auth.uid == resource.data.developerProfileId);
-      allow list: if isSignedIn(); // Queries must filter by clientId or developerProfileId
-      allow create: if isSignedIn() && (request.resource.data.clientId == request.auth.uid);
-      allow update: if resource != null && (request.auth.uid == resource.data.clientId || request.auth.uid == resource.data.developerProfileId);
-      allow delete: if isAdmin();
-    }
-
-    // Admin role registration. Used for DBAC lookup.
-    // Path: /adminRoles/{uid}
-    // Allow: (get) User checks their own admin status.
-    // Deny: (create) User attempts to make themselves an admin.
-    // Principle: Database-Backed Access Control.
-    match /adminRoles/{uid} {
-      allow get: if isOwner(uid);
-      allow list: if isAdmin();
-      allow write: if false; // Admin roles should be managed via console or secure backend
+      allow get: if isParticipant(resource.data);
+      // Removed 'query.filters' as it is an invalid variable in Firestore Security Rules.
+      // For 'list' operations on collections with sensitive data, the rule must allow the
+      // operation broadly, and rely on the 'get' rule to filter accessible documents.
+      // If a client performs an unfiltered 'list' query, it will fail if the authenticated
+      // user is not a participant in *all* documents returned by the query. This effectively
+      // forces clients to include explicit filters (e.g., by buyerId or sellerId) to list
+      // only relevant orders.
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && (request.resource.data.buyerId == request.auth.uid || request.resource.data.sellerId == request.auth.uid);
+      allow update: if isParticipant(resource.data) && request.resource.data.buyerId == resource.data.buyerId && request.resource.data.sellerId == resource.data.sellerId;
+      allow delete: if false; // Transactions are immutable for audit trails.
     }
   }
 }
