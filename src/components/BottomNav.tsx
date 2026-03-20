@@ -1,9 +1,8 @@
 "use client";
 
-import { Home, PlusSquare, Users, User } from "lucide-react";
+import { Home, Globe, Users, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-type NavTab = "marketplace" | "list" | "directory" | "profile";
+import type { NavTab } from "@/app/page";
 
 interface BottomNavProps {
   activeTab: NavTab;
@@ -13,7 +12,7 @@ interface BottomNavProps {
 export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
   const tabs = [
     { id: "marketplace", icon: Home, label: "Market" },
-    { id: "list", icon: PlusSquare, label: "List" },
+    { id: "global", icon: Globe, label: "Global" },
     { id: "directory", icon: Users, label: "Devs" },
     { id: "profile", icon: User, label: "Profile" },
   ] as const;
@@ -30,7 +29,7 @@ export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
               onClick={() => onTabChange(tab.id as NavTab)}
               className={cn(
                 "flex flex-col items-center justify-center transition-all duration-300 relative group",
-                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                isActive ? "text-primary" : "text-muted-foreground hover:text-white"
               )}
             >
               <div className={cn(
@@ -39,7 +38,7 @@ export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
               )}>
                 <Icon className={cn("w-6 h-6", isActive ? "stroke-[2.5px]" : "stroke-[2px]")} />
               </div>
-              <span className="text-[10px] font-bold mt-1">{tab.label}</span>
+              <span className="text-[10px] font-bold mt-1 uppercase tracking-tighter">{tab.label}</span>
               {isActive && (
                 <div className="absolute -top-1 w-1 h-1 bg-primary rounded-full" />
               )}
