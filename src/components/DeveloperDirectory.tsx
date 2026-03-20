@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import dynamic from "next/dynamic";
-import duckData from "./duck_animation.json";
 
 // Dynamically import Lottie to avoid hydration issues
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
@@ -25,7 +24,8 @@ export function DeveloperDirectory() {
           <div className="bg-secondary rounded-[2.5rem] p-12 text-center flex flex-col items-center gap-6 border border-white/5 shadow-2xl">
             <div className="w-48 h-48 flex items-center justify-center">
               <Lottie 
-                animationData={duckData} 
+                animationData={null}
+                path="https://lottie.host/8a420129-88f0-4890-905f-f323d6248971/sbbuM0ZAkG.json"
                 loop={true} 
                 className="w-full h-full"
               />
