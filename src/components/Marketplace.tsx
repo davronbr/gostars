@@ -12,16 +12,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import dynamic from "next/dynamic";
+import type { Language } from "@/app/page";
+import { translations } from "@/app/page";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const WEBSITES: any[] = [];
 const CATEGORIES = ["All", "SaaS", "E-com", "Tool", "Social", "Portfolio"];
 
-export function Marketplace() {
+export function Marketplace({ lang }: { lang: Language }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [animationData, setAnimationData] = useState<any>(null);
+
+  const t = translations[lang];
 
   useEffect(() => {
     fetch("https://lottie.host/cf2036f9-0082-403e-b468-192acea5325e/u40R6Mla4A.json")
@@ -37,7 +41,7 @@ export function Marketplace() {
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input 
-              placeholder="Search assets..." 
+              placeholder={t.search} 
               className="pl-11 bg-secondary border-none rounded-full h-12 focus-visible:ring-primary font-bold text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -66,7 +70,7 @@ export function Marketplace() {
         
         <div className="mt-4 flex items-center justify-between px-2">
           <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
-            Filtering: <span className="text-primary">{activeCategory}</span>
+            {t.categories}: <span className="text-primary">{activeCategory}</span>
           </p>
         </div>
       </header>
@@ -87,8 +91,10 @@ export function Marketplace() {
               )}
             </div>
             <div>
-              <h3 className="text-2xl font-black mb-2 uppercase tracking-tight">Market is Empty</h3>
-              <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto uppercase tracking-widest leading-relaxed">Be the first to list a premium digital asset on Build io.</p>
+              <h3 className="text-2xl font-black mb-2 uppercase tracking-tight">{t.emptyMarket}</h3>
+              <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto uppercase tracking-widest leading-relaxed">
+                Be the first to list a premium digital asset on Build io.
+              </p>
             </div>
           </div>
         ) : (

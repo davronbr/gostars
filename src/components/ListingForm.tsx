@@ -9,14 +9,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { generateListingDescription } from "@/ai/flows/ai-powered-listing-description";
+import type { Language } from "@/app/page";
+import { translations } from "@/app/page";
 
 interface ListingFormProps {
   onBack?: () => void;
+  lang: Language;
 }
 
-export function ListingForm({ onBack }: ListingFormProps) {
+export function ListingForm({ onBack, lang }: ListingFormProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const t = translations[lang];
+
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -62,7 +67,6 @@ export function ListingForm({ onBack }: ListingFormProps) {
 
   return (
     <div className="flex flex-col h-screen animate-in fade-in duration-500 overflow-hidden bg-background">
-      {/* Full Screen Header */}
       <div className="px-4 py-4 flex items-center border-b border-white/5 bg-background/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="flex items-center gap-2">
           <Button 
@@ -74,7 +78,7 @@ export function ListingForm({ onBack }: ListingFormProps) {
             <ChevronLeft className="w-6 h-6" />
           </Button>
           <div className="flex flex-col">
-            <h2 className="text-sm font-bold text-white uppercase tracking-tight">List Asset</h2>
+            <h2 className="text-sm font-bold text-white uppercase tracking-tight">{t.listAsset}</h2>
             <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Marketplace Entry</p>
           </div>
         </div>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,16 +7,17 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import dynamic from "next/dynamic";
+import type { Language } from "@/app/page";
+import { translations } from "@/app/page";
 
-// Lottie kutubxonasini dinamik yuklash (SSR xatolarini oldini olish uchun)
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const DEVELOPERS: any[] = [];
 
-export function DeveloperDirectory() {
+export function DeveloperDirectory({ lang }: { lang: Language }) {
   const [animationData, setAnimationData] = useState<any>(null);
+  const t = translations[lang];
 
-  // Animatsiya faylini yuklab olish
   useEffect(() => {
     fetch("https://lottie.host/8a420129-88f0-4890-905f-f323d6248971/sbbuM0ZAkG.json")
       .then((res) => res.json())
@@ -28,7 +30,7 @@ export function DeveloperDirectory() {
       <div className="mb-8 mt-4 text-center sm:text-left">
         <h2 className="text-3xl font-bold mb-2 uppercase tracking-tighter">Build Partners</h2>
         <p className="text-muted-foreground font-bold text-sm uppercase tracking-tight">
-          Expert developers vetted for premium digital asset construction.
+          {t.vetted}
         </p>
       </div>
 
@@ -92,10 +94,10 @@ export function DeveloperDirectory() {
 
                 <div className="flex gap-3 mt-auto">
                   <Button className="flex-1 rounded-2xl bg-primary text-white font-black uppercase tracking-tight hover:bg-primary/80 h-11 text-xs">
-                    Contact
+                    {t.contact}
                   </Button>
                   <Button variant="outline" className="flex-1 rounded-2xl bg-secondary border-none hover:bg-white/10 font-black uppercase tracking-tight h-11 text-xs">
-                    Portfolio
+                    {t.portfolio}
                   </Button>
                 </div>
               </div>

@@ -1,20 +1,25 @@
+
 "use client";
 
 import { Home, Globe, Users, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { NavTab } from "@/app/page";
+import type { NavTab, Language } from "@/app/page";
+import { translations } from "@/app/page";
 
 interface BottomNavProps {
   activeTab: NavTab;
   onTabChange: (tab: NavTab) => void;
+  lang: Language;
 }
 
-export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
+export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
+  const t = translations[lang];
+
   const tabs = [
-    { id: "marketplace", icon: Home, label: "Market" },
-    { id: "global", icon: Globe, label: "Global" },
-    { id: "directory", icon: Users, label: "Devs" },
-    { id: "profile", icon: User, label: "Profile" },
+    { id: "marketplace", icon: Home, label: t.market },
+    { id: "global", icon: Globe, label: t.global },
+    { id: "directory", icon: Users, label: t.devs },
+    { id: "profile", icon: User, label: t.profile },
   ] as const;
 
   return (

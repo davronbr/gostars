@@ -9,6 +9,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
+import type { Language } from "@/app/page";
+import { translations } from "@/app/page";
 
 interface Message {
   id: string;
@@ -53,14 +55,17 @@ const TELEGRAM_EMOJIS = [
 
 interface GlobalChatProps {
   onBack?: () => void;
+  lang: Language;
 }
 
-export function GlobalChat({ onBack }: GlobalChatProps) {
+export function GlobalChat({ onBack, lang }: GlobalChatProps) {
   const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
   const [newMessage, setNewMessage] = useState("");
   const [pendingImage, setPendingImage] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const t = translations[lang];
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -114,10 +119,10 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
             <ChevronLeft className="w-6 h-6" />
           </Button>
           <div className="flex flex-col">
-            <h2 className="text-sm font-bold text-white uppercase tracking-tight">Global Hub</h2>
+            <h2 className="text-sm font-bold text-white uppercase tracking-tight">{t.global} Hub</h2>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-              <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">1,248 Online</p>
+              <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">1,248 {t.online}</p>
             </div>
           </div>
         </div>

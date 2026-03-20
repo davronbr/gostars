@@ -18,30 +18,113 @@ import {
   FileText, 
   Star, 
   Users,
-  ChevronRight 
+  ChevronRight,
+  Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export type NavTab = "marketplace" | "global" | "directory" | "profile" | "listing";
+export type Language = "en" | "ru" | "uz";
+
+export const translations = {
+  uz: {
+    market: "Market",
+    global: "Global",
+    devs: "Dasturchilar",
+    profile: "Profil",
+    language: "Til",
+    payment: "To'lov usuli",
+    help: "Yordam",
+    news: "Yangiliklar",
+    offer: "Ommaviy oferta",
+    stars: "Bonus Stars",
+    friends: "Do'stlar",
+    listAsset: "Asset qo'shish",
+    foundry: "Foundry",
+    online: "Onlayn",
+    search: "Qidirish...",
+    categories: "Kategoriyalar",
+    emptyMarket: "Market bo'sh",
+    contact: "Bog'lanish",
+    portfolio: "Portfolio",
+    vetted: "Tasdiqlangan dasturchilar",
+    langName: "O'zbekcha"
+  },
+  ru: {
+    market: "Маркет",
+    global: "Глобал",
+    devs: "Разрабы",
+    profile: "Профиль",
+    language: "Язык",
+    payment: "Способ оплаты",
+    help: "Помощь",
+    news: "Канал новостей",
+    offer: "Публичная оферта",
+    stars: "Бонусные звезды",
+    friends: "Друзья",
+    listAsset: "Добавить актив",
+    foundry: "Foundry",
+    online: "В сети",
+    search: "Поиск...",
+    categories: "Категории",
+    emptyMarket: "Маркет пуст",
+    contact: "Связаться",
+    portfolio: "Портфолио",
+    vetted: "Проверенные специалисты",
+    langName: "Русский"
+  },
+  en: {
+    market: "Market",
+    global: "Global",
+    devs: "Devs",
+    profile: "Profile",
+    language: "Language",
+    payment: "Payment Method",
+    help: "Support",
+    news: "News Channel",
+    offer: "Public Offer",
+    stars: "Bonus Stars",
+    friends: "Friends",
+    listAsset: "List Asset",
+    foundry: "Foundry",
+    online: "Online",
+    search: "Search assets...",
+    categories: "Categories",
+    emptyMarket: "Market is Empty",
+    contact: "Contact",
+    portfolio: "Portfolio",
+    vetted: "Vetted Developers",
+    langName: "English"
+  }
+};
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>("marketplace");
+  const [lang, setLang] = useState<Language>("uz");
+
+  const t = translations[lang];
 
   const renderContent = () => {
     switch (activeTab) {
       case "marketplace":
-        return <Marketplace />;
+        return <Marketplace lang={lang} />;
       case "directory":
-        return <DeveloperDirectory />;
+        return <DeveloperDirectory lang={lang} />;
       case "global":
-        return <GlobalChat onBack={() => setActiveTab("marketplace")} />;
+        return <GlobalChat onBack={() => setActiveTab("marketplace")} lang={lang} />;
       case "profile":
-        return <ProfileView />;
+        return <ProfileView lang={lang} setLang={setLang} />;
       case "listing":
-        return <ListingForm onBack={() => setActiveTab("marketplace")} />;
+        return <ListingForm onBack={() => setActiveTab("marketplace")} lang={lang} />;
       default:
-        return <Marketplace />;
+        return <Marketplace lang={lang} />;
     }
   };
 
@@ -56,7 +139,7 @@ export default function Home() {
               Build io
             </h1>
             <p className="text-[10px] text-primary font-bold uppercase tracking-[0.3em] mt-1">
-              Foundry
+              {t.foundry}
             </p>
           </div>
           <div className="flex gap-2">
@@ -85,32 +168,44 @@ export default function Home() {
       </div>
 
       {!isFullScreenView && (
-        <BottomNav activeTab={activeTab === "listing" ? "marketplace" : activeTab} onTabChange={setActiveTab} />
+        <BottomNav 
+          activeTab={activeTab === "listing" ? "marketplace" : activeTab} 
+          onTabChange={setActiveTab} 
+          lang={lang}
+        />
       )}
       <Toaster />
     </main>
   );
 }
 
-function ProfileView() {
+function ProfileView({ lang, setLang }: { lang: Language, setLang: (l: Language) => void }) {
+  const t = translations[lang];
+
   const settingsGroups = [
     {
       items: [
-        { icon: Globe, label: "Til", value: "O'zbekcha", color: "bg-purple-500" },
-        { icon: Wallet, label: "To'lov usuli", value: "Payme", color: "bg-blue-500" },
-        { icon: MessageCircle, label: "Yordam", value: "@tezstar_supp", color: "bg-orange-500" },
-        { icon: Lightbulb, label: "Yangiliklar kanali", value: "@tezstar", color: "bg-yellow-500" },
+        { 
+          icon: Globe, 
+          label: t.language, 
+          value: t.langName, 
+          color: "bg-purple-500",
+          isLanguage: true 
+        },
+        { icon: Wallet, label: t.payment, value: "Payme", color: "bg-blue-500" },
+        { icon: MessageCircle, label: t.help, value: "@tezstar_supp", color: "bg-orange-500" },
+        { icon: Lightbulb, label: t.news, value: "@tezstar", color: "bg-yellow-500" },
       ]
     },
     {
       items: [
-        { icon: FileText, label: "Ommaviy oferta", value: "", color: "bg-green-500" },
+        { icon: FileText, label: t.offer, value: "", color: "bg-green-500" },
       ]
     },
     {
       items: [
-        { icon: Star, label: "Bonus Stars", value: "0 Yulduzlar", color: "bg-amber-500" },
-        { icon: Users, label: "Do'stlar", value: "0", color: "bg-blue-400" },
+        { icon: Star, label: t.stars, value: `0 ${t.stars}`, color: "bg-amber-500" },
+        { icon: Users, label: t.friends, value: "0", color: "bg-blue-400" },
       ]
     }
   ];
@@ -129,18 +224,49 @@ function ProfileView() {
         {settingsGroups.map((group, gIdx) => (
           <div key={gIdx} className="bg-secondary/50 rounded-[2rem] overflow-hidden border border-white/5 divide-y divide-white/5 shadow-2xl">
             {group.items.map((item, iIdx) => (
-              <button key={iIdx} className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-all text-left group active:scale-[0.98]">
-                <div className="flex items-center gap-3">
-                  <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shadow-lg", item.color)}>
-                    <item.icon className="w-4 h-4 text-white" />
+              item.isLanguage ? (
+                <DropdownMenu key={iIdx}>
+                  <DropdownMenuTrigger asChild>
+                    <button className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-all text-left group active:scale-[0.98]">
+                      <div className="flex items-center gap-3">
+                        <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shadow-lg", item.color)}>
+                          <item.icon className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="font-bold text-[13px] text-white uppercase tracking-tight">{item.label}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[13px] text-primary font-black uppercase tracking-tight">{item.value}</span>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
+                      </div>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 bg-secondary border-white/10 rounded-2xl p-2" align="end">
+                    {(['en', 'ru', 'uz'] as Language[]).map((l) => (
+                      <DropdownMenuItem 
+                        key={l} 
+                        onClick={() => setLang(l)}
+                        className="rounded-xl font-bold cursor-pointer hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary uppercase text-[10px] tracking-widest flex justify-between items-center"
+                      >
+                        {translations[l].langName}
+                        {lang === l && <Check className="w-4 h-4 text-primary" />}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <button key={iIdx} className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-all text-left group active:scale-[0.98]">
+                  <div className="flex items-center gap-3">
+                    <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shadow-lg", item.color)}>
+                      <item.icon className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="font-bold text-[13px] text-white uppercase tracking-tight">{item.label}</span>
                   </div>
-                  <span className="font-bold text-[13px] text-white uppercase tracking-tight">{item.label}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[13px] text-primary font-black uppercase tracking-tight">{item.value}</span>
-                  <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
-                </div>
-              </button>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[13px] text-primary font-black uppercase tracking-tight">{item.value}</span>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
+                  </div>
+                </button>
+              )
             ))}
           </div>
         ))}
