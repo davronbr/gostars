@@ -201,12 +201,6 @@ function ProfileView({ lang, setLang }: { lang: Language, setLang: (l: Language)
       items: [
         { icon: FileText, label: t.offer, value: "", color: "bg-green-500" },
       ]
-    },
-    {
-      items: [
-        { icon: Star, label: t.stars, value: `0 ${t.stars}`, color: "bg-amber-500" },
-        { icon: Users, label: t.friends, value: "0", color: "bg-blue-400" },
-      ]
     }
   ];
 
