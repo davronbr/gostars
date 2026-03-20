@@ -16,7 +16,6 @@ import {
   MessageCircle, 
   Lightbulb, 
   FileText, 
-  Check,
   ChevronRight,
   X
 } from "lucide-react";
@@ -75,9 +74,9 @@ export const translations = {
     publish: "E'lon berish",
     images: "Rasmlar",
     name: "Davron",
-    chooseLang: "Tilni tanlang",
-    chooseLangDesc: "Ilovada ishlatmoqchi bo'lgan tilni tanlang.",
-    confirm: "Tasdiqlash"
+    chooseLang: "TILNI TANLASH",
+    chooseLangDesc: "ILOVADA ISHLATMOQCHI BO'LGAN TILNI TANLANG.",
+    confirm: "TASDIQLASH"
   },
   ru: {
     market: "Маркет",
@@ -117,9 +116,9 @@ export const translations = {
     publish: "Опубликовать",
     images: "Изображения",
     name: "Даврон",
-    chooseLang: "Выберите язык",
-    chooseLangDesc: "Выберите язык, который вы хотите использовать в приложении.",
-    confirm: "Подтвердить"
+    chooseLang: "ВЫБЕРИТЕ ЯЗЫК",
+    chooseLangDesc: "ВЫБЕРИТЕ ЯЗЫК, КОТОРЫЙ ВЫ ХОТИТЕ ИСПОЛЬЗОВАТЬ В ПРИЛОЖЕНИИ.",
+    confirm: "ПОДТВЕРДИТЬ"
   },
   en: {
     market: "Market",
@@ -159,9 +158,9 @@ export const translations = {
     publish: "Publish Listing",
     images: "Images",
     name: "Davron",
-    chooseLang: "Choose language",
-    chooseLangDesc: "Select the language you want to use in the application.",
-    confirm: "Confirm"
+    chooseLang: "CHOOSE LANGUAGE",
+    chooseLangDesc: "SELECT THE LANGUAGE YOU WANT TO USE IN THE APPLICATION.",
+    confirm: "CONFIRM"
   }
 };
 
@@ -333,47 +332,47 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
   };
 
   const languages = [
-    { id: "uz", name: "Uzbek", sub: "O'zbek" },
-    { id: "en", name: "English", sub: "English" },
-    { id: "ru", name: "Russian", sub: "Русский" },
+    { id: "uz", name: "UZBEK", sub: "O'ZBEK" },
+    { id: "en", name: "ENGLISH", sub: "ENGLISH" },
+    { id: "ru", name: "RUSSIAN", sub: "РУССКИЙ" },
   ] as const;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#0D121D] border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[400px] shadow-2xl">
+      <DialogContent className="bg-[#0D121D] border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[380px] shadow-2xl">
         <div className="relative p-6 flex flex-col items-center">
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors"
+            className="absolute top-4 right-4 p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors z-20"
           >
             <X className="w-5 h-5 text-muted-foreground" />
           </button>
 
-          <div className="w-32 h-32 mb-4">
+          <div className="w-40 h-40 mb-2 mt-4">
             {animationData && (
               <Lottie animationData={animationData} loop={true} />
             )}
           </div>
 
           <DialogHeader className="text-center space-y-2 mb-8">
-            <DialogTitle className="text-2xl font-black text-white uppercase tracking-tight">
+            <DialogTitle className="text-xl font-black text-white uppercase tracking-tight">
               {t.chooseLang}
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-xs font-bold uppercase tracking-widest leading-relaxed">
+            <DialogDescription className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest leading-relaxed px-4">
               {t.chooseLangDesc}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="w-full space-y-3 mb-8">
+          <div className="w-full space-y-3 mb-10">
             {languages.map((l) => (
               <button
                 key={l.id}
                 onClick={() => setSelected(l.id as Language)}
                 className={cn(
-                  "w-full flex items-center gap-4 p-4 rounded-3xl border-2 transition-all duration-300",
+                  "w-full flex items-center gap-4 p-5 rounded-[1.8rem] border-2 transition-all duration-300 group",
                   selected === l.id 
                     ? "border-primary bg-primary/5" 
-                    : "border-white/5 bg-secondary/30 hover:bg-white/5"
+                    : "border-white/5 bg-[#161C2A] hover:bg-white/5"
                 )}
               >
                 <div className={cn(
@@ -392,7 +391,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
 
           <Button 
             onClick={handleConfirm}
-            className="w-full h-14 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-base"
+            className="w-full h-14 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-base mb-2"
           >
             {t.confirm}
           </Button>
