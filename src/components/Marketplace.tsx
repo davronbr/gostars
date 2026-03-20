@@ -1,0 +1,132 @@
+
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import { Search, SlidersHorizontal, ExternalLink, Code2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
+
+const WEBSITES = [
+  {
+    id: 1,
+    name: "CyberFlow SaaS",
+    price: "$2,400",
+    tech: ["Next.js", "Tailwind", "Supabase"],
+    image: PlaceHolderImages[0].imageUrl,
+    type: "SaaS",
+  },
+  {
+    id: 2,
+    name: "Nebula E-commerce",
+    price: "$4,850",
+    tech: ["React", "Node.js", "Stripe"],
+    image: PlaceHolderImages[1].imageUrl,
+    type: "E-com",
+  },
+  {
+    id: 3,
+    name: "Prism Dashboard",
+    price: "$1,200",
+    tech: ["Vue.js", "Firebase", "D3.js"],
+    image: PlaceHolderImages[2].imageUrl,
+    type: "Tool",
+  },
+  {
+    id: 4,
+    name: "Vortex Blog",
+    price: "$850",
+    tech: ["Astro", "MDX", "Vercel"],
+    image: PlaceHolderImages[3].imageUrl,
+    type: "Content",
+  },
+];
+
+export function Marketplace() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  return (
+    <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md pt-6 pb-4 px-4">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input 
+              placeholder="Search websites..." 
+              className="pl-10 glass border-none rounded-full h-12 focus-visible:ring-primary"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <Button size="icon" variant="secondary" className="rounded-full h-12 w-12 glass border-none">
+            <SlidersHorizontal className="w-5 h-5" />
+          </Button>
+        </div>
+        
+        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+          {["All", "SaaS", "E-com", "Tool", "Social", "Portfolio"].map((tag) => (
+            <Badge 
+              key={tag} 
+              variant="secondary" 
+              className="px-4 py-1.5 rounded-full glass border-none cursor-pointer hover:bg-primary/20 hover:text-primary transition-colors whitespace-nowrap"
+            >
+              {tag}
+            </Badge>
+          ))}
+        </div>
+      </header>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 mt-4">
+        {WEBSITES.map((site) => (
+          <div 
+            key={site.id} 
+            className="glass rounded-3xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300"
+          >
+            <div className="relative h-56 w-full bg-secondary/50">
+              <Image 
+                src={site.image} 
+                alt={site.name} 
+                fill 
+                className="object-cover"
+                data-ai-hint="3D technology interface"
+              />
+              <div className="absolute top-4 left-4">
+                <Badge className="bg-primary text-white neon-glow border-none px-3 py-1 rounded-full font-headline">
+                  {site.price}
+                </Badge>
+              </div>
+            </div>
+            
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-xl font-headline font-bold text-foreground group-hover:text-primary transition-colors">
+                    {site.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                    <Code2 className="w-3 h-3" />
+                    {site.tech.join(" • ")}
+                  </p>
+                </div>
+                <Badge variant="outline" className="rounded-full border-primary/30 text-primary bg-primary/5">
+                  {site.type}
+                </Badge>
+              </div>
+              
+              <div className="flex gap-3">
+                <Button className="flex-1 rounded-full h-11 bg-primary text-white font-semibold hover:bg-primary/80 transition-all">
+                  Details
+                </Button>
+                <Button size="icon" variant="secondary" className="rounded-full h-11 w-11 glass border-none">
+                  <ExternalLink className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

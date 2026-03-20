@@ -1,3 +1,40 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "website-3d-1",
+      "description": "3D render of a futuristic glass website interface",
+      "imageUrl": "https://picsum.photos/seed/web1/600/400",
+      "imageHint": "3D technology interface"
+    },
+    {
+      "id": "website-3d-2",
+      "description": "3D holographic dashboard illustration",
+      "imageUrl": "https://picsum.photos/seed/web2/600/400",
+      "imageHint": "3D digital dashboard"
+    },
+    {
+      "id": "website-3d-3",
+      "description": "Floating 3D geometric shapes representing data",
+      "imageUrl": "https://picsum.photos/seed/web3/600/400",
+      "imageHint": "3D geometric data"
+    },
+    {
+      "id": "website-3d-4",
+      "description": "Futuristic 3D e-commerce shop illustration",
+      "imageUrl": "https://picsum.photos/seed/web4/600/400",
+      "imageHint": "3D shop futuristic"
+    },
+    {
+      "id": "dev-avatar-1",
+      "description": "Stylized 3D avatar of a developer",
+      "imageUrl": "https://picsum.photos/seed/dev1/200/200",
+      "imageHint": "3D avatar person"
+    },
+    {
+      "id": "dev-avatar-2",
+      "description": "Stylized 3D avatar of a designer",
+      "imageUrl": "https://picsum.photos/seed/dev2/200/200",
+      "imageHint": "3D character model"
+    }
+  ]
 }
