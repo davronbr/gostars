@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { 
   Search, 
   Activity,
@@ -16,24 +17,50 @@ import { Separator } from "@/components/ui/separator";
 import dynamic from "next/dynamic";
 import type { Language } from "@/app/page";
 import { translations } from "@/app/page";
+import { nftCollections, type NftCollectionItem } from "@/lib/collections";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const WEBSITES: any[] = [];
 
+function CollectionItem({ item }: { item: NftCollectionItem }) {
+  return (
+    <button className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-zinc-900 transition-colors text-left">
+      <Image 
+        src={item.imageUrl} 
+        alt={item.name} 
+        width={40} 
+        height={40} 
+        className="rounded-lg"
+        data-ai-hint={item.imageHint}
+      />
+      <div className="flex flex-col">
+        <span className="font-bold text-sm text-white tracking-tight">{item.name}</span>
+        {item.date && <span className="text-xs font-bold text-zinc-500 tracking-wide mt-0.5">{item.date}</span>}
+      </div>
+    </button>
+  );
+}
+
 export function Marketplace({ lang }: { lang: Language }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("items");
+  const [activeTab, setActiveTab] = useState("collections");
   const [animationData, setAnimationData] = useState<any>(null);
 
   const t = translations[lang];
 
   useEffect(() => {
-    fetch("https://lottie.host/cf2036f9-0082-403e-b468-192acea5325e/u40R6Mla4A.json")
-      .then((res) => res.json())
-      .then((data) => setAnimationData(data))
-      .catch((err) => console.error("Market Lottie load error:", err));
-  }, []);
+    if (activeTab === 'items') {
+      fetch("https://lottie.host/cf2036f9-0082-403e-b468-192acea5325e/u40R6Mla4A.json")
+        .then((res) => res.json())
+        .then((data) => setAnimationData(data))
+        .catch((err) => console.error("Market Lottie load error:", err));
+    }
+  }, [activeTab]);
+
+  const filteredCollections = nftCollections.filter(item => 
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -91,30 +118,38 @@ export function Marketplace({ lang }: { lang: Language }) {
         </div>
       </div>
 
-      <div className="px-4 mt-8">
-        {WEBSITES.length === 0 ? (
-          <div className="bg-secondary rounded-[2.5rem] p-16 text-center flex flex-col items-center gap-6 border border-white/5 shadow-2xl">
-            <div className="w-48 h-48 flex items-center justify-center">
-              {animationData ? (
-                <Lottie 
-                  animationData={animationData}
-                  loop={true} 
-                  autoplay={true}
-                  className="w-full h-full scale-125"
-                />
-              ) : (
-                <div className="w-20 h-20 bg-primary/10 rounded-full animate-pulse" />
-              )}
-            </div>
-            <div>
-              <h3 className="text-2xl font-black mb-2 tracking-tight">{t.emptyMarket}</h3>
-              <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto tracking-widest leading-relaxed">
-                {t.emptyMarketDesc}
-              </p>
+      <div className="mt-4">
+        {activeTab === 'collections' ? (
+          <div className="px-4 space-y-1">
+            {filteredCollections.map(item => (
+              <CollectionItem key={item.id} item={item} />
+            ))}
+          </div>
+        ) : WEBSITES.length === 0 ? (
+          <div className="px-4 mt-8">
+            <div className="bg-secondary rounded-[2.5rem] p-16 text-center flex flex-col items-center gap-6 border border-white/5 shadow-2xl">
+              <div className="w-48 h-48 flex items-center justify-center">
+                {animationData ? (
+                  <Lottie 
+                    animationData={animationData}
+                    loop={true} 
+                    autoplay={true}
+                    className="w-full h-full scale-125"
+                  />
+                ) : (
+                  <div className="w-20 h-20 bg-primary/10 rounded-full animate-pulse" />
+                )}
+              </div>
+              <div>
+                <h3 className="text-2xl font-black mb-2 tracking-tight">{t.emptyMarket}</h3>
+                <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto tracking-widest leading-relaxed">
+                  {t.emptyMarketDesc}
+                </p>
+              </div>
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-6 px-4">
             {/* Website cards would go here */}
           </div>
         )}
