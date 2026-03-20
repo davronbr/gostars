@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -77,9 +78,9 @@ export const translations = {
     chooseLang: "TILNI TANLASH",
     chooseLangDesc: "ILOVADA ISHLATMOQCHI BO'LGAN TILNI TANLANG.",
     confirm: "TASDIQLASH",
-    selectWallet: "Hamyon usulini tanlang",
-    walletDesc: "Bu standart sifatida ishlatiladi",
-    save: "Saqlash"
+    selectWallet: "HAMYON USULINI TANLANG",
+    walletDesc: "BU STANDART SIFATIDA ISHLATILADI",
+    save: "SAQLASH"
   },
   ru: {
     market: "Маркет",
@@ -122,9 +123,9 @@ export const translations = {
     chooseLang: "ВЫБЕРИТЕ ЯЗЫК",
     chooseLangDesc: "ВЫБЕРИТЕ ЯЗЫК, КОТОРЫЙ ВЫ ХОТИТЕ ИСПОЛЬЗОВАТЬ В ПРИЛОЖЕНИИ.",
     confirm: "ПОДТВЕРДИТЬ",
-    selectWallet: "Выберите способ оплаты",
-    walletDesc: "Это будет использоваться по умолчанию",
-    save: "Сохранить"
+    selectWallet: "ВЫБЕРИТЕ СПОСОБ ОПЛАТЫ",
+    walletDesc: "ЭТО БУДЕТ ИСПОЛЬЗОВАТЬСЯ ПО УМОЛЧАНИЮ",
+    save: "СОХРАНИТЬ"
   },
   en: {
     market: "Market",
@@ -167,9 +168,9 @@ export const translations = {
     chooseLang: "CHOOSE LANGUAGE",
     chooseLangDesc: "SELECT THE LANGUAGE YOU WANT TO USE IN THE APPLICATION.",
     confirm: "CONFIRM",
-    selectWallet: "Select payment method",
-    walletDesc: "This will be used as default",
-    save: "Save"
+    selectWallet: "SELECT WALLET METHOD",
+    walletDesc: "THIS WILL BE USED AS DEFAULT",
+    save: "SAVE"
   }
 };
 
@@ -209,9 +210,9 @@ export default function Home() {
   const isFullScreenView = activeTab === "global" || activeTab === "listing";
 
   return (
-    <main className="min-h-screen max-w-2xl mx-auto bg-background selection:bg-primary selection:text-white font-body">
+    <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body">
       {!isFullScreenView && (
-        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-background/80 backdrop-blur-sm sticky top-0 z-40 border-b border-white/5">
+        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-black/60 backdrop-blur-lg sticky top-0 z-40 border-b border-white/10">
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-white tracking-tighter leading-none uppercase">
               Build io
@@ -224,7 +225,7 @@ export default function Home() {
             <Button 
               size="icon" 
               variant="secondary" 
-              className="bg-secondary/80 rounded-full border-none h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md"
+              className="bg-zinc-900 rounded-full border border-white/5 h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md"
               onClick={() => setActiveTab("listing")}
             >
               <Plus className="w-6 h-6 text-white" />
@@ -232,7 +233,7 @@ export default function Home() {
             <Button 
               size="icon" 
               variant="secondary" 
-              className="bg-secondary/80 rounded-full border-none h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md"
+              className="bg-zinc-900 rounded-full border border-white/5 h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md"
               onClick={() => setActiveTab("profile")}
             >
               <Settings className="w-5 h-5 text-white" />
@@ -324,7 +325,7 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center mt-6 mb-8 text-center">
-        <div className="w-24 h-24 bg-card/50 backdrop-blur-md rounded-full flex items-center justify-center mb-4 border-2 border-white/20 overflow-hidden shadow-xl">
+        <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center mb-4 border-2 border-white/20 overflow-hidden shadow-xl">
            <div className="text-white font-black text-2xl italic tracking-tighter opacity-80">BIO</div>
         </div>
         <h2 className="text-2xl font-bold text-white uppercase tracking-tight">{t.name}</h2>
@@ -333,7 +334,7 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
 
       <div className="space-y-4 px-2">
         {settingsGroups.map((group, gIdx) => (
-          <div key={gIdx} className="bg-secondary/40 backdrop-blur-md rounded-[2rem] overflow-hidden border border-white/10 divide-y divide-white/5 shadow-2xl">
+          <div key={gIdx} className="bg-zinc-900/40 backdrop-blur-md rounded-[2rem] overflow-hidden border border-white/10 divide-y divide-white/5 shadow-2xl">
             {group.items.map((item, iIdx) => (
               <button 
                 key={iIdx} 
@@ -388,7 +389,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-card border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[85%] sm:max-w-[310px] shadow-2xl backdrop-blur-xl">
+      <DialogContent className="bg-zinc-900 border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[85%] sm:max-w-[310px] shadow-2xl backdrop-blur-xl">
         <div className="relative p-5 flex flex-col items-center">
           <button 
             onClick={onClose}
@@ -421,7 +422,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
                   "w-full flex items-center gap-3 p-4 rounded-[1.5rem] border-2 transition-all duration-300 group",
                   selected === l.id 
                     ? "border-primary bg-primary/10" 
-                    : "border-white/10 bg-background/30 hover:bg-white/10"
+                    : "border-white/10 bg-black/30 hover:bg-white/10"
                 )}
               >
                 <div className={cn(
@@ -474,7 +475,7 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-card border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[400px] shadow-2xl backdrop-blur-xl">
+      <DialogContent className="bg-zinc-900 border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[400px] shadow-2xl backdrop-blur-xl">
         <div className="p-6 flex flex-col">
           <DialogHeader className="text-center space-y-2 mb-8 mt-4">
             <DialogTitle className="text-xl font-bold text-white tracking-tight">
