@@ -17,19 +17,19 @@ export function DeveloperDirectory() {
 
       <div className="space-y-6">
         {DEVELOPERS.length === 0 ? (
-          <div className="glass rounded-3xl p-12 text-center flex flex-col items-center gap-4">
-            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-              <Users className="w-8 h-8 text-primary" />
+          <div className="bg-secondary rounded-3xl p-16 text-center flex flex-col items-center gap-6">
+            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+              <Users className="w-10 h-10 text-primary" />
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-1">No Developers Found</h3>
+              <h3 className="text-2xl font-bold mb-2">No Developers Found</h3>
               <p className="text-muted-foreground text-sm font-medium">The developer directory is currently empty.</p>
             </div>
           </div>
         ) : (
           DEVELOPERS.map((dev) => (
-            <div key={dev.id} className="glass rounded-3xl p-6 flex flex-col sm:flex-row gap-6 hover:border-primary/30 transition-all">
-              <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden bg-secondary flex-shrink-0">
+            <div key={dev.id} className="bg-secondary rounded-3xl p-6 flex flex-col sm:flex-row gap-6 hover:border-primary/30 transition-all">
+              <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden bg-background flex-shrink-0">
                 <Image 
                   src={dev.avatar} 
                   alt={dev.name} 
@@ -56,7 +56,7 @@ export function DeveloperDirectory() {
 
                 <div className="flex flex-wrap gap-2 mt-4 mb-6">
                   {dev.specialties.map((spec: string) => (
-                    <Badge key={spec} variant="secondary" className="glass border-none text-[10px] uppercase tracking-wider font-bold">
+                    <Badge key={spec} variant="secondary" className="bg-background border-none text-[10px] uppercase tracking-wider font-bold">
                       {spec}
                     </Badge>
                   ))}
@@ -66,7 +66,7 @@ export function DeveloperDirectory() {
                   <Button className="flex-1 rounded-full bg-primary text-white font-bold hover:bg-primary/80">
                     Contact
                   </Button>
-                  <Button variant="outline" className="rounded-full glass border-none hover:bg-white/10 font-bold">
+                  <Button variant="outline" className="rounded-full bg-secondary border-none hover:bg-white/10 font-bold">
                     Portfolio
                   </Button>
                 </div>

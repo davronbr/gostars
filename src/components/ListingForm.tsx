@@ -62,13 +62,13 @@ export function ListingForm() {
         <p className="text-muted-foreground font-bold">Sell your website or digital tool to the Build IO network.</p>
       </div>
 
-      <div className="glass rounded-3xl p-6 space-y-6">
+      <div className="bg-secondary rounded-3xl p-6 space-y-6">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label className="font-bold">Asset Name</Label>
             <Input 
               placeholder="e.g. CyberFlow SaaS" 
-              className="glass border-none h-12 font-bold"
+              className="bg-background border-none h-12 font-bold"
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
             />
@@ -78,7 +78,7 @@ export function ListingForm() {
             <Input 
               type="number" 
               placeholder="0.00" 
-              className="glass border-none h-12 font-bold"
+              className="bg-background border-none h-12 font-bold"
               value={formData.price}
               onChange={(e) => setFormData({...formData, price: e.target.value})}
             />
@@ -89,7 +89,7 @@ export function ListingForm() {
           <Label className="font-bold">Technical Stack</Label>
           <Input 
             placeholder="e.g. Next.js, Tailwind, Postgres" 
-            className="glass border-none h-12 font-bold"
+            className="bg-background border-none h-12 font-bold"
             value={formData.technicalDetails}
             onChange={(e) => setFormData({...formData, technicalDetails: e.target.value})}
           />
@@ -99,7 +99,7 @@ export function ListingForm() {
           <Label className="font-bold">Key Features (comma separated)</Label>
           <Input 
             placeholder="e.g. Auth, Stripe, Admin Panel" 
-            className="glass border-none h-12 font-bold"
+            className="bg-background border-none h-12 font-bold"
             value={formData.features}
             onChange={(e) => setFormData({...formData, features: e.target.value})}
           />
@@ -111,7 +111,7 @@ export function ListingForm() {
             <Button 
               size="sm" 
               variant="outline" 
-              className="rounded-full glass border-primary/30 text-primary gap-2 h-8 px-4 hover:bg-primary/10 font-bold"
+              className="rounded-full bg-background border-primary/30 text-primary gap-2 h-8 px-4 hover:bg-primary/10 font-bold"
               onClick={handleAiSuggest}
               disabled={loading}
             >
@@ -121,7 +121,7 @@ export function ListingForm() {
           </div>
           <Textarea 
             placeholder="Describe your asset's value proposition..." 
-            className="glass border-none min-h-[150px] resize-none font-bold"
+            className="bg-background border-none min-h-[150px] resize-none font-bold"
             value={formData.description}
             onChange={(e) => setFormData({...formData, description: e.target.value})}
           />
@@ -130,13 +130,13 @@ export function ListingForm() {
         <div className="space-y-2">
           <Label className="font-bold">Screenshots</Label>
           <div className="grid grid-cols-3 gap-4">
-            <div className="aspect-square glass rounded-xl flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors border-dashed border-2 border-white/10">
+            <div className="aspect-square bg-background rounded-xl flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors border-dashed border-2 border-white/10">
               <Upload className="w-6 h-6 text-muted-foreground" />
             </div>
           </div>
         </div>
 
-        <Button className="w-full h-14 rounded-full bg-primary text-white font-bold text-lg mt-4">
+        <Button className="w-full h-14 rounded-full bg-primary text-white font-black text-lg mt-4">
           Publish Listing
         </Button>
       </div>

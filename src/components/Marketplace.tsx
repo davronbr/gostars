@@ -14,18 +14,18 @@ export function Marketplace() {
 
   return (
     <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md pt-6 pb-4 px-4">
+      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md pt-6 pb-4 px-4 border-b border-white/5">
         <div className="flex items-center gap-3 mb-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input 
               placeholder="Search websites..." 
-              className="pl-10 glass border-none rounded-full h-12 focus-visible:ring-primary font-bold"
+              className="pl-10 bg-secondary border-none rounded-full h-12 focus-visible:ring-primary font-bold"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button size="icon" variant="secondary" className="rounded-full h-12 w-12 glass border-none">
+          <Button size="icon" variant="secondary" className="rounded-full h-12 w-12 bg-secondary border-none">
             <SlidersHorizontal className="w-5 h-5" />
           </Button>
         </div>
@@ -35,7 +35,7 @@ export function Marketplace() {
             <Badge 
               key={tag} 
               variant="secondary" 
-              className="px-4 py-1.5 rounded-full glass border-none cursor-pointer hover:bg-primary/20 hover:text-primary transition-colors whitespace-nowrap font-bold"
+              className="px-4 py-1.5 rounded-full bg-secondary border-none cursor-pointer hover:bg-primary/20 hover:text-primary transition-colors whitespace-nowrap font-bold"
             >
               {tag}
             </Badge>
@@ -43,23 +43,24 @@ export function Marketplace() {
         </div>
       </header>
 
-      <div className="px-4 mt-4">
+      <div className="px-4 mt-8">
         {WEBSITES.length === 0 ? (
-          <div className="glass rounded-3xl p-12 text-center flex flex-col items-center gap-4">
-            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-              <PlusCircle className="w-8 h-8 text-primary" />
+          <div className="bg-secondary rounded-3xl p-16 text-center flex flex-col items-center gap-6">
+            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+              <PlusCircle className="w-10 h-10 text-primary" />
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-1">No Listings Yet</h3>
-              <p className="text-muted-foreground text-sm font-bold">Be the first to list a digital asset on the marketplace.</p>
+              <h3 className="text-2xl font-bold mb-2">No Listings Yet</h3>
+              <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto">The marketplace is empty. Start by listing your digital asset.</p>
             </div>
+            <Button className="rounded-full px-8 font-black">Create Listing</Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {WEBSITES.map((site) => (
               <div 
                 key={site.id} 
-                className="glass rounded-3xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300"
+                className="bg-secondary rounded-3xl overflow-hidden group hover:scale-[1.02] transition-transform duration-300"
               >
                 <div className="relative h-56 w-full bg-secondary/50">
                   <Image 
@@ -96,7 +97,7 @@ export function Marketplace() {
                     <Button className="flex-1 rounded-full h-11 bg-primary text-white font-bold hover:bg-primary/80 transition-all">
                       Details
                     </Button>
-                    <Button size="icon" variant="secondary" className="rounded-full h-11 w-11 glass border-none">
+                    <Button size="icon" variant="secondary" className="rounded-full h-11 w-11 bg-secondary border-none">
                       <ExternalLink className="w-4 h-4" />
                     </Button>
                   </div>
