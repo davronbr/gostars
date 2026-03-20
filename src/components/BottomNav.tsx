@@ -24,7 +24,7 @@ export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
 
   return (
     <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md">
-      <nav className="bg-zinc-900/95 backdrop-blur-3xl rounded-[2.8rem] p-1.5 flex items-center justify-around gap-1 shadow-[0_25px_60px_rgba(0,0,0,0.8)] border border-white/10 overflow-hidden">
+      <nav className="bg-zinc-900/80 backdrop-blur-3xl rounded-[2.8rem] p-1.5 flex items-center justify-around gap-1 shadow-[0_25px_60px_rgba(0,0,0,0.8)] border border-white/10 overflow-hidden">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -35,7 +35,7 @@ export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
               className={cn(
                 "flex flex-col items-center justify-center transition-all duration-300 relative flex-1 py-3 px-1 rounded-[2.2rem]",
                 isActive 
-                  ? "bg-primary/20 text-primary shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_4px_12px_rgba(0,0,0,0.4)] border border-primary/40" 
+                  ? "bg-zinc-800/90 text-primary shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1),0_4px_12px_rgba(0,0,0,0.4)] border border-white/5" 
                   : "text-zinc-500 hover:text-white border border-transparent"
               )}
             >
