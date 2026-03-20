@@ -18,7 +18,8 @@ import {
   X,
   Check,
   User as UserIcon,
-  Info
+  Info,
+  Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -56,15 +57,15 @@ export const translations = {
     help: "Yordam",
     news: "Yangiliklar",
     offer: "Ommaviy oferta",
-    offerTitle: "Build io nima?",
-    offerContent: "Build io — bu raqamli aktivlar (veb-saytlar, SaaS, skriptlar) va professional dasturchilar uchun mo'ljallangan premium platforma. Bizning maqsadimiz: tayyor bizneslarni sotish, sotib olish va tajribali mutaxassislar bilan xavfsiz bog'lanish uchun qulay Foundry markazini yaratishdir.",
+    offerTitle: "Tez Nft nima?",
+    offerContent: "Tez Nft — bu raqamli aktivlar (veb-saytlar, SaaS, skriptlar) va professional dasturchilar uchun mo'ljallangan premium platforma. Bizning maqsadimiz: tayyor bizneslarni sotish, sotib olish va tajribali mutaxassislar bilan xavfsiz bog'lanish uchun qulay Foundry markazini yaratishdir.",
     listAsset: "Asset qo'shish",
     foundry: "Foundry",
     online: "Onlayn",
     search: "Qidirish...",
     categories: "Kategoriyalar",
     emptyMarket: "Market bo'sh",
-    emptyMarketDesc: "Build io-da birinchi bo'lib premium asset joylang.",
+    emptyMarketDesc: "Tez Nft-da birinchi bo'lib premium asset joylang.",
     contact: "Bog'lanish",
     portfolio: "Portfolio",
     vetted: "Tasdiqlangan dasturchilar",
@@ -73,9 +74,9 @@ export const translations = {
     communityGrowing: "Hamjamiyat o'smoqda",
     leaderboardDesc: "Leaderboard hozirda tasdiqlangan mutaxassislar bilan to'ldirilmoqda.",
     myGiftsTitle: "Sovg'alar qutisi bo'sh",
-    myGiftsDesc: "Aktiv bo'ling va Build hamkorlaridan sovg'alarni qo'lga kiriting.",
+    myGiftsDesc: "Aktiv bo'ling va Tez Nft hamkorlaridan sovg'alarni qo'lga kiriting.",
     listingEntry: "Marketga kirish",
-    listingDesc: "Saytingiz yoki raqamli vositangizni Build io tarmog'ida soting.",
+    listingDesc: "Saytingiz yoki raqamli vositangizni Tez Nft tarmog'ida soting.",
     assetName: "Asset nomi",
     price: "Narxi (USD)",
     techStack: "Texnik stek",
@@ -103,15 +104,15 @@ export const translations = {
     help: "Помощь",
     news: "Канал новостей",
     offer: "Публичная оферта",
-    offerTitle: "Что такое Build io?",
-    offerContent: "Build io — это премиальная платформа для цифровых активов (сайты, SaaS, скрипты) и профессиональных разработчиков. Наша цель: создать удобный центр Foundry для покупки, продажи готового бизнеса и безопасного взаимодействия с опытными специалистами.",
+    offerTitle: "Что такое Tez Nft?",
+    offerContent: "Tez Nft — это премиальная платформа для цифровых активов (сайты, SaaS, скрипты) и профессиональных разработчиков. Наша цель: создать удобный центр Foundry для покупки, продажи готового бизнеса и безопасного взаимодействия с опытными специалистами.",
     listAsset: "Добавить актив",
     foundry: "Foundry",
     online: "В сети",
     search: "Поиск...",
     categories: "Категории",
     emptyMarket: "Маркет пуст",
-    emptyMarketDesc: "Будьте первым, кто разместит премиум-актив на Build io.",
+    emptyMarketDesc: "Будьте первым, кто разместит премиум-актив на Tez Nft.",
     contact: "Связаться",
     portfolio: "Портфолио",
     vetted: "Проверенные специалисты",
@@ -120,9 +121,9 @@ export const translations = {
     communityGrowing: "Сообщество растет",
     leaderboardDesc: "Каталог в настоящее время наполняется проверенными специалистами.",
     myGiftsTitle: "Коробка подарков пуста",
-    myGiftsDesc: "Будьте активны и получайте подарки от партнеров Build.",
+    myGiftsDesc: "Будьте активны и получайте подарки от партнеров Tez Nft.",
     listingEntry: "Вход в маркет",
-    listingDesc: "Продайте свой сайт или цифровой инструмент в сети Build io.",
+    listingDesc: "Продайте свой сайт или цифровой инструмент в сети Tez Nft.",
     assetName: "Название актива",
     price: "Цена (USD)",
     techStack: "Тех стек",
@@ -150,15 +151,15 @@ export const translations = {
     help: "Support",
     news: "News channel",
     offer: "Public offer",
-    offerTitle: "What is Build io?",
-    offerContent: "Build io is a premium platform for digital assets (websites, SaaS, scripts) and professional developers. Our goal: to create a convenient Foundry hub for buying, selling ready-made businesses, and safe connection with experienced specialists.",
+    offerTitle: "What is Tez Nft?",
+    offerContent: "Tez Nft is a premium platform for digital assets (websites, SaaS, scripts) and professional developers. Our goal: to create a convenient Foundry hub for buying, selling ready-made businesses, and safe connection with experienced specialists.",
     listAsset: "List asset",
     foundry: "Foundry",
     online: "Online",
     search: "Search assets...",
     categories: "Categories",
     emptyMarket: "Market is empty",
-    emptyMarketDesc: "Be the first to list a premium digital asset on Build io.",
+    emptyMarketDesc: "Be the first to list a premium digital asset on Tez Nft.",
     contact: "Contact",
     portfolio: "Portfolio",
     vetted: "Vetted developers",
@@ -167,9 +168,9 @@ export const translations = {
     communityGrowing: "Community growing",
     leaderboardDesc: "The leaderboard is currently being populated with vetted talent.",
     myGiftsTitle: "Gift box is empty",
-    myGiftsDesc: "Be active and receive gifts from Build partners.",
+    myGiftsDesc: "Be active and receive gifts from Tez Nft partners.",
     listingEntry: "Marketplace entry",
-    listingDesc: "Sell your website or digital tool to the Build io network.",
+    listingDesc: "Sell your website or digital tool to the Tez Nft network.",
     assetName: "Asset name",
     price: "Price (USD)",
     techStack: "Technical stack",
@@ -245,7 +246,7 @@ export default function Home() {
         <header className="px-6 pt-12 pb-6 flex justify-between items-center bg-transparent sticky top-0 z-40">
           <div className="flex flex-col">
             <h1 className="text-2xl font-black text-white tracking-tighter leading-none">
-              Build io
+              Tez Nft
             </h1>
             <p className="text-[10px] text-primary font-black tracking-[0.3em]">
               {t.foundry}
@@ -351,9 +352,9 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
         { 
           icon: Lightbulb, 
           label: t.news, 
-          value: "@build_io", 
+          value: "@tez_nft", 
           color: "bg-yellow-500",
-          onClick: () => window.open("https://t.me/build_io", "_blank")
+          onClick: () => window.open("https://t.me/tez_nft", "_blank")
         },
       ]
     },

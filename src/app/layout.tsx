@@ -3,7 +3,7 @@ import './globals.css';
 import Script from 'next/script';
 
 export const metadata: Metadata = {
-  title: 'Build IO | Digital Marketplace',
+  title: 'Tez Nft | Digital Marketplace',
   description: 'Premium Marketplace for digital assets and expert developers.',
 };
 

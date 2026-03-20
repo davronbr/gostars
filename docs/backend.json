@@ -4,7 +4,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "User",
       "type": "object",
-      "description": "Represents a user account in the Build IO application, capable of being a buyer, a developer, or both.",
+      "description": "Represents a user account in the Tez Nft application, capable of being a buyer, a developer, or both.",
       "properties": {
         "id": {
           "type": "string",
