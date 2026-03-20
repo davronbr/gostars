@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -32,12 +33,10 @@ export default function Home() {
     }
   };
 
-  // Views that should be full-screen (no main header, no bottom nav)
   const isFullScreenView = activeTab === "global" || activeTab === "listing";
 
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-background selection:bg-primary selection:text-white font-body">
-      {/* App Header - Hidden on Full Screen Views */}
       {!isFullScreenView && (
         <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-background">
           <div className="flex flex-col">
@@ -67,12 +66,10 @@ export default function Home() {
         </header>
       )}
 
-      {/* Main View Area */}
       <div className="relative">
         {renderContent()}
       </div>
 
-      {/* Hide Bottom Nav on Full Screen Views */}
       {!isFullScreenView && (
         <BottomNav activeTab={activeTab === "listing" ? "marketplace" : activeTab} onTabChange={setActiveTab} />
       )}

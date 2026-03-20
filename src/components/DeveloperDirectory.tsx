@@ -1,33 +1,19 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
 import { Users, Star, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import dynamic from "next/dynamic";
+import duckData from "./duck_animation.json";
 
-// Dynamically import Lottie to avoid hydration issues and improve performance
+// Dynamically import Lottie to avoid hydration issues
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const DEVELOPERS: any[] = [];
-// A high-quality public Lottie URL for an animated search/community interaction
-const ANIMATION_URL = "https://assets10.lottiefiles.com/packages/lf20_96bovdur.json";
 
 export function DeveloperDirectory() {
-  const [animationData, setAnimationData] = useState<any>(null);
-
-  useEffect(() => {
-    // Fetch the Lottie JSON data safely
-    fetch(ANIMATION_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load animation");
-        return res.json();
-      })
-      .then((data) => setAnimationData(data))
-      .catch((err) => console.error("Lottie fetch error:", err));
-  }, []);
-
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="mb-8 mt-4 text-center sm:text-left">
@@ -39,17 +25,11 @@ export function DeveloperDirectory() {
         {DEVELOPERS.length === 0 ? (
           <div className="bg-secondary rounded-[2.5rem] p-12 text-center flex flex-col items-center gap-6 border border-white/5 shadow-2xl">
             <div className="w-48 h-48 flex items-center justify-center">
-              {animationData ? (
-                <Lottie 
-                  animationData={animationData} 
-                  loop={true} 
-                  className="w-full h-full"
-                />
-              ) : (
-                <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center animate-pulse">
-                  <Users className="w-10 h-10 text-primary/50" />
-                </div>
-              )}
+              <Lottie 
+                animationData={duckData} 
+                loop={true} 
+                className="w-full h-full"
+              />
             </div>
             <div className="space-y-2">
               <h3 className="text-2xl font-black uppercase tracking-tight">Community Growing</h3>
