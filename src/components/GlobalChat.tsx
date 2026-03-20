@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Send, Shield, Info, MoreVertical, Paperclip, ChevronLeft } from "lucide-react";
+import { Send, Shield, Paperclip, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -71,8 +71,8 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
 
   return (
     <div className="flex flex-col h-screen animate-in fade-in duration-500 overflow-hidden bg-background">
-      {/* Full Screen Header with Back Button */}
-      <div className="px-4 py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-sm sticky top-0 z-10">
+      {/* Simplified Full Screen Header */}
+      <div className="px-4 py-4 flex items-center border-b border-white/5 bg-background/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="flex items-center gap-2">
           <Button 
             size="icon" 
@@ -82,26 +82,13 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
           >
             <ChevronLeft className="w-6 h-6" />
           </Button>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center border border-primary/20">
-              <span className="text-primary font-bold">B</span>
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-white uppercase tracking-tight">Global Hub</h2>
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-                <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">1,248 Online</p>
-              </div>
+          <div className="flex flex-col">
+            <h2 className="text-sm font-bold text-white uppercase tracking-tight">Global Hub</h2>
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
+              <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">1,248 Online</p>
             </div>
           </div>
-        </div>
-        <div className="flex items-center gap-1">
-          <Button size="icon" variant="ghost" className="rounded-full text-muted-foreground hover:text-white">
-            <Info className="w-5 h-5" />
-          </Button>
-          <Button size="icon" variant="ghost" className="rounded-full text-muted-foreground hover:text-white">
-            <MoreVertical className="w-5 h-5" />
-          </Button>
         </div>
       </div>
 
@@ -126,7 +113,7 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
                 <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tight">{msg.user}</span>
                 {msg.isAdmin && <Shield className="w-3 h-3 text-primary" />}
               </div>
-              <div className={`p-3 rounded-2xl text-sm font-medium leading-relaxed ${
+              <div className={`p-3 rounded-2xl text-sm font-bold leading-relaxed ${
                 msg.user === "You" 
                   ? "bg-primary text-white rounded-tr-none shadow-lg shadow-primary/10" 
                   : "bg-secondary text-white rounded-tl-none border border-white/5"
