@@ -35,19 +35,14 @@ export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
               className={cn(
                 "flex flex-col items-center justify-center transition-all duration-300 relative flex-1 py-3 px-1 rounded-[2.2rem]",
                 isActive 
-                  ? "bg-primary/20 text-primary shadow-[0_0_20px_rgba(59,130,246,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] border border-primary/30" 
+                  ? "bg-primary/20 text-primary shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),0_4px_12px_rgba(0,0,0,0.4)] border border-primary/40" 
                   : "text-zinc-500 hover:text-white border border-transparent"
               )}
             >
-              <div className="relative">
-                <Icon className={cn(
-                  "w-5.5 h-5.5 transition-transform duration-300", 
-                  isActive ? "scale-110 stroke-[2.5px]" : "scale-100 stroke-[2px]"
-                )} />
-                {isActive && (
-                  <div className="absolute -inset-6 bg-primary/30 blur-2xl rounded-full -z-10 animate-pulse" />
-                )}
-              </div>
+              <Icon className={cn(
+                "w-5.5 h-5.5 transition-transform duration-300", 
+                isActive ? "scale-110 stroke-[2.5px]" : "scale-100 stroke-[2px]"
+              )} />
               <span className={cn(
                 "text-[9px] font-black mt-1.5 uppercase tracking-tighter transition-all",
                 isActive ? "opacity-100" : "opacity-60"
