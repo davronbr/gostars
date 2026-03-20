@@ -212,7 +212,7 @@ export default function Home() {
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body">
       {!isFullScreenView && (
-        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-black/80 backdrop-blur-xl sticky top-0 z-40 border-b border-white/5">
+        <header className="px-6 pt-10 pb-4 flex justify-between items-center bg-transparent sticky top-0 z-40">
           <div className="flex flex-col">
             <h1 className="text-2xl font-black text-white tracking-tighter leading-none uppercase italic">
               Build io
@@ -332,14 +332,14 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
         <p className="text-white/40 text-xs font-black uppercase tracking-widest mt-1">@moglq</p>
       </div>
 
-      <div className="space-y-2 px-2">
+      <div className="space-y-4 px-2">
         {settingsGroups.map((group, gIdx) => (
-          <div key={gIdx} className="mb-6">
+          <div key={gIdx} className="space-y-2">
             {group.items.map((item, iIdx) => (
               <button 
                 key={iIdx} 
                 onClick={item.onClick}
-                className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-all text-left group active:scale-[0.98] rounded-2xl mb-1"
+                className="w-full flex items-center justify-between p-4 bg-zinc-900/40 border border-white/5 hover:bg-zinc-800/60 transition-all text-left group active:scale-[0.98] rounded-[1.5rem] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
               >
                 <div className="flex items-center gap-4">
                   <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
