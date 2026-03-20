@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { Send, MessageSquare, Shield, Info } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Send, Shield, Info, MoreVertical, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface Message {
   id: string;
@@ -18,27 +18,40 @@ const MOCK_MESSAGES: Message[] = [
   {
     id: "1",
     user: "Admin",
-    text: "Welcome to the Build io Global Hub! Ask questions, share ideas, or find your next partner here.",
+    text: "Welcome to the Build io Global Hub! This is the official space for community collaboration.",
     time: "10:00 AM",
     isAdmin: true,
   },
   {
     id: "2",
     user: "CyberNaut",
-    text: "Anyone here experienced with Genkit and Next.js? Need some help with a flow.",
+    text: "Does anyone have a boilerplate for a Next.js 15 dashboard with Firebase?",
     time: "10:05 AM",
   },
   {
     id: "3",
     user: "DevMaster",
-    text: "I can help! What exactly is the issue you're facing?",
+    text: "I'm working on one right now. I'll share the link once it's on the Marketplace!",
     time: "10:07 AM",
+  },
+  {
+    id: "4",
+    user: "AlphaBuild",
+    text: "Need a React native expert for a fintech app project. DM me if interested.",
+    time: "10:12 AM",
   },
 ];
 
 export function GlobalChat() {
   const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
   const [newMessage, setNewMessage] = useState("");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const handleSend = () => {
     if (!newMessage.trim()) return;
@@ -53,67 +66,92 @@ export function GlobalChat() {
   };
 
   return (
-    <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700 flex flex-col h-[75vh]">
-      <div className="mb-6 mt-4">
-        <h2 className="text-3xl font-bold mb-2 text-white">Global Hub</h2>
-        <p className="text-muted-foreground font-bold">Community-wide discussion and collaboration space.</p>
+    <div className="flex flex-col h-[calc(100vh-140px)] animate-in fade-in duration-500 overflow-hidden">
+      {/* Telegram Style Header */}
+      <div className="px-6 py-4 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-sm sticky top-0 z-10">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center border border-primary/20">
+            <span className="text-primary font-bold">B</span>
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-white uppercase tracking-tight">Global Hub</h2>
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
+              <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">1,248 Online</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button size="icon" variant="ghost" className="rounded-full text-muted-foreground hover:text-white">
+            <Info className="w-5 h-5" />
+          </Button>
+          <Button size="icon" variant="ghost" className="rounded-full text-muted-foreground hover:text-white">
+            <MoreVertical className="w-5 h-5" />
+          </Button>
+        </div>
       </div>
 
-      <div className="flex-1 bg-secondary rounded-3xl border border-white/5 flex flex-col overflow-hidden">
-        {/* Chat Info Header */}
-        <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-            <span className="text-xs font-bold text-white uppercase tracking-widest">Live Channel</span>
-          </div>
-          <Info className="w-4 h-4 text-muted-foreground cursor-pointer" />
+      {/* Messages Area */}
+      <div 
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar scroll-smooth"
+      >
+        <div className="flex justify-center mb-6">
+          <span className="bg-secondary/50 text-[10px] font-bold text-muted-foreground px-4 py-1 rounded-full uppercase tracking-widest">Today</span>
         </div>
 
-        {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
-          {messages.map((msg) => (
-            <div key={msg.id} className={`flex gap-3 ${msg.user === "You" ? "flex-row-reverse" : ""}`}>
-              <Avatar className="w-8 h-8 rounded-full border border-white/10">
-                <AvatarFallback className="bg-primary/20 text-primary text-[10px] font-bold">
-                  {msg.user[0]}
-                </AvatarFallback>
-              </Avatar>
-              <div className={`max-w-[80%] flex flex-col ${msg.user === "You" ? "items-end" : ""}`}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase">{msg.user}</span>
-                  {msg.isAdmin && <Shield className="w-3 h-3 text-primary" />}
-                  <span className="text-[10px] text-muted-foreground/50">{msg.time}</span>
-                </div>
-                <div className={`p-3 rounded-2xl text-sm font-bold ${
-                  msg.user === "You" 
-                    ? "bg-primary text-white rounded-tr-none" 
-                    : "bg-background text-white rounded-tl-none border border-white/5"
-                }`}>
-                  {msg.text}
+        {messages.map((msg) => (
+          <div key={msg.id} className={`flex gap-3 ${msg.user === "You" ? "flex-row-reverse" : ""}`}>
+            <Avatar className="w-8 h-8 rounded-full border border-white/5 flex-shrink-0">
+              <AvatarFallback className="bg-secondary text-primary text-[10px] font-bold uppercase">
+                {msg.user[0]}
+              </AvatarFallback>
+            </Avatar>
+            <div className={`max-w-[75%] flex flex-col ${msg.user === "You" ? "items-end" : ""}`}>
+              <div className="flex items-center gap-2 mb-1 px-1">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tight">{msg.user}</span>
+                {msg.isAdmin && <Shield className="w-3 h-3 text-primary" />}
+              </div>
+              <div className={`p-3 rounded-2xl text-sm font-medium leading-relaxed ${
+                msg.user === "You" 
+                  ? "bg-primary text-white rounded-tr-none shadow-lg shadow-primary/10" 
+                  : "bg-secondary text-white rounded-tl-none border border-white/5"
+              }`}>
+                {msg.text}
+                <div className="mt-1 flex justify-end">
+                  <span className={`text-[9px] font-bold uppercase opacity-50 ${msg.user === "You" ? "text-white" : "text-muted-foreground"}`}>
+                    {msg.time}
+                  </span>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Input Area */}
-        <div className="p-4 bg-white/5 border-t border-white/5">
-          <div className="flex gap-2">
-            <Input 
-              placeholder="Message Global Hub..." 
-              className="bg-background border-none rounded-2xl h-12 font-bold focus-visible:ring-primary"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            />
-            <Button 
-              size="icon" 
-              className="h-12 w-12 rounded-2xl bg-primary text-white hover:bg-primary/80"
-              onClick={handleSend}
-            >
-              <Send className="w-5 h-5" />
-            </Button>
           </div>
+        ))}
+      </div>
+
+      {/* Bottom Input Area */}
+      <div className="p-4 bg-background border-t border-white/5 pb-10">
+        <div className="flex items-center gap-2 bg-secondary/50 p-2 rounded-2xl border border-white/5 focus-within:border-primary/50 transition-colors">
+          <Button size="icon" variant="ghost" className="rounded-xl text-muted-foreground hover:text-primary">
+            <Paperclip className="w-5 h-5" />
+          </Button>
+          <Input 
+            placeholder="Write a message..." 
+            className="bg-transparent border-none h-10 font-bold focus-visible:ring-0 shadow-none text-white placeholder:text-muted-foreground/50"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+          />
+          <Button 
+            size="icon" 
+            disabled={!newMessage.trim()}
+            className={`h-10 w-10 rounded-xl transition-all duration-300 ${
+              newMessage.trim() ? "bg-primary text-white scale-100" : "bg-transparent text-muted-foreground scale-90 opacity-50"
+            }`}
+            onClick={handleSend}
+          >
+            <Send className="w-5 h-5" />
+          </Button>
         </div>
       </div>
     </div>
