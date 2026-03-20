@@ -11,7 +11,7 @@ import dynamic from "next/dynamic";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const DEVELOPERS: any[] = [];
-// A high-quality public Lottie URL for an animated emoji
+// A high-quality public Lottie URL for an animated community/search emoji
 const ANIMATION_URL = "https://lottie.host/93952f44-8898-41d6-b9b2-32697926b2b5/l2o3T4lH7I.json";
 
 export function DeveloperDirectory() {
@@ -26,15 +26,15 @@ export function DeveloperDirectory() {
 
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="mb-8 mt-4">
+      <div className="mb-8 mt-4 text-center sm:text-left">
         <h2 className="text-3xl font-bold mb-2 uppercase tracking-tighter">Build Partners</h2>
         <p className="text-muted-foreground font-bold text-sm uppercase tracking-tight">Expert developers vetted for premium digital asset construction.</p>
       </div>
 
       <div className="space-y-6">
         {DEVELOPERS.length === 0 ? (
-          <div className="bg-secondary rounded-[2rem] p-12 text-center flex flex-col items-center gap-6 border border-white/5">
-            <div className="w-40 h-40 flex items-center justify-center">
+          <div className="bg-secondary rounded-[2.5rem] p-12 text-center flex flex-col items-center gap-6 border border-white/5 shadow-2xl">
+            <div className="w-48 h-48 flex items-center justify-center">
               {animationData ? (
                 <Lottie 
                   animationData={animationData} 
@@ -47,10 +47,10 @@ export function DeveloperDirectory() {
                 </div>
               )}
             </div>
-            <div>
-              <h3 className="text-2xl font-black mb-2 uppercase tracking-tight">No Developers Found</h3>
-              <p className="text-muted-foreground text-sm font-bold uppercase tracking-widest max-w-[200px] mx-auto leading-relaxed">
-                The directory is currently under reconstruction.
+            <div className="space-y-2">
+              <h3 className="text-2xl font-black uppercase tracking-tight">Community Growing</h3>
+              <p className="text-muted-foreground text-sm font-bold uppercase tracking-widest max-w-[240px] mx-auto leading-relaxed">
+                The directory is currently being populated with vetted talent.
               </p>
             </div>
           </div>
