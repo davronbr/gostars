@@ -1,9 +1,9 @@
 "use client";
 
-import { Home, Search, PlusSquare, Users, User } from "lucide-react";
+import { Home, PlusSquare, Users, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type NavTab = "marketplace" | "search" | "list" | "directory" | "profile";
+type NavTab = "marketplace" | "list" | "directory" | "profile";
 
 interface BottomNavProps {
   activeTab: NavTab;
@@ -13,7 +13,6 @@ interface BottomNavProps {
 export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
   const tabs = [
     { id: "marketplace", icon: Home, label: "Market" },
-    { id: "search", icon: Search, label: "Search" },
     { id: "list", icon: PlusSquare, label: "List" },
     { id: "directory", icon: Users, label: "Devs" },
     { id: "profile", icon: User, label: "Profile" },

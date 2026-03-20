@@ -40,10 +40,12 @@
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl;
+  /* No glass/glow effects as requested */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
-  .glass-dark {
-    @apply bg-black/20 backdrop-blur-xl border border-white/5;
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

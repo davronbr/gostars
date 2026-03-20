@@ -6,10 +6,10 @@ import { Marketplace } from "@/components/Marketplace";
 import { DeveloperDirectory } from "@/components/DeveloperDirectory";
 import { ListingForm } from "@/components/ListingForm";
 import { Toaster } from "@/components/ui/toaster";
-import { ShoppingBag, Heart, User, Settings, LogOut, Package, ExternalLink } from "lucide-react";
+import { ShoppingBag, Heart, User, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-type NavTab = "marketplace" | "search" | "list" | "directory" | "profile";
+type NavTab = "marketplace" | "list" | "directory" | "profile";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>("marketplace");
@@ -17,7 +17,6 @@ export default function Home() {
   const renderContent = () => {
     switch (activeTab) {
       case "marketplace":
-      case "search":
         return <Marketplace />;
       case "directory":
         return <DeveloperDirectory />;
@@ -35,7 +34,7 @@ export default function Home() {
       {/* App Header */}
       <header className="px-6 pt-10 pb-6 flex justify-between items-center">
         <div>
-          <h1 className="text-4xl font-body font-black text-white tracking-tighter">
+          <h1 className="text-4xl font-headline font-black text-white tracking-tighter uppercase">
             Build io
           </h1>
         </div>
