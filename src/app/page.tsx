@@ -34,9 +34,12 @@ export default function Home() {
       {/* App Header */}
       <header className="px-6 pt-10 pb-6 flex justify-between items-center">
         <div>
-          <h1 className="text-4xl font-headline font-black text-white tracking-tighter uppercase">
+          <h1 className="text-2xl font-body font-bold text-white tracking-tighter leading-none">
             Build io
           </h1>
+          <p className="text-[10px] text-primary font-bold uppercase tracking-[0.3em] mt-1">
+            Foundry
+          </p>
         </div>
         <div className="flex gap-2">
           <Button size="icon" variant="secondary" className="bg-secondary rounded-full border-none">
