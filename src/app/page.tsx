@@ -18,7 +18,8 @@ import {
   ChevronRight,
   X,
   Check,
-  User as UserIcon
+  User as UserIcon,
+  Info
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -56,6 +57,8 @@ export const translations = {
     help: "Yordam",
     news: "Yangiliklar",
     offer: "Ommaviy oferta",
+    offerTitle: "Build io nima?",
+    offerContent: "Build io — bu raqamli aktivlar (veb-saytlar, SaaS, skriptlar) va professional dasturchilar uchun mo'ljallangan premium platforma. Bizning maqsadimiz: tayyor bizneslarni sotish, sotib olish va tajribali mutaxassislar bilan xavfsiz bog'lanish uchun qulay Foundry markazini yaratishdir.",
     listAsset: "Asset qo'shish",
     foundry: "Foundry",
     online: "Onlayn",
@@ -102,6 +105,8 @@ export const translations = {
     help: "Помощь",
     news: "Канал новостей",
     offer: "Публичная оферта",
+    offerTitle: "Что такое Build io?",
+    offerContent: "Build io — это премиальная платформа для цифровых активов (сайты, SaaS, скрипты) и профессиональных разработчиков. Наша цель: создать удобный центр Foundry для покупки, продажи готового бизнеса и безопасного взаимодействия с опытными специалистами.",
     listAsset: "Добавить актив",
     foundry: "Foundry",
     online: "В сети",
@@ -148,6 +153,8 @@ export const translations = {
     help: "Support",
     news: "News channel",
     offer: "Public offer",
+    offerTitle: "What is Build io?",
+    offerContent: "Build io is a premium platform for digital assets (websites, SaaS, scripts) and professional developers. Our goal: to create a convenient Foundry hub for buying, selling ready-made businesses, and safe connection with experienced specialists.",
     listAsset: "List asset",
     foundry: "Foundry",
     online: "Online",
@@ -192,6 +199,7 @@ export default function Home() {
   const [walletMethod, setWalletMethod] = useState("Payme");
   const [isLangModalOpen, setIsLangModalOpen] = useState(false);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [tgUser, setTgUser] = useState<any>(null);
 
   useEffect(() => {
@@ -223,6 +231,7 @@ export default function Home() {
             tgUser={tgUser}
             onOpenLangModal={() => setIsLangModalOpen(true)} 
             onOpenWalletModal={() => setIsWalletModalOpen(true)}
+            onOpenOfferModal={() => setIsOfferModalOpen(true)}
           />
         );
       case "listing":
@@ -247,8 +256,8 @@ export default function Home() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-11 px-5 flex items-center justify-center bg-zinc-900/80 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
-              <span className="text-sm font-black text-white tracking-tight">0 UZS</span>
+            <div className="h-11 px-5 flex items-center justify-center bg-zinc-900 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
+              <span className="text-sm font-bold text-white tracking-tight">0 UZS</span>
             </div>
             
             <Button 
@@ -297,18 +306,25 @@ export default function Home() {
         onSelectWallet={setWalletMethod}
         lang={lang}
       />
+
+      <OfferModal
+        isOpen={isOfferModalOpen}
+        onClose={() => setIsOfferModalOpen(false)}
+        lang={lang}
+      />
       
       <Toaster />
     </main>
   );
 }
 
-function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWalletModal }: { 
+function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWalletModal, onOpenOfferModal }: { 
   lang: Language, 
   walletMethod: string,
   tgUser: any,
   onOpenLangModal: () => void,
-  onOpenWalletModal: () => void 
+  onOpenWalletModal: () => void,
+  onOpenOfferModal: () => void 
 }) {
   const t = translations[lang];
 
@@ -347,7 +363,13 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
     },
     {
       items: [
-        { icon: FileText, label: t.offer, value: "", color: "bg-green-500" },
+        { 
+          icon: FileText, 
+          label: t.offer, 
+          value: "", 
+          color: "bg-green-500",
+          onClick: onOpenOfferModal
+        },
       ]
     }
   ];
@@ -356,7 +378,7 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center mt-6 mb-10 text-center">
         <div className="relative w-24 h-24 mb-4">
-          <div className="w-24 h-24 bg-zinc-900/80 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] relative">
+          <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] relative">
             {tgUser?.photo_url ? (
               <Image 
                 src={tgUser.photo_url} 
@@ -366,7 +388,7 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
                 unoptimized
               />
             ) : tgUser?.first_name ? (
-              <div className="text-white font-black text-3xl tracking-tighter uppercase opacity-80">
+              <div className="text-white font-bold text-3xl tracking-tighter uppercase opacity-80">
                 {tgUser.first_name[0]}
               </div>
             ) : (
@@ -378,10 +400,10 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
           </div>
         </div>
         
-        <h2 className="text-2xl font-black text-white tracking-tight">
+        <h2 className="text-2xl font-bold text-white tracking-tight">
           {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}` : t.anonymous}
         </h2>
-        <p className="text-white/40 text-xs font-black tracking-widest mt-1">
+        <p className="text-white/40 text-xs font-bold tracking-widest mt-1">
           {tgUser?.username ? `@${tgUser.username}` : `@${t.anonymous.toLowerCase()}`}
         </p>
       </div>
@@ -393,16 +415,16 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
               <button 
                 key={iIdx} 
                 onClick={item.onClick}
-                className="w-full flex items-center justify-between p-4 bg-zinc-900/80 border border-white/10 transition-all text-left group rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] mb-1"
+                className="w-full flex items-center justify-between p-4 bg-zinc-900 border border-white/10 transition-all text-left group rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] mb-1"
               >
                 <div className="flex items-center gap-4">
                   <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
                     <item.icon className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-black text-sm text-white tracking-tight">{item.label}</span>
+                  <span className="font-bold text-sm text-white tracking-tight">{item.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-white/50 font-black tracking-tight">{item.value}</span>
+                  <span className="text-xs text-white/50 font-bold tracking-tight">{item.value}</span>
                   <ChevronRight className="w-4 h-4 text-white/20 transition-colors" />
                 </div>
               </button>
@@ -459,7 +481,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
           </div>
 
           <DialogHeader className="text-center space-y-1 mb-6">
-            <DialogTitle className="text-lg font-black text-white tracking-tight">
+            <DialogTitle className="text-lg font-bold text-white tracking-tight">
               {t.chooseLang}
             </DialogTitle>
             <DialogDescription className="text-white/60 text-[10px] font-bold tracking-widest leading-tight px-4">
@@ -486,7 +508,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
                   {selected === l.id && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                 </div>
                 <div className="flex flex-col items-start">
-                  <span className="text-xs font-black text-white tracking-tight">{l.name}</span>
+                  <span className="text-xs font-bold text-white tracking-tight">{l.name}</span>
                   <span className="text-[9px] font-bold text-white/50 tracking-widest">{l.sub}</span>
                 </div>
               </button>
@@ -561,7 +583,7 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
                   </div>
                   <div className="flex items-center gap-3">
                     <div className={cn("w-10 h-8 rounded-lg flex items-center justify-center", w.color)}>
-                      <span className="text-[10px] font-black text-white italic tracking-tighter uppercase">{w.logoText}</span>
+                      <span className="text-[10px] font-bold text-white italic tracking-tighter uppercase">{w.logoText}</span>
                     </div>
                     <span className="text-sm font-bold text-white tracking-tight">{w.name}</span>
                   </div>
@@ -579,6 +601,43 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
             className="w-full"
           >
             {t.save}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function OfferModal({ isOpen, onClose, lang }: {
+  isOpen: boolean;
+  onClose: () => void;
+  lang: Language;
+}) {
+  const t = translations[lang];
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="bg-zinc-900 border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[420px] shadow-2xl backdrop-blur-xl">
+        <div className="p-8 flex flex-col items-center">
+          <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 border border-primary/20">
+            <Info className="w-8 h-8 text-primary" />
+          </div>
+          
+          <DialogHeader className="text-center space-y-4 mb-8">
+            <DialogTitle className="text-2xl font-bold text-white tracking-tight">
+              {t.offerTitle}
+            </DialogTitle>
+            <DialogDescription className="text-white/70 text-sm font-bold leading-relaxed">
+              {t.offerContent}
+            </DialogDescription>
+          </DialogHeader>
+
+          <Button 
+            onClick={onClose}
+            size="lg"
+            className="w-full"
+          >
+            {t.confirm}
           </Button>
         </div>
       </DialogContent>
