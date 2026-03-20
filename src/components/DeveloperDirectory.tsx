@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Star, MessageCircle, ExternalLink, ShieldCheck, Users } from "lucide-react";
+import { Users, Star, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,8 +11,8 @@ import dynamic from "next/dynamic";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const DEVELOPERS: any[] = [];
-// A high-quality public Lottie URL for an animated community/search emoji
-const ANIMATION_URL = "https://lottie.host/93952f44-8898-41d6-b9b2-32697926b2b5/l2o3T4lH7I.json";
+// A high-quality public Lottie URL for an animated search/community interaction
+const ANIMATION_URL = "https://lottie.host/7907572d-440d-4523-8395-97746199347d/t67Q5U9C9c.json";
 
 export function DeveloperDirectory() {
   const [animationData, setAnimationData] = useState<any>(null);
