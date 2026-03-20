@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -34,7 +33,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
   const handleAiSuggest = async () => {
     if (!formData.technicalDetails || !formData.features) {
       toast({
-        title: "Missing Info",
+        title: "Missing info",
         description: "Please provide technical details and features first.",
         variant: "destructive",
       });
@@ -78,8 +77,8 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
             <ChevronLeft className="w-6 h-6" />
           </Button>
           <div className="flex flex-col">
-            <h2 className="text-sm font-bold text-white uppercase tracking-tight">{t.listAsset}</h2>
-            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{t.listingEntry}</p>
+            <h2 className="text-sm font-bold text-white tracking-tight">{t.listAsset}</h2>
+            <p className="text-[10px] text-muted-foreground font-bold tracking-widest">{t.listingEntry}</p>
           </div>
         </div>
       </div>
@@ -92,7 +91,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
         <div className="bg-secondary rounded-3xl p-6 space-y-6 mb-12">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label className="font-bold text-xs uppercase tracking-tight">{t.assetName}</Label>
+              <Label className="font-bold text-xs tracking-tight">{t.assetName}</Label>
               <Input 
                 placeholder="CyberFlow SaaS" 
                 className="bg-background border-none h-12 font-bold"
@@ -101,7 +100,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label className="font-bold text-xs uppercase tracking-tight">{t.price}</Label>
+              <Label className="font-bold text-xs tracking-tight">{t.price}</Label>
               <Input 
                 type="number" 
                 placeholder="0.00" 
@@ -113,7 +112,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label className="font-bold text-xs uppercase tracking-tight">{t.techStack}</Label>
+            <Label className="font-bold text-xs tracking-tight">{t.techStack}</Label>
             <Input 
               placeholder="Next.js, Tailwind, Postgres" 
               className="bg-background border-none h-12 font-bold"
@@ -123,7 +122,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label className="font-bold text-xs uppercase tracking-tight">{t.features}</Label>
+            <Label className="font-bold text-xs tracking-tight">{t.features}</Label>
             <Input 
               placeholder="Auth, Stripe, Admin Panel" 
               className="bg-background border-none h-12 font-bold"
@@ -134,7 +133,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
 
           <div className="space-y-2">
             <div className="flex justify-between items-center mb-1">
-              <Label className="font-bold text-xs uppercase tracking-tight">{t.assetDesc}</Label>
+              <Label className="font-bold text-xs tracking-tight">{t.assetDesc}</Label>
               <Button 
                 size="sm" 
                 variant="outline" 
@@ -155,7 +154,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label className="font-bold text-xs uppercase tracking-tight">{t.images}</Label>
+            <Label className="font-bold text-xs tracking-tight">{t.images}</Label>
             <div className="grid grid-cols-3 gap-4">
               <div className="aspect-square bg-background rounded-xl flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors border-dashed border-2 border-white/10 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]">
                 <Upload className="w-6 h-6 text-muted-foreground" />

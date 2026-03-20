@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -28,8 +27,8 @@ export function DeveloperDirectory({ lang }: { lang: Language }) {
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="mb-8 mt-4 text-center sm:text-left">
-        <h2 className="text-3xl font-bold mb-2 uppercase tracking-tighter">{t.partners}</h2>
-        <p className="text-muted-foreground font-bold text-sm uppercase tracking-tight">
+        <h2 className="text-3xl font-bold mb-2 tracking-tighter">{t.partners}</h2>
+        <p className="text-muted-foreground font-bold text-sm tracking-tight">
           {t.vetted}
         </p>
       </div>
@@ -50,8 +49,8 @@ export function DeveloperDirectory({ lang }: { lang: Language }) {
               )}
             </div>
             <div className="space-y-2">
-              <h3 className="text-2xl font-black uppercase tracking-tight">{t.communityGrowing}</h3>
-              <p className="text-muted-foreground text-sm font-bold uppercase tracking-widest max-w-[240px] mx-auto leading-relaxed">
+              <h3 className="text-2xl font-black tracking-tight">{t.communityGrowing}</h3>
+              <p className="text-muted-foreground text-sm font-bold tracking-widest max-w-[240px] mx-auto leading-relaxed">
                 {t.devDirectoryDesc}
               </p>
             </div>
@@ -73,10 +72,10 @@ export function DeveloperDirectory({ lang }: { lang: Language }) {
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="text-xl font-bold uppercase tracking-tight">{dev.name}</h3>
+                      <h3 className="text-xl font-bold tracking-tight">{dev.name}</h3>
                       {dev.verified && <ShieldCheck className="w-4 h-4 text-primary" />}
                     </div>
-                    <p className="text-primary font-bold text-xs uppercase tracking-widest">{dev.role}</p>
+                    <p className="text-primary font-bold text-xs tracking-widest">{dev.role}</p>
                   </div>
                   <div className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-black">
                     <Star className="w-3.5 h-3.5 fill-primary" />
@@ -86,7 +85,7 @@ export function DeveloperDirectory({ lang }: { lang: Language }) {
 
                 <div className="flex flex-wrap gap-2 mt-4 mb-6">
                   {dev.specialties.map((spec: string) => (
-                    <Badge key={spec} variant="secondary" className="bg-background border-none text-[9px] uppercase tracking-widest font-black px-3 py-1">
+                    <Badge key={spec} variant="secondary" className="bg-background border-none text-[9px] tracking-widest font-black px-3 py-1">
                       {spec}
                     </Badge>
                   ))}

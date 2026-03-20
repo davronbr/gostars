@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Home, Globe, Users, User } from "lucide-react";
@@ -27,7 +26,6 @@ export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
   return (
     <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-md">
       <nav className="bg-zinc-900/90 backdrop-blur-3xl rounded-[2.8rem] p-1.5 flex items-center relative shadow-[0_25px_60px_rgba(0,0,0,0.8)] border border-white/5 overflow-hidden h-20">
-        {/* Silliq siljiydigan faol fon (Sliding Pill) */}
         <div 
           className="absolute h-[calc(100%-12px)] transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) bg-zinc-800/80 rounded-[2.2rem] border border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
           style={{ 
@@ -55,7 +53,7 @@ export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
                   isActive ? "scale-110 stroke-[2.5px]" : "scale-100 stroke-[2px]"
                 )} />
                 <span className={cn(
-                  "text-[10px] font-black uppercase tracking-tighter transition-all duration-300",
+                  "text-[10px] font-black tracking-tighter transition-all duration-300",
                   isActive ? "opacity-100" : "opacity-60"
                 )}>
                   {tab.label}

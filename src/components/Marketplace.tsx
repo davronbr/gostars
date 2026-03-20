@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -58,7 +57,7 @@ export function Marketplace({ lang }: { lang: Language }) {
               {CATEGORIES.map((category) => (
                 <DropdownMenuItem 
                   key={category}
-                  className="rounded-xl font-bold cursor-pointer hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary uppercase text-[10px] tracking-widest"
+                  className="rounded-xl font-bold cursor-pointer hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary text-[10px] tracking-widest"
                   onClick={() => setActiveCategory(category)}
                 >
                   {category}
@@ -69,7 +68,7 @@ export function Marketplace({ lang }: { lang: Language }) {
         </div>
         
         <div className="mt-4 flex items-center justify-between px-2">
-          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+          <p className="text-[10px] text-muted-foreground font-bold tracking-widest">
             {t.categories}: <span className="text-primary">{activeCategory}</span>
           </p>
         </div>
@@ -91,8 +90,8 @@ export function Marketplace({ lang }: { lang: Language }) {
               )}
             </div>
             <div>
-              <h3 className="text-2xl font-black mb-2 uppercase tracking-tight">{t.emptyMarket}</h3>
-              <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto uppercase tracking-widest leading-relaxed">
+              <h3 className="text-2xl font-black mb-2 tracking-tight">{t.emptyMarket}</h3>
+              <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto tracking-widest leading-relaxed">
                 {t.emptyMarketDesc}
               </p>
             </div>

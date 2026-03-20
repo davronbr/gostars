@@ -72,13 +72,13 @@ export const translations = {
     writeMessage: "Xabar yozish...",
     hub: "Hub",
     listingEntry: "Marketga kirish",
-    listingDesc: "Saytingiz yoki raqamli vositangizni Build IO tarmog'ida soting.",
+    listingDesc: "Saytingiz yoki raqamli vositangizni Build io tarmog'ida soting.",
     assetName: "Asset nomi",
     price: "Narxi (USD)",
     techStack: "Texnik stek",
     features: "Asosiy funksiyalar (vergul bilan)",
     assetDesc: "Asset tavsifi",
-    aiRefine: "AI Tahrirlash",
+    aiRefine: "AI tahrirlash",
     publish: "E'lon berish",
     images: "Rasmlar",
     name: "Davron",
@@ -117,13 +117,13 @@ export const translations = {
     writeMessage: "Написать сообщение...",
     hub: "Хаб",
     listingEntry: "Вход в маркет",
-    listingDesc: "Продайте свой сайт или цифровой инструмент в сети Build IO.",
+    listingDesc: "Продайте свой сайт или цифровой инструмент в сети Build io.",
     assetName: "Название актива",
     price: "Цена (USD)",
     techStack: "Тех стек",
     features: "Особенности (через запятую)",
     assetDesc: "Описание актива",
-    aiRefine: "AI Улучшение",
+    aiRefine: "AI улучшение",
     publish: "Опубликовать",
     images: "Изображения",
     name: "Даврон",
@@ -140,42 +140,42 @@ export const translations = {
     devs: "Developers",
     profile: "Profile",
     language: "Language",
-    payment: "Wallet Method",
+    payment: "Wallet method",
     help: "Support",
-    news: "News Channel",
-    offer: "Public Offer",
-    listAsset: "List Asset",
+    news: "News channel",
+    offer: "Public offer",
+    listAsset: "List asset",
     foundry: "Foundry",
     online: "Online",
     search: "Search assets...",
     categories: "Categories",
-    emptyMarket: "Market is Empty",
+    emptyMarket: "Market is empty",
     emptyMarketDesc: "Be the first to list a premium digital asset on Build io.",
     contact: "Contact",
     portfolio: "Portfolio",
-    vetted: "Vetted Developers",
+    vetted: "Vetted developers",
     langName: "English",
-    partners: "Build Partners",
-    communityGrowing: "Community Growing",
+    partners: "Build partners",
+    communityGrowing: "Community growing",
     devDirectoryDesc: "The directory is currently being populated with vetted talent.",
     welcomeChat: "Welcome to the Build io Global Hub!",
     writeMessage: "Write a message...",
     hub: "Hub",
-    listingEntry: "Marketplace Entry",
-    listingDesc: "Sell your website or digital tool to the Build IO network.",
-    assetName: "Asset Name",
+    listingEntry: "Marketplace entry",
+    listingDesc: "Sell your website or digital tool to the Build io network.",
+    assetName: "Asset name",
     price: "Price (USD)",
-    techStack: "Technical Stack",
-    features: "Key Features (comma separated)",
-    assetDesc: "Asset Description",
-    aiRefine: "AI Refine",
-    publish: "Publish Listing",
+    techStack: "Technical stack",
+    features: "Key features (comma separated)",
+    assetDesc: "Asset description",
+    aiRefine: "AI refine",
+    publish: "Publish listing",
     images: "Images",
     name: "Davron",
-    chooseLang: "Choose Language",
+    chooseLang: "Choose language",
     chooseLangDesc: "Select the language you want to use in the application.",
     confirm: "Confirm",
-    selectWallet: "Select Wallet Method",
+    selectWallet: "Select wallet method",
     walletDesc: "This will be used as default",
     save: "Save"
   }
@@ -351,13 +351,13 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
       <div className="flex flex-col items-center mt-6 mb-10 text-center">
         <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center mb-4 border border-white/10 overflow-hidden shadow-2xl">
            <div className="text-white font-black text-2xl tracking-tighter opacity-80">
-             {tgUser?.first_name ? tgUser.first_name[0] : "BIO"}
+             {tgUser?.first_name ? tgUser.first_name[0] : "B"}
            </div>
         </div>
         <h2 className="text-2xl font-black text-white tracking-tight">
           {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}` : t.name}
         </h2>
-        <p className="text-white/40 text-xs font-black uppercase tracking-widest mt-1">
+        <p className="text-white/40 text-xs font-black tracking-widest mt-1">
           {tgUser?.username ? `@${tgUser.username}` : "@moglq"}
         </p>
       </div>
@@ -511,7 +511,7 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
             <DialogTitle className="text-xl font-bold text-white tracking-tight">
               {t.selectWallet}
             </DialogTitle>
-            <DialogDescription className="text-white/40 text-[11px] font-bold uppercase tracking-widest">
+            <DialogDescription className="text-white/40 text-[11px] font-bold tracking-widest">
               {t.walletDesc}
             </DialogDescription>
           </DialogHeader>
