@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -78,7 +77,7 @@ export const translations = {
     chooseLang: "TILNI TANLASH",
     chooseLangDesc: "ILOVADA ISHLATMOQCHI BO'LGAN TILNI TANLANG.",
     confirm: "TASDIQLASH",
-    selectWallet: "To'lov usulini tanlang",
+    selectWallet: "Hamyon usulini tanlang",
     walletDesc: "Bu standart sifatida ishlatiladi",
     save: "Saqlash"
   },
@@ -212,7 +211,7 @@ export default function Home() {
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-background selection:bg-primary selection:text-white font-body">
       {!isFullScreenView && (
-        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-background/50 backdrop-blur-sm sticky top-0 z-40">
+        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-background/80 backdrop-blur-sm sticky top-0 z-40 border-b border-white/5">
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-white tracking-tighter leading-none uppercase">
               Build io
@@ -325,7 +324,7 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center mt-6 mb-8 text-center">
-        <div className="w-24 h-24 bg-[#1e2a44]/50 backdrop-blur-md rounded-full flex items-center justify-center mb-4 border-2 border-white/20 overflow-hidden shadow-xl">
+        <div className="w-24 h-24 bg-card/50 backdrop-blur-md rounded-full flex items-center justify-center mb-4 border-2 border-white/20 overflow-hidden shadow-xl">
            <div className="text-white font-black text-2xl italic tracking-tighter opacity-80">BIO</div>
         </div>
         <h2 className="text-2xl font-bold text-white uppercase tracking-tight">{t.name}</h2>
@@ -475,7 +474,7 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#1c2733] border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[400px] shadow-2xl backdrop-blur-xl">
+      <DialogContent className="bg-card border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[400px] shadow-2xl backdrop-blur-xl">
         <div className="p-6 flex flex-col">
           <DialogHeader className="text-center space-y-2 mb-8 mt-4">
             <DialogTitle className="text-xl font-bold text-white tracking-tight">
