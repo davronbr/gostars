@@ -17,16 +17,21 @@ import {
   Lightbulb, 
   FileText, 
   Check,
-  ChevronRight
+  ChevronRight,
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export type NavTab = "marketplace" | "global" | "directory" | "profile" | "listing";
 export type Language = "en" | "ru" | "uz";
@@ -69,7 +74,10 @@ export const translations = {
     aiRefine: "AI Tahrirlash",
     publish: "E'lon berish",
     images: "Rasmlar",
-    name: "Davron"
+    name: "Davron",
+    chooseLang: "Tilni tanlang",
+    chooseLangDesc: "Ilovada ishlatmoqchi bo'lgan tilni tanlang.",
+    confirm: "Tasdiqlash"
   },
   ru: {
     market: "Маркет",
@@ -108,7 +116,10 @@ export const translations = {
     aiRefine: "AI Улучшение",
     publish: "Опубликовать",
     images: "Изображения",
-    name: "Даврон"
+    name: "Даврон",
+    chooseLang: "Выберите язык",
+    chooseLangDesc: "Выберите язык, который вы хотите использовать в приложении.",
+    confirm: "Подтвердить"
   },
   en: {
     market: "Market",
@@ -147,13 +158,17 @@ export const translations = {
     aiRefine: "AI Refine",
     publish: "Publish Listing",
     images: "Images",
-    name: "Davron"
+    name: "Davron",
+    chooseLang: "Choose language",
+    chooseLangDesc: "Select the language you want to use in the application.",
+    confirm: "Confirm"
   }
 };
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>("marketplace");
   const [lang, setLang] = useState<Language>("uz");
+  const [isLangModalOpen, setIsLangModalOpen] = useState(false);
 
   const t = translations[lang];
 
@@ -166,7 +181,7 @@ export default function Home() {
       case "global":
         return <GlobalChat onBack={() => setActiveTab("marketplace")} lang={lang} />;
       case "profile":
-        return <ProfileView lang={lang} setLang={setLang} />;
+        return <ProfileView lang={lang} onOpenLangModal={() => setIsLangModalOpen(true)} />;
       case "listing":
         return <ListingForm onBack={() => setActiveTab("marketplace")} lang={lang} />;
       default:
@@ -220,12 +235,20 @@ export default function Home() {
           lang={lang}
         />
       )}
+      
+      <LanguageModal 
+        isOpen={isLangModalOpen} 
+        onClose={() => setIsLangModalOpen(false)} 
+        currentLang={lang} 
+        onSelectLang={setLang} 
+      />
+      
       <Toaster />
     </main>
   );
 }
 
-function ProfileView({ lang, setLang }: { lang: Language, setLang: (l: Language) => void }) {
+function ProfileView({ lang, onOpenLangModal }: { lang: Language, onOpenLangModal: () => void }) {
   const t = translations[lang];
 
   const settingsGroups = [
@@ -236,7 +259,7 @@ function ProfileView({ lang, setLang }: { lang: Language, setLang: (l: Language)
           label: t.language, 
           value: t.langName, 
           color: "bg-purple-500",
-          isLanguage: true 
+          onClick: onOpenLangModal
         },
         { icon: Wallet, label: t.payment, value: "Payme", color: "bg-blue-500" },
         { icon: MessageCircle, label: t.help, value: "@tezstar_supp", color: "bg-orange-500" },
@@ -264,53 +287,117 @@ function ProfileView({ lang, setLang }: { lang: Language, setLang: (l: Language)
         {settingsGroups.map((group, gIdx) => (
           <div key={gIdx} className="bg-secondary/50 rounded-[2rem] overflow-hidden border border-white/5 divide-y divide-white/5 shadow-2xl">
             {group.items.map((item, iIdx) => (
-              item.isLanguage ? (
-                <DropdownMenu key={iIdx}>
-                  <DropdownMenuTrigger asChild>
-                    <button className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-all text-left group active:scale-[0.98]">
-                      <div className="flex items-center gap-3">
-                        <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shadow-lg", item.color)}>
-                          <item.icon className="w-4 h-4 text-white" />
-                        </div>
-                        <span className="font-bold text-[13px] text-white uppercase tracking-tight">{item.label}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[13px] text-primary font-black uppercase tracking-tight">{item.value}</span>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
-                      </div>
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56 bg-secondary border-white/10 rounded-2xl p-2" align="end">
-                    {(['en', 'ru', 'uz'] as Language[]).map((l) => (
-                      <DropdownMenuItem 
-                        key={l} 
-                        onClick={() => setLang(l)}
-                        className="rounded-xl font-bold cursor-pointer hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary uppercase text-[10px] tracking-widest flex justify-between items-center"
-                      >
-                        {translations[l].langName}
-                        {lang === l && <Check className="w-4 h-4 text-primary" />}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <button key={iIdx} className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-all text-left group active:scale-[0.98]">
-                  <div className="flex items-center gap-3">
-                    <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shadow-lg", item.color)}>
-                      <item.icon className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="font-bold text-[13px] text-white uppercase tracking-tight">{item.label}</span>
+              <button 
+                key={iIdx} 
+                onClick={item.onClick}
+                className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-all text-left group active:scale-[0.98]"
+              >
+                <div className="flex items-center gap-3">
+                  <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shadow-lg", item.color)}>
+                    <item.icon className="w-4 h-4 text-white" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[13px] text-primary font-black uppercase tracking-tight">{item.value}</span>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
-                  </div>
-                </button>
-              )
+                  <span className="font-bold text-[13px] text-white uppercase tracking-tight">{item.label}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[13px] text-primary font-black uppercase tracking-tight">{item.value}</span>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
+                </div>
+              </button>
             ))}
           </div>
         ))}
       </div>
     </div>
+  );
+}
+
+function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  currentLang: Language; 
+  onSelectLang: (l: Language) => void;
+}) {
+  const [selected, setSelected] = useState<Language>(currentLang);
+  const [animationData, setAnimationData] = useState<any>(null);
+  const t = translations[currentLang];
+
+  useEffect(() => {
+    fetch("https://lottie.host/8a420129-88f0-4890-905f-f323d6248971/sbbuM0ZAkG.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data));
+  }, []);
+
+  const handleConfirm = () => {
+    onSelectLang(selected);
+    onClose();
+  };
+
+  const languages = [
+    { id: "uz", name: "Uzbek", sub: "O'zbek" },
+    { id: "en", name: "English", sub: "English" },
+    { id: "ru", name: "Russian", sub: "Русский" },
+  ] as const;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="bg-[#0D121D] border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[400px] shadow-2xl">
+        <div className="relative p-6 flex flex-col items-center">
+          <button 
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors"
+          >
+            <X className="w-5 h-5 text-muted-foreground" />
+          </button>
+
+          <div className="w-32 h-32 mb-4">
+            {animationData && (
+              <Lottie animationData={animationData} loop={true} />
+            )}
+          </div>
+
+          <DialogHeader className="text-center space-y-2 mb-8">
+            <DialogTitle className="text-2xl font-black text-white uppercase tracking-tight">
+              {t.chooseLang}
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground text-xs font-bold uppercase tracking-widest leading-relaxed">
+              {t.chooseLangDesc}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="w-full space-y-3 mb-8">
+            {languages.map((l) => (
+              <button
+                key={l.id}
+                onClick={() => setSelected(l.id as Language)}
+                className={cn(
+                  "w-full flex items-center gap-4 p-4 rounded-3xl border-2 transition-all duration-300",
+                  selected === l.id 
+                    ? "border-primary bg-primary/5" 
+                    : "border-white/5 bg-secondary/30 hover:bg-white/5"
+                )}
+              >
+                <div className={cn(
+                  "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
+                  selected === l.id ? "border-primary" : "border-muted-foreground/30"
+                )}>
+                  {selected === l.id && <div className="w-3 h-3 rounded-full bg-primary" />}
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="text-sm font-black text-white uppercase tracking-tight">{l.name}</span>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{l.sub}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <Button 
+            onClick={handleConfirm}
+            className="w-full h-14 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-base"
+          >
+            {t.confirm}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
