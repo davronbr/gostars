@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Home, Globe, Users, User } from "lucide-react";
@@ -23,8 +22,8 @@ export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
   ] as const;
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-md">
-      <nav className="bg-secondary/95 rounded-full py-3 px-6 flex items-center justify-between gap-2 shadow-2xl border border-white/5">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-md">
+      <nav className="bg-secondary/40 backdrop-blur-2xl rounded-[2.5rem] p-2 flex items-center justify-around gap-1 shadow-2xl border border-white/5 overflow-hidden">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -33,20 +32,27 @@ export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
               key={tab.id}
               onClick={() => onTabChange(tab.id as NavTab)}
               className={cn(
-                "flex flex-col items-center justify-center transition-all duration-300 relative group",
-                isActive ? "text-primary" : "text-muted-foreground hover:text-white"
+                "flex flex-col items-center justify-center transition-all duration-500 relative flex-1 py-3 px-1 rounded-[1.8rem]",
+                isActive 
+                  ? "bg-white/10 text-primary shadow-inner" 
+                  : "text-muted-foreground hover:text-white"
               )}
             >
-              <div className={cn(
-                "p-2 rounded-xl transition-all",
-                isActive ? "bg-primary/10" : ""
-              )}>
-                <Icon className={cn("w-6 h-6", isActive ? "stroke-[2.5px]" : "stroke-[2px]")} />
+              <div className="relative">
+                <Icon className={cn(
+                  "w-6 h-6 transition-transform duration-300", 
+                  isActive ? "scale-110 stroke-[2.5px]" : "scale-100 stroke-[2px]"
+                )} />
+                {isActive && (
+                  <div className="absolute -inset-2 bg-primary/20 blur-xl rounded-full -z-10 animate-pulse" />
+                )}
               </div>
-              <span className="text-[10px] font-bold mt-1 uppercase tracking-tighter">{tab.label}</span>
-              {isActive && (
-                <div className="absolute -top-1 w-1 h-1 bg-primary rounded-full" />
-              )}
+              <span className={cn(
+                "text-[10px] font-black mt-1.5 uppercase tracking-tighter transition-all",
+                isActive ? "opacity-100" : "opacity-60"
+              )}>
+                {tab.label}
+              </span>
             </button>
           );
         })}
