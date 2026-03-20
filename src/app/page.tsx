@@ -214,7 +214,7 @@ export default function Home() {
       {!isFullScreenView && (
         <header className="px-6 pt-12 pb-6 flex justify-between items-center bg-transparent sticky top-0 z-40">
           <div className="flex flex-col">
-            <h1 className="text-2xl font-black text-white tracking-tighter leading-none uppercase italic">
+            <h1 className="text-2xl font-black text-white tracking-tighter leading-none uppercase">
               Build io
             </h1>
             <p className="text-[10px] text-primary font-black uppercase tracking-[0.3em] mt-1">
@@ -222,9 +222,9 @@ export default function Home() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            {/* Balance Pill */}
+            {/* Balance Pill - Straight font, No Italic */}
             <div className="h-11 px-5 flex items-center justify-center bg-zinc-900/80 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
-              <span className="text-sm font-black text-white tracking-tight italic uppercase">0 UZS</span>
+              <span className="text-sm font-black text-white tracking-tight uppercase">0 UZS</span>
             </div>
             
             <Button 
@@ -331,9 +331,9 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center mt-6 mb-10 text-center">
         <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center mb-4 border border-white/10 overflow-hidden shadow-2xl">
-           <div className="text-white font-black text-2xl italic tracking-tighter opacity-80">BIO</div>
+           <div className="text-white font-black text-2xl tracking-tighter opacity-80">BIO</div>
         </div>
-        <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">{t.name}</h2>
+        <h2 className="text-2xl font-black text-white uppercase tracking-tight">{t.name}</h2>
         <p className="text-white/40 text-xs font-black uppercase tracking-widest mt-1">@moglq</p>
       </div>
 
