@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react";
 import { BottomNav } from "@/components/BottomNav";
 import { Marketplace } from "@/components/Marketplace";
-import { DeveloperDirectory } from "@/components/DeveloperDirectory";
-import { GlobalChat } from "@/components/GlobalChat";
+import { Leaderboard } from "@/components/Leaderboard";
+import { MyGifts } from "@/components/MyGifts";
 import { ListingForm } from "@/components/ListingForm";
 import { Toaster } from "@/components/ui/toaster";
 import { 
   Plus, 
   Settings, 
-  Globe, 
   Wallet, 
   MessageCircle, 
   Lightbulb, 
@@ -35,7 +34,7 @@ import Image from "next/image";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
-export type NavTab = "marketplace" | "global" | "directory" | "profile" | "listing";
+export type NavTab = "marketplace" | "gifts" | "leaderboard" | "profile" | "listing";
 export type Language = "en" | "ru" | "uz";
 
 declare global {
@@ -49,8 +48,8 @@ declare global {
 export const translations = {
   uz: {
     market: "Market",
-    global: "Global",
-    devs: "Dasturchilar",
+    gifts: "Sovg'alarim",
+    leaderboard: "Leaderboard",
     profile: "Profil",
     language: "Til",
     payment: "Hamyon usuli",
@@ -70,12 +69,11 @@ export const translations = {
     portfolio: "Portfolio",
     vetted: "Tasdiqlangan dasturchilar",
     langName: "O'zbekcha",
-    partners: "Build hamkorlari",
+    leaderboardTitle: "Eng yaxshi hamkorlar",
     communityGrowing: "Hamjamiyat o'smoqda",
-    devDirectoryDesc: "Katalog hozirda tasdiqlangan mutaxassislar bilan to'ldirilmoqda.",
-    welcomeChat: "Build io Global Hub-ga xush kelibsiz!",
-    writeMessage: "Xabar yozish...",
-    hub: "Hub",
+    leaderboardDesc: "Leaderboard hozirda tasdiqlangan mutaxassislar bilan to'ldirilmoqda.",
+    myGiftsTitle: "Sovg'alar qutisi bo'sh",
+    myGiftsDesc: "Aktiv bo'ling va Build hamkorlaridan sovg'alarni qo'lga kiriting.",
     listingEntry: "Marketga kirish",
     listingDesc: "Saytingiz yoki raqamli vositangizni Build io tarmog'ida soting.",
     assetName: "Asset nomi",
@@ -97,8 +95,8 @@ export const translations = {
   },
   ru: {
     market: "Маркет",
-    global: "Глобал",
-    devs: "Разработчики",
+    gifts: "Мои подарки",
+    leaderboard: "Лидерборд",
     profile: "Профиль",
     language: "Язык",
     payment: "Метод кошелька",
@@ -118,12 +116,11 @@ export const translations = {
     portfolio: "Портфолио",
     vetted: "Проверенные специалисты",
     langName: "Русский",
-    partners: "Партнеры Build",
+    leaderboardTitle: "Лучшие партнеры",
     communityGrowing: "Сообщество растет",
-    devDirectoryDesc: "Каталог в настоящее время наполняется проверенными специалистами.",
-    welcomeChat: "Добро пожаловать в Build io Global Hub!",
-    writeMessage: "Написать сообщение...",
-    hub: "Хаб",
+    leaderboardDesc: "Каталог в настоящее время наполняется проверенными специалистами.",
+    myGiftsTitle: "Коробка подарков пуста",
+    myGiftsDesc: "Будьте активны и получайте подарки от партнеров Build.",
     listingEntry: "Вход в маркет",
     listingDesc: "Продайте свой сайт или цифровой инструмент в сети Build io.",
     assetName: "Название актива",
@@ -145,8 +142,8 @@ export const translations = {
   },
   en: {
     market: "Market",
-    global: "Global",
-    devs: "Developers",
+    gifts: "My gifts",
+    leaderboard: "Leaderboard",
     profile: "Profile",
     language: "Language",
     payment: "Wallet method",
@@ -166,12 +163,11 @@ export const translations = {
     portfolio: "Portfolio",
     vetted: "Vetted developers",
     langName: "English",
-    partners: "Build partners",
+    leaderboardTitle: "Top Partners",
     communityGrowing: "Community growing",
-    devDirectoryDesc: "The directory is currently being populated with vetted talent.",
-    welcomeChat: "Welcome to the Build io Global Hub!",
-    writeMessage: "Write a message...",
-    hub: "Hub",
+    leaderboardDesc: "The leaderboard is currently being populated with vetted talent.",
+    myGiftsTitle: "Gift box is empty",
+    myGiftsDesc: "Be active and receive gifts from Build partners.",
     listingEntry: "Marketplace entry",
     listingDesc: "Sell your website or digital tool to the Build io network.",
     assetName: "Asset name",
@@ -219,10 +215,10 @@ export default function Home() {
     switch (activeTab) {
       case "marketplace":
         return <Marketplace lang={lang} />;
-      case "directory":
-        return <DeveloperDirectory lang={lang} />;
-      case "global":
-        return <GlobalChat onBack={() => setActiveTab("marketplace")} lang={lang} />;
+      case "leaderboard":
+        return <Leaderboard lang={lang} />;
+      case "gifts":
+        return <MyGifts lang={lang} />;
       case "profile":
         return (
           <ProfileView 
@@ -241,7 +237,7 @@ export default function Home() {
     }
   };
 
-  const isFullScreenView = activeTab === "global" || activeTab === "listing";
+  const isFullScreenView = activeTab === "listing";
 
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body">
@@ -251,7 +247,7 @@ export default function Home() {
             <h1 className="text-2xl font-black text-white tracking-tighter leading-none">
               Build io
             </h1>
-            <p className="text-[10px] text-primary font-black uppercase tracking-[0.3em] mt-1">
+            <p className="text-[10px] text-primary font-black tracking-[0.3em]">
               {t.foundry}
             </p>
           </div>
@@ -388,7 +384,7 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
                 unoptimized
               />
             ) : tgUser?.first_name ? (
-              <div className="text-white font-bold text-3xl tracking-tighter uppercase opacity-80">
+              <div className="text-white font-bold text-3xl tracking-tighter">
                 {tgUser.first_name[0]}
               </div>
             ) : (
@@ -401,10 +397,10 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
         </div>
         
         <h2 className="text-2xl font-bold text-white tracking-tight">
-          {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}` : t.anonymous}
+          {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}`.trim() : t.anonymous}
         </h2>
         <p className="text-white/40 text-xs font-bold tracking-widest mt-1">
-          {tgUser?.username ? `@${tgUser.username}` : `@${t.anonymous.toLowerCase()}`}
+          {tgUser?.username ? `@${tgUser.username}` : t.anonymous.toLowerCase()}
         </p>
       </div>
 
