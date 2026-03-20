@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -16,7 +17,8 @@ import {
   Lightbulb, 
   FileText, 
   ChevronRight,
-  X
+  X,
+  Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -75,7 +77,10 @@ export const translations = {
     name: "Davron",
     chooseLang: "TILNI TANLASH",
     chooseLangDesc: "ILOVADA ISHLATMOQCHI BO'LGAN TILNI TANLANG.",
-    confirm: "TASDIQLASH"
+    confirm: "TASDIQLASH",
+    selectWallet: "To'lov usulini tanlang",
+    walletDesc: "Bu standart sifatida ishlatiladi",
+    save: "Saqlash"
   },
   ru: {
     market: "Маркет",
@@ -117,7 +122,10 @@ export const translations = {
     name: "Даврон",
     chooseLang: "ВЫБЕРИТЕ ЯЗЫК",
     chooseLangDesc: "ВЫБЕРИТЕ ЯЗЫК, КОТОРЫЙ ВЫ ХОТИТЕ ИСПОЛЬЗОВАТЬ В ПРИЛОЖЕНИИ.",
-    confirm: "ПОДТВЕРДИТЬ"
+    confirm: "ПОДТВЕРДИТЬ",
+    selectWallet: "Выберите способ оплаты",
+    walletDesc: "Это будет использоваться по умолчанию",
+    save: "Сохранить"
   },
   en: {
     market: "Market",
@@ -159,14 +167,19 @@ export const translations = {
     name: "Davron",
     chooseLang: "CHOOSE LANGUAGE",
     chooseLangDesc: "SELECT THE LANGUAGE YOU WANT TO USE IN THE APPLICATION.",
-    confirm: "CONFIRM"
+    confirm: "CONFIRM",
+    selectWallet: "Select payment method",
+    walletDesc: "This will be used as default",
+    save: "Save"
   }
 };
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>("marketplace");
   const [lang, setLang] = useState<Language>("uz");
+  const [walletMethod, setWalletMethod] = useState("Payme");
   const [isLangModalOpen, setIsLangModalOpen] = useState(false);
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
 
   const t = translations[lang];
 
@@ -179,7 +192,14 @@ export default function Home() {
       case "global":
         return <GlobalChat onBack={() => setActiveTab("marketplace")} lang={lang} />;
       case "profile":
-        return <ProfileView lang={lang} onOpenLangModal={() => setIsLangModalOpen(true)} />;
+        return (
+          <ProfileView 
+            lang={lang} 
+            walletMethod={walletMethod}
+            onOpenLangModal={() => setIsLangModalOpen(true)} 
+            onOpenWalletModal={() => setIsWalletModalOpen(true)}
+          />
+        );
       case "listing":
         return <ListingForm onBack={() => setActiveTab("marketplace")} lang={lang} />;
       default:
@@ -240,13 +260,26 @@ export default function Home() {
         currentLang={lang} 
         onSelectLang={setLang} 
       />
+
+      <WalletModal
+        isOpen={isWalletModalOpen}
+        onClose={() => setIsWalletModalOpen(false)}
+        currentWallet={walletMethod}
+        onSelectWallet={setWalletMethod}
+        lang={lang}
+      />
       
       <Toaster />
     </main>
   );
 }
 
-function ProfileView({ lang, onOpenLangModal }: { lang: Language, onOpenLangModal: () => void }) {
+function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }: { 
+  lang: Language, 
+  walletMethod: string,
+  onOpenLangModal: () => void,
+  onOpenWalletModal: () => void 
+}) {
   const t = translations[lang];
 
   const settingsGroups = [
@@ -259,7 +292,13 @@ function ProfileView({ lang, onOpenLangModal }: { lang: Language, onOpenLangModa
           color: "bg-purple-500",
           onClick: onOpenLangModal
         },
-        { icon: Wallet, label: t.payment, value: "Payme", color: "bg-blue-500" },
+        { 
+          icon: Wallet, 
+          label: t.payment, 
+          value: walletMethod, 
+          color: "bg-blue-500",
+          onClick: onOpenWalletModal
+        },
         { icon: MessageCircle, label: t.help, value: "@tezstar_supp", color: "bg-orange-500" },
         { icon: Lightbulb, label: t.news, value: "@tezstar", color: "bg-yellow-500" },
       ]
@@ -393,6 +432,86 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
             className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-sm mb-1 shadow-lg"
           >
             {t.confirm}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
+  isOpen: boolean;
+  onClose: () => void;
+  currentWallet: string;
+  onSelectWallet: (w: string) => void;
+  lang: Language;
+}) {
+  const [selected, setSelected] = useState(currentWallet);
+  const t = translations[lang];
+
+  const wallets = [
+    { id: "Paynet", name: "Paynet", color: "bg-[#00B359]", logoText: "paynet" },
+    { id: "Click", name: "Click", color: "bg-[#0067FF]", logoText: "C" },
+    { id: "Payme", name: "Payme", color: "bg-[#15D1C5]", logoText: "payme" },
+    { id: "Alif", name: "Alif", color: "bg-[#00C45C]", logoText: "alif" },
+  ];
+
+  const handleSave = () => {
+    onSelectWallet(selected);
+    onClose();
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="bg-[#1c2733] border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[400px] shadow-2xl backdrop-blur-xl">
+        <div className="p-6 flex flex-col">
+          <DialogHeader className="text-center space-y-2 mb-8 mt-4">
+            <DialogTitle className="text-xl font-bold text-white tracking-tight">
+              {t.selectWallet}
+            </DialogTitle>
+            <DialogDescription className="text-white/40 text-[11px] font-bold uppercase tracking-widest">
+              {t.walletDesc}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 mb-10">
+            {wallets.map((w) => (
+              <button
+                key={w.id}
+                onClick={() => setSelected(w.id)}
+                className={cn(
+                  "w-full flex items-center justify-between p-4 rounded-[1.2rem] border-2 transition-all duration-300",
+                  selected === w.id 
+                    ? "border-primary bg-primary/5" 
+                    : "border-white/5 bg-white/5 hover:bg-white/10"
+                )}
+              >
+                <div className="flex items-center gap-4">
+                  <div className={cn(
+                    "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
+                    selected === w.id ? "border-primary" : "border-white/20"
+                  )}>
+                    {selected === w.id && <div className="w-3 h-3 rounded-full bg-primary" />}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className={cn("w-10 h-8 rounded-lg flex items-center justify-center", w.color)}>
+                      <span className="text-[10px] font-black text-white italic tracking-tighter uppercase">{w.logoText}</span>
+                    </div>
+                    <span className="text-sm font-bold text-white uppercase tracking-tight">{w.name}</span>
+                  </div>
+                </div>
+                {selected === w.id && (
+                  <Check className="w-4 h-4 text-primary" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          <Button 
+            onClick={handleSave}
+            className="w-full h-14 rounded-full bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-base mb-2 shadow-lg"
+          >
+            {t.save}
           </Button>
         </div>
       </DialogContent>
