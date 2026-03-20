@@ -212,7 +212,7 @@ export default function Home() {
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body">
       {!isFullScreenView && (
-        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-black/60 backdrop-blur-lg sticky top-0 z-40 border-b border-white/10">
+        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-zinc-900/90 backdrop-blur-xl sticky top-0 z-40 border-b border-white/10 shadow-lg">
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-white tracking-tighter leading-none uppercase">
               Build io
@@ -225,7 +225,7 @@ export default function Home() {
             <Button 
               size="icon" 
               variant="secondary" 
-              className="bg-zinc-900 rounded-full border border-white/5 h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md"
+              className="bg-zinc-800 rounded-full border border-white/5 h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md shadow-md"
               onClick={() => setActiveTab("listing")}
             >
               <Plus className="w-6 h-6 text-white" />
@@ -233,7 +233,7 @@ export default function Home() {
             <Button 
               size="icon" 
               variant="secondary" 
-              className="bg-zinc-900 rounded-full border border-white/5 h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md"
+              className="bg-zinc-800 rounded-full border border-white/5 h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md shadow-md"
               onClick={() => setActiveTab("profile")}
             >
               <Settings className="w-5 h-5 text-white" />
@@ -334,22 +334,22 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
 
       <div className="space-y-4 px-2">
         {settingsGroups.map((group, gIdx) => (
-          <div key={gIdx} className="bg-zinc-900/40 backdrop-blur-md rounded-[2rem] overflow-hidden border border-white/10 divide-y divide-white/5 shadow-2xl">
+          <div key={gIdx} className="bg-zinc-900/90 backdrop-blur-3xl rounded-[2.2rem] overflow-hidden border border-white/10 divide-y divide-white/5 shadow-[0_15px_45px_rgba(0,0,0,0.6)]">
             {group.items.map((item, iIdx) => (
               <button 
                 key={iIdx} 
                 onClick={item.onClick}
-                className="w-full flex items-center justify-between p-4 hover:bg-white/10 transition-all text-left group active:scale-[0.98]"
+                className="w-full flex items-center justify-between p-5 hover:bg-white/5 transition-all text-left group active:scale-[0.98]"
               >
-                <div className="flex items-center gap-3">
-                  <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shadow-lg", item.color)}>
-                    <item.icon className="w-4 h-4 text-white" />
+                <div className="flex items-center gap-4">
+                  <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
+                    <item.icon className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-bold text-[13px] text-white uppercase tracking-tight">{item.label}</span>
+                  <span className="font-bold text-[14px] text-white uppercase tracking-tight">{item.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[13px] text-white font-black uppercase tracking-tight">{item.value}</span>
-                  <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
+                  <span className="text-[13px] text-white font-black uppercase tracking-tight opacity-80">{item.value}</span>
+                  <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
                 </div>
               </button>
             ))}
