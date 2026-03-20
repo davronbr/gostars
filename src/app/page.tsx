@@ -300,7 +300,13 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
           onClick: onOpenWalletModal
         },
         { icon: MessageCircle, label: t.help, value: "@tezstar_supp", color: "bg-orange-500" },
-        { icon: Lightbulb, label: t.news, value: "@tezstar", color: "bg-yellow-500" },
+        { 
+          icon: Lightbulb, 
+          label: t.news, 
+          value: "@build_io", 
+          color: "bg-yellow-500",
+          onClick: () => window.open("https://t.me/build_io", "_blank")
+        },
       ]
     },
     {
