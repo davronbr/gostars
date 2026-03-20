@@ -1,8 +1,7 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Send, Shield, Paperclip, ChevronLeft, Smile, Image as ImageIcon, X } from "lucide-react";
+import { Send, Shield, ChevronLeft, Smile, Image as ImageIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -47,7 +46,8 @@ const TELEGRAM_EMOJIS = [
   "😂", "😭", "😋", "😘", "😄", "😔", "🙈", "😌", "😆", "😁", "😐", "🔥", "😕", "😍", "🐣", "🐥", 
   "👨‍💻", "🎗️", "🎀", "😢", "😮", "💧", "🏆", "💸", "🇺🇿", "🏇", "💀", "🥂", "😪", "❤️", "😊", "👍", 
   "☺️", "😅", "💋", "😒", "😳", "😜", "😉", "🥲", "😝", "😱", "😡", "😏", "😚", "👌", "😇", "🤔",
-  "🤡", "🥳", "🤯", "🥶", "🥵", "🥺", "🤫", "🤥", "🤤", "🤢", "🤮", "🤧", "🤠", "🧐", "🤓", "😎"
+  "🤡", "🥳", "🤯", "🥶", "🥵", "🥺", "🤫", "🤥", "🤤", "🤢", "🤮", "🤧", "🤠", "🧐", "🤓", "😎",
+  "✨", "🎉", "🔥", "💯", "🙌", "🙏", "💪", "🚀", "⚡️", "🌈", "🍎", "🍕", "🚗", "💻", "📱", "🎮"
 ];
 
 interface GlobalChatProps {
@@ -97,7 +97,6 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
       };
       reader.readAsDataURL(file);
     }
-    // Reset input so the same file can be selected again if needed
     e.target.value = "";
   };
 
@@ -152,7 +151,7 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
                 )}
                 
                 {msg.sticker ? (
-                  <div className="text-6xl py-2 animate-bounce-short">
+                  <div className="text-6xl py-2 animate-bounce-short select-none">
                     {msg.sticker}
                   </div>
                 ) : msg.text ? (
@@ -204,17 +203,17 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
           
           <Popover>
             <PopoverTrigger asChild>
-              <Button size="icon" variant="ghost" className="rounded-xl text-muted-foreground hover:text-primary">
-                <Smile className="w-5 h-5" />
-              </Button>
+              <button className="p-2 rounded-xl text-muted-foreground hover:text-primary transition-colors">
+                <Smile className="w-6 h-6" />
+              </button>
             </PopoverTrigger>
-            <PopoverContent side="top" align="start" className="w-80 bg-secondary border-white/10 p-0 rounded-2xl overflow-hidden">
-              <ScrollArea className="h-64 p-3">
-                <div className="grid grid-cols-6 gap-2">
+            <PopoverContent side="top" align="start" className="w-[340px] bg-secondary/95 backdrop-blur-xl border-white/10 p-0 rounded-3xl overflow-hidden shadow-2xl mb-2">
+              <ScrollArea className="h-[300px] p-4">
+                <div className="grid grid-cols-7 gap-1">
                   {TELEGRAM_EMOJIS.map((emoji) => (
                     <button 
                       key={emoji} 
-                      className="text-3xl hover:bg-white/10 p-2 rounded-xl transition-all active:scale-90"
+                      className="text-3xl hover:bg-white/10 p-2 rounded-xl transition-all active:scale-75 select-none"
                       onClick={() => handleSend(undefined, undefined, emoji)}
                     >
                       {emoji}
@@ -222,15 +221,20 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
                   ))}
                 </div>
               </ScrollArea>
-              <div className="bg-background/50 p-2 text-center">
-                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Emojis & Stickers</p>
+              <div className="bg-white/5 p-3 flex justify-between items-center px-6">
+                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">iPhone Emojis</p>
+                <div className="flex gap-4">
+                  <span className="text-primary text-xs font-bold">😊</span>
+                  <span className="text-muted-foreground text-xs font-bold">🚀</span>
+                  <span className="text-muted-foreground text-xs font-bold">⚡️</span>
+                </div>
               </div>
             </PopoverContent>
           </Popover>
 
           <Input 
             placeholder="Write a message..." 
-            className="bg-transparent border-none h-10 font-bold focus-visible:ring-0 shadow-none text-white placeholder:text-muted-foreground/50"
+            className="bg-transparent border-none h-10 font-bold focus-visible:ring-0 shadow-none text-white placeholder:text-muted-foreground/50 text-base"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend(newMessage, pendingImage || undefined)}

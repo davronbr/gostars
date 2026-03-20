@@ -33,6 +33,8 @@
   }
   body {
     @apply bg-background text-foreground font-body font-bold antialiased;
+    /* Prioritize Apple/iPhone emojis */
+    font-family: 'Inter', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-body font-bold tracking-tight;
