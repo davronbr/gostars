@@ -12,14 +12,18 @@ const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const DEVELOPERS: any[] = [];
 // A high-quality public Lottie URL for an animated search/community interaction
-const ANIMATION_URL = "https://lottie.host/7907572d-440d-4523-8395-97746199347d/t67Q5U9C9c.json";
+const ANIMATION_URL = "https://assets10.lottiefiles.com/packages/lf20_96bovdur.json";
 
 export function DeveloperDirectory() {
   const [animationData, setAnimationData] = useState<any>(null);
 
   useEffect(() => {
+    // Fetch the Lottie JSON data safely
     fetch(ANIMATION_URL)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load animation");
+        return res.json();
+      })
       .then((data) => setAnimationData(data))
       .catch((err) => console.error("Lottie fetch error:", err));
   }, []);
