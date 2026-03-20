@@ -338,7 +338,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-card border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[340px] shadow-2xl">
+      <DialogContent className="bg-card border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[85%] sm:max-w-[310px] shadow-2xl">
         <div className="relative p-5 flex flex-col items-center">
           <button 
             onClick={onClose}
@@ -347,7 +347,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
             <X className="w-4 h-4 text-muted-foreground" />
           </button>
 
-          <div className="w-32 h-32 mb-1 mt-2">
+          <div className="w-28 h-28 mb-1 mt-2">
             {animationData && (
               <Lottie animationData={animationData} loop={true} />
             )}
