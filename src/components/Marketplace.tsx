@@ -1,15 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { 
+  Search, 
+  Activity,
+  Equal,
+  ChevronDown,
+  Filter,
+  ArrowUpDown,
+  ChevronRight
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import dynamic from "next/dynamic";
 import type { Language } from "@/app/page";
 import { translations } from "@/app/page";
@@ -17,11 +20,10 @@ import { translations } from "@/app/page";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const WEBSITES: any[] = [];
-const CATEGORIES = ["All", "SaaS", "E-com", "Tool", "Social", "Portfolio"];
 
 export function Marketplace({ lang }: { lang: Language }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeTab, setActiveTab] = useState("items");
   const [animationData, setAnimationData] = useState<any>(null);
 
   const t = translations[lang];
@@ -35,44 +37,59 @@ export function Marketplace({ lang }: { lang: Language }) {
 
   return (
     <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md pt-6 pb-4 px-4 border-b border-white/5">
-        <div className="flex items-center gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input 
-              placeholder={t.search} 
-              className="pl-11 bg-secondary border-none rounded-full h-12 focus-visible:ring-primary font-bold text-sm"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md pt-6 pb-4 px-4 border-b border-white/5">
+        <div className="flex items-baseline gap-4 mb-4">
+          <button onClick={() => setActiveTab("items")} className={`font-bold transition-colors ${activeTab === 'items' ? 'text-white text-2xl' : 'text-muted-foreground text-lg'}`}>
+            {t.allItems}
+          </button>
+          <button onClick={() => setActiveTab("collections")} className={`font-bold transition-colors ${activeTab === 'collections' ? 'text-white text-2xl' : 'text-muted-foreground text-lg'}`}>
+            {t.collections}
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Input 
+                placeholder={t.quickFind}
+                className="pl-10 bg-zinc-900 border-white/10 rounded-full h-11 font-bold text-sm focus-visible:ring-primary"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <Button size="icon" variant="outline" className="rounded-full w-11 h-11 bg-zinc-900 border-white/10">
+              <Activity className="w-5 h-5 text-zinc-400" />
+            </Button>
+            <Button size="icon" variant="outline" className="rounded-full w-11 h-11 bg-zinc-900 border-white/10">
+              <Equal className="w-5 h-5 text-zinc-400" />
+            </Button>
+            <Button size="icon" variant="outline" className="rounded-full w-11 h-11 bg-zinc-900 border-white/10">
+              <ChevronDown className="w-5 h-5 text-zinc-400" />
+            </Button>
           </div>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="secondary" className="rounded-full h-12 w-12 bg-secondary border-none hover:bg-primary/20 hover:text-primary transition-all">
-                <SlidersHorizontal className="w-5 h-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 bg-secondary border-white/10 rounded-2xl p-2">
-              {CATEGORIES.map((category) => (
-                <DropdownMenuItem 
-                  key={category}
-                  className="rounded-xl font-bold cursor-pointer hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary text-[10px] tracking-widest"
-                  onClick={() => setActiveCategory(category)}
-                >
-                  {category}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center gap-2">
+            <Button size="icon" variant="outline" className="rounded-full w-11 h-11 bg-zinc-900 border-white/10">
+              <Filter className="w-5 h-5 text-zinc-400" />
+            </Button>
+            <Button size="icon" variant="outline" className="rounded-full w-11 h-11 bg-zinc-900 border-white/10">
+              <ArrowUpDown className="w-5 h-5 text-zinc-400" />
+            </Button>
+            <Separator orientation="vertical" className="h-6 bg-white/10 mx-1" />
+            <Button variant="outline" className="h-11 px-5 flex-1 justify-between bg-zinc-900 border-white/10 rounded-full font-bold text-sm">
+              <span>{t.collection}</span>
+              <ChevronDown className="w-4 h-4 text-zinc-500" />
+            </Button>
+            <Button variant="outline" className="h-11 px-5 flex-1 justify-center bg-zinc-900 border-white/10 rounded-full font-bold text-sm">
+              <span>{t.model}</span>
+            </Button>
+            <Button variant="outline" className="h-11 px-5 flex-1 justify-between bg-zinc-900 border-white/10 rounded-full font-bold text-sm">
+              <span>{t.back}</span>
+              <ChevronRight className="w-4 h-4 text-zinc-500" />
+            </Button>
+          </div>
         </div>
-        
-        <div className="mt-4 flex items-center justify-between px-2">
-          <p className="text-[10px] text-muted-foreground font-bold tracking-widest">
-            {t.categories}: <span className="text-primary">{activeCategory}</span>
-          </p>
-        </div>
-      </header>
+      </div>
 
       <div className="px-4 mt-8">
         {WEBSITES.length === 0 ? (

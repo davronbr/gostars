@@ -55,7 +55,7 @@ export const translations = {
     payment: "Hamyon usuli",
     help: "Yordam",
     news: "Yangiliklar",
-    offer: "Ommaviy oferta",
+    offer: "Ommaviy taklif",
     offerTitle: "Tez Nft nima?",
     offerContent: "Tez Nft — bu raqamli aktivlar (veb-saytlar, SaaS, skriptlar) va professional dasturchilar uchun mo'ljallangan premium platforma. Bizning maqsadimiz: tayyor bizneslarni sotish, sotib olish va tajribali mutaxassislar bilan xavfsiz bog'lanish uchun qulay markaz yaratishdir.",
     listAsset: "Asset qo'shish",
@@ -106,6 +106,8 @@ export const translations = {
     anyTelegramGifts: "Telegram sovg'alari bormi?",
     addGiftsViaBot: "Ularni bizning bot orqali qo'shishingiz mumkin",
     howToAddGifts: "Sovg'alarni qanday qo'shaman?",
+    allItems: "Barcha narsalar",
+    collections: "Kolleksiyalar",
   },
   ru: {
     market: "Маркет",
@@ -167,6 +169,8 @@ export const translations = {
     anyTelegramGifts: "Есть подарки из Telegram?",
     addGiftsViaBot: "Вы можете добавить их через нашего бота",
     howToAddGifts: "Как добавить подарки?",
+    allItems: "Все товары",
+    collections: "Коллекции",
   },
   en: {
     market: "Market",
@@ -228,6 +232,8 @@ export const translations = {
     anyTelegramGifts: "Any Telegram gifts?",
     addGiftsViaBot: "You can add them through our bot",
     howToAddGifts: "How do I add gifts?",
+    allItems: "All items",
+    collections: "Collections",
   }
 };
 
