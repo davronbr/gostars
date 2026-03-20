@@ -5,11 +5,12 @@ import { BottomNav } from "@/components/BottomNav";
 import { Marketplace } from "@/components/Marketplace";
 import { DeveloperDirectory } from "@/components/DeveloperDirectory";
 import { GlobalChat } from "@/components/GlobalChat";
+import { ListingForm } from "@/components/ListingForm";
 import { Toaster } from "@/components/ui/toaster";
-import { ShoppingBag, Heart, User, Settings, LogOut } from "lucide-react";
+import { ShoppingBag, Plus, User, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export type NavTab = "marketplace" | "global" | "directory" | "profile";
+export type NavTab = "marketplace" | "global" | "directory" | "profile" | "listing";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>("marketplace");
@@ -24,6 +25,8 @@ export default function Home() {
         return <GlobalChat onBack={() => setActiveTab("marketplace")} />;
       case "profile":
         return <ProfileView />;
+      case "listing":
+        return <ListingForm />;
       default:
         return <Marketplace />;
     }
@@ -43,8 +46,13 @@ export default function Home() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button size="icon" variant="secondary" className="bg-secondary rounded-full border-none h-11 w-11">
-              <Heart className="w-5 h-5 text-white" />
+            <Button 
+              size="icon" 
+              variant="secondary" 
+              className="bg-secondary rounded-full border-none h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all"
+              onClick={() => setActiveTab("listing")}
+            >
+              <Plus className="w-5 h-5 text-white" />
             </Button>
             <Button size="icon" variant="secondary" className="bg-secondary rounded-full border-none h-11 w-11 relative">
               <ShoppingBag className="w-5 h-5 text-white" />
@@ -63,7 +71,7 @@ export default function Home() {
 
       {/* Hide Bottom Nav on Global Hub */}
       {activeTab !== "global" && (
-        <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+        <BottomNav activeTab={activeTab === "listing" ? "marketplace" : activeTab} onTabChange={setActiveTab} />
       )}
       <Toaster />
     </main>
