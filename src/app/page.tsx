@@ -299,7 +299,13 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
           color: "bg-blue-500",
           onClick: onOpenWalletModal
         },
-        { icon: MessageCircle, label: t.help, value: "@tezstar_supp", color: "bg-orange-500" },
+        { 
+          icon: MessageCircle, 
+          label: t.help, 
+          value: "@moglq", 
+          color: "bg-orange-500",
+          onClick: () => window.open("https://t.me/moglq", "_blank")
+        },
         { 
           icon: Lightbulb, 
           label: t.news, 
