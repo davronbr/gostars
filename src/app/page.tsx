@@ -221,7 +221,12 @@ export default function Home() {
               {t.foundry}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            {/* Balance Pill */}
+            <div className="h-11 px-5 flex items-center justify-center bg-zinc-900/80 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
+              <span className="text-sm font-black text-white tracking-tight italic uppercase">0 UZS</span>
+            </div>
+            
             <Button 
               size="icon" 
               variant="outline" 
@@ -339,7 +344,7 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
               <button 
                 key={iIdx} 
                 onClick={item.onClick}
-                className="w-full flex items-center justify-between p-4 bg-zinc-900/80 border border-white/5 transition-all text-left group active:scale-[0.98] rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] mb-1"
+                className="w-full flex items-center justify-between p-4 bg-zinc-900/80 border border-white/10 transition-all text-left group rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] mb-1"
               >
                 <div className="flex items-center gap-4">
                   <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
@@ -349,7 +354,7 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-white/50 font-black uppercase tracking-tight">{item.value}</span>
-                  <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-white/20 transition-colors" />
                 </div>
               </button>
             ))}
@@ -419,7 +424,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
                 key={l.id}
                 onClick={() => setSelected(l.id as Language)}
                 className={cn(
-                  "w-full flex items-center gap-3 p-4 rounded-[1.5rem] border-2 transition-all duration-300 group",
+                  "w-full flex items-center gap-3 p-4 rounded-[1.5rem] border-2 transition-all duration-300 group shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]",
                   selected === l.id 
                     ? "border-primary bg-primary/10" 
                     : "border-white/10 bg-black/30 hover:bg-white/10"
@@ -492,7 +497,7 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
                 key={w.id}
                 onClick={() => setSelected(w.id)}
                 className={cn(
-                  "w-full flex items-center justify-between p-4 rounded-[1.2rem] border-2 transition-all duration-300",
+                  "w-full flex items-center justify-between p-4 rounded-[1.2rem] border-2 transition-all duration-300 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]",
                   selected === w.id 
                     ? "border-primary bg-primary/5" 
                     : "border-white/5 bg-white/5 hover:bg-white/10"
