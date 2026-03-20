@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Home, Search, PlusSquare, Users, User } from "lucide-react";
@@ -41,9 +40,9 @@ export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
               )}>
                 <Icon className={cn("w-6 h-6", isActive ? "stroke-[2.5px]" : "stroke-[2px]")} />
               </div>
-              <span className="text-[10px] font-medium mt-1">{tab.label}</span>
+              <span className="text-[10px] font-bold mt-1">{tab.label}</span>
               {isActive && (
-                <div className="absolute -top-1 w-1 h-1 bg-primary rounded-full neon-glow" />
+                <div className="absolute -top-1 w-1 h-1 bg-primary rounded-full" />
               )}
             </button>
           );

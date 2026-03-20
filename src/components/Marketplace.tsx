@@ -51,7 +51,7 @@ export function Marketplace() {
             </div>
             <div>
               <h3 className="text-xl font-bold mb-1">No Listings Yet</h3>
-              <p className="text-muted-foreground text-sm font-medium">Be the first to list a digital asset on the marketplace.</p>
+              <p className="text-muted-foreground text-sm font-bold">Be the first to list a digital asset on the marketplace.</p>
             </div>
           </div>
         ) : (
@@ -70,7 +70,7 @@ export function Marketplace() {
                     data-ai-hint="3D technology interface"
                   />
                   <div className="absolute top-4 left-4">
-                    <Badge className="bg-primary text-white neon-glow border-none px-3 py-1 rounded-full font-headline font-bold">
+                    <Badge className="bg-primary text-white border-none px-3 py-1 rounded-full font-headline font-bold">
                       {site.price}
                     </Badge>
                   </div>

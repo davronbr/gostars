@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -39,7 +38,7 @@ export default function Home() {
           <h1 className="text-2xl font-headline font-bold text-primary flex items-center gap-2">
             BUILD IO
           </h1>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium">Digital Foundry</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Digital Foundry</p>
         </div>
         <div className="flex gap-2">
           <Button size="icon" variant="secondary" className="glass rounded-full border-none">
@@ -47,7 +46,7 @@ export default function Home() {
           </Button>
           <Button size="icon" variant="secondary" className="glass rounded-full border-none relative">
             <ShoppingBag className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-[10px] flex items-center justify-center rounded-full text-white font-bold neon-glow">
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-[10px] flex items-center justify-center rounded-full text-white font-bold">
               2
             </span>
           </Button>
@@ -75,22 +74,22 @@ function ProfileView() {
           </div>
         </div>
         <h2 className="text-2xl font-headline font-bold">John Doe</h2>
-        <p className="text-primary text-sm font-medium">Verified Developer</p>
+        <p className="text-primary text-sm font-bold">Verified Developer</p>
         
         <div className="flex justify-center gap-4 mt-6">
           <div className="text-center">
             <p className="text-xl font-bold font-headline">12</p>
-            <p className="text-[10px] text-muted-foreground uppercase">Sales</p>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold">Sales</p>
           </div>
           <div className="w-px h-8 bg-white/10" />
           <div className="text-center">
             <p className="text-xl font-bold font-headline">$4.2k</p>
-            <p className="text-[10px] text-muted-foreground uppercase">Earned</p>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold">Earned</p>
           </div>
           <div className="w-px h-8 bg-white/10" />
           <div className="text-center">
             <p className="text-xl font-bold font-headline">4.9</p>
-            <p className="text-[10px] text-muted-foreground uppercase">Rating</p>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold">Rating</p>
           </div>
         </div>
       </div>
@@ -105,7 +104,7 @@ function ProfileView() {
               </div>
               <div>
                 <p className="font-bold text-sm">Purchase: Nebula E-com</p>
-                <p className="text-xs text-muted-foreground">Order #88241 • Completed</p>
+                <p className="text-xs text-muted-foreground font-bold">Order #88241 • Completed</p>
               </div>
             </div>
             <div className="text-right">
@@ -121,7 +120,7 @@ function ProfileView() {
               </div>
               <div>
                 <p className="font-bold text-sm">Sold: CyberFlow SaaS</p>
-                <p className="text-xs text-muted-foreground">Order #88239 • Processing</p>
+                <p className="text-xs text-muted-foreground font-bold">Order #88239 • Processing</p>
               </div>
             </div>
             <div className="text-right">
@@ -134,10 +133,10 @@ function ProfileView() {
         </div>
 
         <div className="space-y-2 pt-4">
-          <Button variant="outline" className="w-full h-12 rounded-2xl glass border-none justify-start gap-4 hover:bg-white/10">
+          <Button variant="outline" className="w-full h-12 rounded-2xl glass border-none justify-start gap-4 hover:bg-white/10 font-bold">
             <Settings className="w-5 h-5" /> Account Settings
           </Button>
-          <Button variant="outline" className="w-full h-12 rounded-2xl glass border-none justify-start gap-4 text-destructive hover:bg-destructive/10">
+          <Button variant="outline" className="w-full h-12 rounded-2xl glass border-none justify-start gap-4 text-destructive hover:bg-destructive/10 font-bold">
             <LogOut className="w-5 h-5" /> Logout Session
           </Button>
         </div>

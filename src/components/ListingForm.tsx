@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -60,26 +59,26 @@ export function ListingForm() {
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="mb-8 mt-4">
         <h2 className="text-3xl font-headline font-bold mb-2">List Asset</h2>
-        <p className="text-muted-foreground">Sell your website or digital tool to the Build IO network.</p>
+        <p className="text-muted-foreground font-bold">Sell your website or digital tool to the Build IO network.</p>
       </div>
 
       <div className="glass rounded-3xl p-6 space-y-6">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label>Asset Name</Label>
+            <Label className="font-bold">Asset Name</Label>
             <Input 
               placeholder="e.g. CyberFlow SaaS" 
-              className="glass border-none h-12"
+              className="glass border-none h-12 font-bold"
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
             />
           </div>
           <div className="space-y-2">
-            <Label>Price (USD)</Label>
+            <Label className="font-bold">Price (USD)</Label>
             <Input 
               type="number" 
               placeholder="0.00" 
-              className="glass border-none h-12"
+              className="glass border-none h-12 font-bold"
               value={formData.price}
               onChange={(e) => setFormData({...formData, price: e.target.value})}
             />
@@ -87,20 +86,20 @@ export function ListingForm() {
         </div>
 
         <div className="space-y-2">
-          <Label>Technical Stack</Label>
+          <Label className="font-bold">Technical Stack</Label>
           <Input 
             placeholder="e.g. Next.js, Tailwind, Postgres" 
-            className="glass border-none h-12"
+            className="glass border-none h-12 font-bold"
             value={formData.technicalDetails}
             onChange={(e) => setFormData({...formData, technicalDetails: e.target.value})}
           />
         </div>
 
         <div className="space-y-2">
-          <Label>Key Features (comma separated)</Label>
+          <Label className="font-bold">Key Features (comma separated)</Label>
           <Input 
             placeholder="e.g. Auth, Stripe, Admin Panel" 
-            className="glass border-none h-12"
+            className="glass border-none h-12 font-bold"
             value={formData.features}
             onChange={(e) => setFormData({...formData, features: e.target.value})}
           />
@@ -108,11 +107,11 @@ export function ListingForm() {
 
         <div className="space-y-2">
           <div className="flex justify-between items-center mb-1">
-            <Label>Asset Description</Label>
+            <Label className="font-bold">Asset Description</Label>
             <Button 
               size="sm" 
               variant="outline" 
-              className="rounded-full glass border-primary/30 text-primary gap-2 h-8 px-4 hover:bg-primary/10"
+              className="rounded-full glass border-primary/30 text-primary gap-2 h-8 px-4 hover:bg-primary/10 font-bold"
               onClick={handleAiSuggest}
               disabled={loading}
             >
@@ -122,14 +121,14 @@ export function ListingForm() {
           </div>
           <Textarea 
             placeholder="Describe your asset's value proposition..." 
-            className="glass border-none min-h-[150px] resize-none"
+            className="glass border-none min-h-[150px] resize-none font-bold"
             value={formData.description}
             onChange={(e) => setFormData({...formData, description: e.target.value})}
           />
         </div>
 
         <div className="space-y-2">
-          <Label>Screenshots</Label>
+          <Label className="font-bold">Screenshots</Label>
           <div className="grid grid-cols-3 gap-4">
             <div className="aspect-square glass rounded-xl flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors border-dashed border-2 border-white/10">
               <Upload className="w-6 h-6 text-muted-foreground" />
@@ -137,7 +136,7 @@ export function ListingForm() {
           </div>
         </div>
 
-        <Button className="w-full h-14 rounded-full bg-primary text-white font-bold text-lg neon-glow shadow-primary/20 mt-4">
+        <Button className="w-full h-14 rounded-full bg-primary text-white font-bold text-lg mt-4">
           Publish Listing
         </Button>
       </div>
