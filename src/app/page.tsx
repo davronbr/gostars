@@ -26,16 +26,19 @@ export default function Home() {
       case "profile":
         return <ProfileView />;
       case "listing":
-        return <ListingForm />;
+        return <ListingForm onBack={() => setActiveTab("marketplace")} />;
       default:
         return <Marketplace />;
     }
   };
 
+  // Views that should be full-screen (no main header, no bottom nav)
+  const isFullScreenView = activeTab === "global" || activeTab === "listing";
+
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-background selection:bg-primary selection:text-white font-body">
-      {/* App Header - Hidden on Global Hub for full screen feel */}
-      {activeTab !== "global" && (
+      {/* App Header - Hidden on Full Screen Views */}
+      {!isFullScreenView && (
         <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-background">
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-white tracking-tighter leading-none uppercase">
@@ -69,8 +72,8 @@ export default function Home() {
         {renderContent()}
       </div>
 
-      {/* Hide Bottom Nav on Global Hub */}
-      {activeTab !== "global" && (
+      {/* Hide Bottom Nav on Full Screen Views */}
+      {!isFullScreenView && (
         <BottomNav activeTab={activeTab === "listing" ? "marketplace" : activeTab} onTabChange={setActiveTab} />
       )}
       <Toaster />
