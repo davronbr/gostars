@@ -8,7 +8,6 @@ import { MyGifts } from "@/components/MyGifts";
 import { ListingForm } from "@/components/ListingForm";
 import { Toaster } from "@/components/ui/toaster";
 import { 
-  Plus, 
   Settings, 
   Wallet, 
   MessageCircle, 
@@ -58,9 +57,8 @@ export const translations = {
     news: "Yangiliklar",
     offer: "Ommaviy oferta",
     offerTitle: "Tez Nft nima?",
-    offerContent: "Tez Nft — bu raqamli aktivlar (veb-saytlar, SaaS, skriptlar) va professional dasturchilar uchun mo'ljallangan premium platforma. Bizning maqsadimiz: tayyor bizneslarni sotish, sotib olish va tajribali mutaxassislar bilan xavfsiz bog'lanish uchun qulay Foundry markazini yaratishdir.",
+    offerContent: "Tez Nft — bu raqamli aktivlar (veb-saytlar, SaaS, skriptlar) va professional dasturchilar uchun mo'ljallangan premium platforma. Bizning maqsadimiz: tayyor bizneslarni sotish, sotib olish va tajribali mutaxassislar bilan xavfsiz bog'lanish uchun qulay markaz yaratishdir.",
     listAsset: "Asset qo'shish",
-    foundry: "Foundry",
     online: "Onlayn",
     search: "Qidirish...",
     categories: "Kategoriyalar",
@@ -105,9 +103,8 @@ export const translations = {
     news: "Канал новостей",
     offer: "Публичная оферта",
     offerTitle: "Что такое Tez Nft?",
-    offerContent: "Tez Nft — это премиальная платформа для цифровых активов (сайты, SaaS, скрипты) и профессиональных разработчиков. Наша цель: создать удобный центр Foundry для покупки, продажи готового бизнеса и безопасного взаимодействия с опытными специалистами.",
+    offerContent: "Tez Nft — это премиальная платформа для цифровых активов (сайты, SaaS, скрипты) и профессиональных разработчиков. Наша цель: создать удобный центр для покупки, продажи готового бизнеса и безопасного взаимодействия с опытными специалистами.",
     listAsset: "Добавить актив",
-    foundry: "Foundry",
     online: "В сети",
     search: "Поиск...",
     categories: "Категории",
@@ -152,9 +149,8 @@ export const translations = {
     news: "News channel",
     offer: "Public offer",
     offerTitle: "What is Tez Nft?",
-    offerContent: "Tez Nft is a premium platform for digital assets (websites, SaaS, scripts) and professional developers. Our goal: to create a convenient Foundry hub for buying, selling ready-made businesses, and safe connection with experienced specialists.",
+    offerContent: "Tez Nft is a premium platform for digital assets (websites, SaaS, scripts) and professional developers. Our goal: to create a convenient hub for buying, selling ready-made businesses, and safe connection with experienced specialists.",
     listAsset: "List asset",
-    foundry: "Foundry",
     online: "Online",
     search: "Search assets...",
     categories: "Categories",
@@ -249,7 +245,7 @@ export default function Home() {
               Tez Nft
             </h1>
             <p className="text-[10px] text-primary font-black tracking-[0.3em]">
-              {t.foundry}
+              {t.market}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -257,14 +253,6 @@ export default function Home() {
               <span className="text-sm font-bold text-white tracking-tight">0 UZS</span>
             </div>
             
-            <Button 
-              size="icon" 
-              variant="outline" 
-              className="rounded-full"
-              onClick={() => setActiveTab("listing")}
-            >
-              <Plus className="w-6 h-6 text-white" />
-            </Button>
             <Button 
               size="icon" 
               variant="outline" 
