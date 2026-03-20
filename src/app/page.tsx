@@ -17,7 +17,8 @@ import {
   FileText, 
   ChevronRight,
   X,
-  Check
+  Check,
+  User as UserIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,6 +30,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
@@ -81,13 +83,14 @@ export const translations = {
     aiRefine: "AI tahrirlash",
     publish: "E'lon berish",
     images: "Rasmlar",
-    name: "Davron",
+    name: "Anonim",
     chooseLang: "Tilni tanlash",
     chooseLangDesc: "Ilovada ishlatmoqchi bo'lgan tilni tanlang.",
     confirm: "Tasdiqlash",
     selectWallet: "Hamyon usulini tanlang",
     walletDesc: "Bu standart sifatida ishlatiladi",
-    save: "Saqlash"
+    save: "Saqlash",
+    anonymous: "Anonim"
   },
   ru: {
     market: "Маркет",
@@ -126,13 +129,14 @@ export const translations = {
     aiRefine: "AI улучшение",
     publish: "Опубликовать",
     images: "Изображения",
-    name: "Даврон",
+    name: "Аноним",
     chooseLang: "Выберите язык",
     chooseLangDesc: "Выберите язык, который вы хотите использовать в приложении.",
     confirm: "Подтвердить",
     selectWallet: "Выберите способ оплаты",
     walletDesc: "Это будет использоваться по умолчанию",
-    save: "Сохранить"
+    save: "Сохранить",
+    anonymous: "Аноним"
   },
   en: {
     market: "Market",
@@ -171,13 +175,14 @@ export const translations = {
     aiRefine: "AI refine",
     publish: "Publish listing",
     images: "Images",
-    name: "Davron",
+    name: "Anonymous",
     chooseLang: "Choose language",
     chooseLangDesc: "Select the language you want to use in the application.",
     confirm: "Confirm",
     selectWallet: "Select wallet method",
     walletDesc: "This will be used as default",
-    save: "Save"
+    save: "Save",
+    anonymous: "Anonymous"
   }
 };
 
@@ -193,6 +198,7 @@ export default function Home() {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
       const webapp = window.Telegram.WebApp;
       webapp.ready();
+      webapp.expand();
       if (webapp.initDataUnsafe?.user) {
         setTgUser(webapp.initDataUnsafe.user);
       }
@@ -349,16 +355,34 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center mt-6 mb-10 text-center">
-        <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center mb-4 border border-white/10 overflow-hidden shadow-2xl">
-           <div className="text-white font-black text-2xl tracking-tighter opacity-80">
-             {tgUser?.first_name ? tgUser.first_name[0] : "B"}
-           </div>
+        <div className="relative w-24 h-24 mb-4">
+          <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shadow-2xl relative">
+            {tgUser?.photo_url ? (
+              <Image 
+                src={tgUser.photo_url} 
+                alt="Profile" 
+                fill 
+                className="object-cover"
+                unoptimized
+              />
+            ) : tgUser?.first_name ? (
+              <div className="text-white font-black text-3xl tracking-tighter opacity-80 uppercase">
+                {tgUser.first_name[0]}
+              </div>
+            ) : (
+              <UserIcon className="w-10 h-10 text-white/20" />
+            )}
+          </div>
+          <div className="absolute bottom-0 right-0 w-6 h-6 bg-primary rounded-full border-2 border-black flex items-center justify-center shadow-lg">
+            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+          </div>
         </div>
+        
         <h2 className="text-2xl font-black text-white tracking-tight">
-          {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}` : t.name}
+          {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}` : t.anonymous}
         </h2>
         <p className="text-white/40 text-xs font-black tracking-widest mt-1">
-          {tgUser?.username ? `@${tgUser.username}` : "@moglq"}
+          {tgUser?.username ? `@${tgUser.username}` : `@${t.anonymous.toLowerCase()}`}
         </p>
       </div>
 
