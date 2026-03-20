@@ -22,29 +22,6 @@ interface Message {
   isAdmin?: boolean;
 }
 
-const MOCK_MESSAGES: Message[] = [
-  {
-    id: "1",
-    user: "Admin",
-    text: "Welcome to the Build io Global Hub! Community is our core.",
-    time: "10:00 AM",
-    isAdmin: true,
-  },
-  {
-    id: "2",
-    user: "CyberNaut",
-    text: "Check out this UI kit I found!",
-    image: "https://picsum.photos/seed/chat1/600/400",
-    time: "10:05 AM",
-  },
-  {
-    id: "3",
-    user: "AlphaBuild",
-    sticker: "🚀",
-    time: "10:12 AM",
-  },
-];
-
 const TELEGRAM_EMOJIS = [
   "😂", "😭", "😋", "😘", "😄", "😔", "🙈", "😌", "😆", "😁", "😐", "🔥", "😕", "😍", "🐣", "🐥", 
   "👨‍💻", "🎗️", "🎀", "😢", "😮", "💧", "🏆", "💸", "🇺🇿", "🏇", "💀", "🥂", "😪", "❤️", "😊", "👍", 
@@ -59,13 +36,36 @@ interface GlobalChatProps {
 }
 
 export function GlobalChat({ onBack, lang }: GlobalChatProps) {
+  const t = translations[lang];
+
+  const MOCK_MESSAGES: Message[] = [
+    {
+      id: "1",
+      user: "Admin",
+      text: t.welcomeChat,
+      time: "10:00 AM",
+      isAdmin: true,
+    },
+    {
+      id: "2",
+      user: "CyberNaut",
+      text: "Check out this UI kit I found!",
+      image: "https://picsum.photos/seed/chat1/600/400",
+      time: "10:05 AM",
+    },
+    {
+      id: "3",
+      user: "AlphaBuild",
+      sticker: "🚀",
+      time: "10:12 AM",
+    },
+  ];
+
   const [messages, setMessages] = useState<Message[]>(MOCK_MESSAGES);
   const [newMessage, setNewMessage] = useState("");
   const [pendingImage, setPendingImage] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const t = translations[lang];
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -119,7 +119,7 @@ export function GlobalChat({ onBack, lang }: GlobalChatProps) {
             <ChevronLeft className="w-6 h-6" />
           </Button>
           <div className="flex flex-col">
-            <h2 className="text-sm font-bold text-white uppercase tracking-tight">{t.global} Hub</h2>
+            <h2 className="text-sm font-bold text-white uppercase tracking-tight">{t.global} {t.hub}</h2>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
               <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">1,248 {t.online}</p>
@@ -235,7 +235,7 @@ export function GlobalChat({ onBack, lang }: GlobalChatProps) {
           </Popover>
 
           <Input 
-            placeholder="Write a message..." 
+            placeholder={t.writeMessage}
             className="bg-transparent border-none h-10 font-bold focus-visible:ring-0 shadow-none text-white placeholder:text-muted-foreground/50 text-base"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}

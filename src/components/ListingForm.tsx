@@ -79,29 +79,29 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
           </Button>
           <div className="flex flex-col">
             <h2 className="text-sm font-bold text-white uppercase tracking-tight">{t.listAsset}</h2>
-            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Marketplace Entry</p>
+            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{t.listingEntry}</p>
           </div>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 no-scrollbar">
         <div className="mb-6 mt-2">
-          <p className="text-muted-foreground font-bold text-sm">Sell your website or digital tool to the Build IO network.</p>
+          <p className="text-muted-foreground font-bold text-sm">{t.listingDesc}</p>
         </div>
 
         <div className="bg-secondary rounded-3xl p-6 space-y-6 mb-12">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label className="font-bold text-xs uppercase tracking-tight">Asset Name</Label>
+              <Label className="font-bold text-xs uppercase tracking-tight">{t.assetName}</Label>
               <Input 
-                placeholder="e.g. CyberFlow SaaS" 
+                placeholder="CyberFlow SaaS" 
                 className="bg-background border-none h-12 font-bold"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
             </div>
             <div className="space-y-2">
-              <Label className="font-bold text-xs uppercase tracking-tight">Price (USD)</Label>
+              <Label className="font-bold text-xs uppercase tracking-tight">{t.price}</Label>
               <Input 
                 type="number" 
                 placeholder="0.00" 
@@ -113,9 +113,9 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label className="font-bold text-xs uppercase tracking-tight">Technical Stack</Label>
+            <Label className="font-bold text-xs uppercase tracking-tight">{t.techStack}</Label>
             <Input 
-              placeholder="e.g. Next.js, Tailwind, Postgres" 
+              placeholder="Next.js, Tailwind, Postgres" 
               className="bg-background border-none h-12 font-bold"
               value={formData.technicalDetails}
               onChange={(e) => setFormData({...formData, technicalDetails: e.target.value})}
@@ -123,9 +123,9 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label className="font-bold text-xs uppercase tracking-tight">Key Features (comma separated)</Label>
+            <Label className="font-bold text-xs uppercase tracking-tight">{t.features}</Label>
             <Input 
-              placeholder="e.g. Auth, Stripe, Admin Panel" 
+              placeholder="Auth, Stripe, Admin Panel" 
               className="bg-background border-none h-12 font-bold"
               value={formData.features}
               onChange={(e) => setFormData({...formData, features: e.target.value})}
@@ -134,7 +134,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
 
           <div className="space-y-2">
             <div className="flex justify-between items-center mb-1">
-              <Label className="font-bold text-xs uppercase tracking-tight">Asset Description</Label>
+              <Label className="font-bold text-xs uppercase tracking-tight">{t.assetDesc}</Label>
               <Button 
                 size="sm" 
                 variant="outline" 
@@ -143,11 +143,11 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
                 disabled={loading}
               >
                 {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
-                AI Refine
+                {t.aiRefine}
               </Button>
             </div>
             <Textarea 
-              placeholder="Describe your asset's value proposition..." 
+              placeholder="..." 
               className="bg-background border-none min-h-[150px] resize-none font-bold"
               value={formData.description}
               onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -155,7 +155,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label className="font-bold text-xs uppercase tracking-tight">Screenshots</Label>
+            <Label className="font-bold text-xs uppercase tracking-tight">{t.images}</Label>
             <div className="grid grid-cols-3 gap-4">
               <div className="aspect-square bg-background rounded-xl flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors border-dashed border-2 border-white/10">
                 <Upload className="w-6 h-6 text-muted-foreground" />
@@ -164,7 +164,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
           </div>
 
           <Button className="w-full h-14 rounded-full bg-primary text-white font-black text-lg mt-4 uppercase tracking-tight">
-            Publish Listing
+            {t.publish}
           </Button>
         </div>
       </div>

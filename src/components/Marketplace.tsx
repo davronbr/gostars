@@ -93,7 +93,7 @@ export function Marketplace({ lang }: { lang: Language }) {
             <div>
               <h3 className="text-2xl font-black mb-2 uppercase tracking-tight">{t.emptyMarket}</h3>
               <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto uppercase tracking-widest leading-relaxed">
-                Be the first to list a premium digital asset on Build io.
+                {t.emptyMarketDesc}
               </p>
             </div>
           </div>

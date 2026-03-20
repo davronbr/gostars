@@ -28,7 +28,7 @@ export function DeveloperDirectory({ lang }: { lang: Language }) {
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="mb-8 mt-4 text-center sm:text-left">
-        <h2 className="text-3xl font-bold mb-2 uppercase tracking-tighter">Build Partners</h2>
+        <h2 className="text-3xl font-bold mb-2 uppercase tracking-tighter">{t.partners}</h2>
         <p className="text-muted-foreground font-bold text-sm uppercase tracking-tight">
           {t.vetted}
         </p>
@@ -50,9 +50,9 @@ export function DeveloperDirectory({ lang }: { lang: Language }) {
               )}
             </div>
             <div className="space-y-2">
-              <h3 className="text-2xl font-black uppercase tracking-tight">Community Growing</h3>
+              <h3 className="text-2xl font-black uppercase tracking-tight">{t.communityGrowing}</h3>
               <p className="text-muted-foreground text-sm font-bold uppercase tracking-widest max-w-[240px] mx-auto leading-relaxed">
-                The directory is currently being populated with vetted talent.
+                {t.devDirectoryDesc}
               </p>
             </div>
           </div>

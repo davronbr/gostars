@@ -48,10 +48,28 @@ export const translations = {
     search: "Qidirish...",
     categories: "Kategoriyalar",
     emptyMarket: "Market bo'sh",
+    emptyMarketDesc: "Build io-da birinchi bo'lib premium asset joylang.",
     contact: "Bog'lanish",
     portfolio: "Portfolio",
     vetted: "Tasdiqlangan dasturchilar",
-    langName: "O'zbekcha"
+    langName: "O'zbekcha",
+    partners: "Build hamkorlari",
+    communityGrowing: "Hamjamiyat o'smoqda",
+    devDirectoryDesc: "Katalog hozirda tasdiqlangan mutaxassislar bilan to'ldirilmoqda.",
+    welcomeChat: "Build io Global Hub-ga xush kelibsiz!",
+    writeMessage: "Xabar yozish...",
+    hub: "Hub",
+    listingEntry: "Marketga kirish",
+    listingDesc: "Saytingiz yoki raqamli vositangizni Build IO tarmog'ida soting.",
+    assetName: "Asset nomi",
+    price: "Narxi (USD)",
+    techStack: "Texnik stek",
+    features: "Asosiy funksiyalar (vergul bilan)",
+    assetDesc: "Asset tavsifi",
+    aiRefine: "AI Tahrirlash",
+    publish: "E'lon berish",
+    images: "Rasmlar",
+    name: "Davron"
   },
   ru: {
     market: "Маркет",
@@ -69,10 +87,28 @@ export const translations = {
     search: "Поиск...",
     categories: "Категории",
     emptyMarket: "Маркет пуст",
+    emptyMarketDesc: "Будьте первым, кто разместит премиум-актив на Build io.",
     contact: "Связаться",
     portfolio: "Портфолио",
     vetted: "Проверенные специалисты",
-    langName: "Русский"
+    langName: "Русский",
+    partners: "Партнеры Build",
+    communityGrowing: "Сообщество растет",
+    devDirectoryDesc: "Каталог в настоящее время наполняется проверенными специалистами.",
+    welcomeChat: "Добро пожаловать в Build io Global Hub!",
+    writeMessage: "Написать сообщение...",
+    hub: "Хаб",
+    listingEntry: "Вход в маркет",
+    listingDesc: "Продайте свой сайт или цифровой инструмент в сети Build IO.",
+    assetName: "Название актива",
+    price: "Цена (USD)",
+    techStack: "Тех стек",
+    features: "Особенности (через запятую)",
+    assetDesc: "Описание актива",
+    aiRefine: "AI Улучшение",
+    publish: "Опубликовать",
+    images: "Изображения",
+    name: "Даврон"
   },
   en: {
     market: "Market",
@@ -90,10 +126,28 @@ export const translations = {
     search: "Search assets...",
     categories: "Categories",
     emptyMarket: "Market is Empty",
+    emptyMarketDesc: "Be the first to list a premium digital asset on Build io.",
     contact: "Contact",
     portfolio: "Portfolio",
     vetted: "Vetted Developers",
-    langName: "English"
+    langName: "English",
+    partners: "Build Partners",
+    communityGrowing: "Community Growing",
+    devDirectoryDesc: "The directory is currently being populated with vetted talent.",
+    welcomeChat: "Welcome to the Build io Global Hub!",
+    writeMessage: "Write a message...",
+    hub: "Hub",
+    listingEntry: "Marketplace Entry",
+    listingDesc: "Sell your website or digital tool to the Build IO network.",
+    assetName: "Asset Name",
+    price: "Price (USD)",
+    techStack: "Technical Stack",
+    features: "Key Features (comma separated)",
+    assetDesc: "Asset Description",
+    aiRefine: "AI Refine",
+    publish: "Publish Listing",
+    images: "Images",
+    name: "Davron"
   }
 };
 
@@ -202,7 +256,7 @@ function ProfileView({ lang, setLang }: { lang: Language, setLang: (l: Language)
         <div className="w-24 h-24 bg-[#0B1E3B] rounded-full flex items-center justify-center mb-4 border-2 border-white/5 overflow-hidden">
            <div className="text-white font-black text-2xl italic tracking-tighter opacity-80">BIO</div>
         </div>
-        <h2 className="text-2xl font-bold text-white uppercase tracking-tight">Даврон</h2>
+        <h2 className="text-2xl font-bold text-white uppercase tracking-tight">{t.name}</h2>
         <p className="text-muted-foreground text-sm font-bold tracking-tight opacity-70">@moglq</p>
       </div>
 
