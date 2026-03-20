@@ -4,26 +4,49 @@
 
 @layer base {
   :root {
-    --background: 222 45% 10%;
-    --foreground: 210 40% 98%;
-    --card: 222 35% 14%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 35% 10%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 200 100% 50%;
+    /* #7096D1 in HSL is approx 217 52% 63% */
+    --background: 217 52% 63%;
+    --foreground: 222 47% 11%;
+    --card: 217 52% 58%;
+    --card-foreground: 222 47% 11%;
+    --popover: 217 52% 63%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 217 100% 25%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 222 30% 18%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 222 20% 25%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 200 100% 50%;
+    --secondary: 217 45% 55%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 217 30% 50%;
+    --muted-foreground: 222 47% 20%;
+    --accent: 217 100% 25%;
     --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 30% 50%;
+    --input: 217 30% 50%;
+    --ring: 217 100% 25%;
+    --radius: 1.25rem;
+  }
+
+  .dark {
+    --background: 217 52% 25%;
+    --foreground: 210 40% 98%;
+    --card: 217 52% 20%;
+    --card-foreground: 210 40% 98%;
+    --popover: 217 52% 20%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217 40% 30%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 30% 35%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 222 47% 11%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 222 30% 20%;
-    --input: 222 30% 20%;
-    --ring: 200 100% 50%;
-    --radius: 1rem;
+    --border: 217 30% 35%;
+    --input: 217 30% 35%;
+    --ring: 217 91% 60%;
   }
 }
 

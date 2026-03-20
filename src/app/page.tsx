@@ -205,7 +205,7 @@ export default function Home() {
             <Button 
               size="icon" 
               variant="secondary" 
-              className="bg-secondary rounded-full border-none h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all"
+              className="bg-secondary/80 rounded-full border-none h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md"
               onClick={() => setActiveTab("listing")}
             >
               <Plus className="w-6 h-6 text-white" />
@@ -213,7 +213,7 @@ export default function Home() {
             <Button 
               size="icon" 
               variant="secondary" 
-              className="bg-secondary rounded-full border-none h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all"
+              className="bg-secondary/80 rounded-full border-none h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md"
               onClick={() => setActiveTab("profile")}
             >
               <Settings className="w-5 h-5 text-white" />
@@ -274,21 +274,21 @@ function ProfileView({ lang, onOpenLangModal }: { lang: Language, onOpenLangModa
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center mt-6 mb-8 text-center">
-        <div className="w-24 h-24 bg-[#1e2a44] rounded-full flex items-center justify-center mb-4 border-2 border-white/5 overflow-hidden shadow-xl">
+        <div className="w-24 h-24 bg-[#1e2a44]/50 backdrop-blur-md rounded-full flex items-center justify-center mb-4 border-2 border-white/20 overflow-hidden shadow-xl">
            <div className="text-white font-black text-2xl italic tracking-tighter opacity-80">BIO</div>
         </div>
         <h2 className="text-2xl font-bold text-white uppercase tracking-tight">{t.name}</h2>
-        <p className="text-muted-foreground text-sm font-bold tracking-tight opacity-70">@moglq</p>
+        <p className="text-white/70 text-sm font-bold tracking-tight opacity-70">@moglq</p>
       </div>
 
       <div className="space-y-4 px-2">
         {settingsGroups.map((group, gIdx) => (
-          <div key={gIdx} className="bg-secondary/50 rounded-[2rem] overflow-hidden border border-white/5 divide-y divide-white/5 shadow-2xl">
+          <div key={gIdx} className="bg-secondary/40 backdrop-blur-md rounded-[2rem] overflow-hidden border border-white/10 divide-y divide-white/5 shadow-2xl">
             {group.items.map((item, iIdx) => (
               <button 
                 key={iIdx} 
                 onClick={item.onClick}
-                className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-all text-left group active:scale-[0.98]"
+                className="w-full flex items-center justify-between p-4 hover:bg-white/10 transition-all text-left group active:scale-[0.98]"
               >
                 <div className="flex items-center gap-3">
                   <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shadow-lg", item.color)}>
@@ -297,8 +297,8 @@ function ProfileView({ lang, onOpenLangModal }: { lang: Language, onOpenLangModa
                   <span className="font-bold text-[13px] text-white uppercase tracking-tight">{item.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[13px] text-primary font-black uppercase tracking-tight">{item.value}</span>
-                  <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" />
+                  <span className="text-[13px] text-white font-black uppercase tracking-tight">{item.value}</span>
+                  <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
                 </div>
               </button>
             ))}
@@ -338,13 +338,13 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-card border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[85%] sm:max-w-[310px] shadow-2xl">
+      <DialogContent className="bg-card border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[85%] sm:max-w-[310px] shadow-2xl backdrop-blur-xl">
         <div className="relative p-5 flex flex-col items-center">
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors z-20"
+            className="absolute top-4 right-4 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors z-20"
           >
-            <X className="w-4 h-4 text-muted-foreground" />
+            <X className="w-4 h-4 text-white" />
           </button>
 
           <div className="w-28 h-28 mb-1 mt-2">
@@ -357,7 +357,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
             <DialogTitle className="text-lg font-black text-white uppercase tracking-tight">
               {t.chooseLang}
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-[9px] font-bold uppercase tracking-widest leading-tight px-4">
+            <DialogDescription className="text-white/60 text-[9px] font-bold uppercase tracking-widest leading-tight px-4">
               {t.chooseLangDesc}
             </DialogDescription>
           </DialogHeader>
@@ -370,19 +370,19 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
                 className={cn(
                   "w-full flex items-center gap-3 p-4 rounded-[1.5rem] border-2 transition-all duration-300 group",
                   selected === l.id 
-                    ? "border-primary bg-primary/5" 
-                    : "border-white/5 bg-background hover:bg-white/5"
+                    ? "border-primary bg-primary/10" 
+                    : "border-white/10 bg-background/30 hover:bg-white/10"
                 )}
               >
                 <div className={cn(
                   "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all",
-                  selected === l.id ? "border-primary" : "border-muted-foreground/30"
+                  selected === l.id ? "border-primary" : "border-white/30"
                 )}>
                   {selected === l.id && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                 </div>
                 <div className="flex flex-col items-start">
                   <span className="text-xs font-black text-white uppercase tracking-tight">{l.name}</span>
-                  <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{l.sub}</span>
+                  <span className="text-[9px] font-bold text-white/50 uppercase tracking-widest">{l.sub}</span>
                 </div>
               </button>
             ))}
@@ -390,7 +390,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
 
           <Button 
             onClick={handleConfirm}
-            className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-sm mb-1"
+            className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-sm mb-1 shadow-lg"
           >
             {t.confirm}
           </Button>
