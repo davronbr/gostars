@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -193,7 +192,7 @@ export default function Home() {
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-background selection:bg-primary selection:text-white font-body">
       {!isFullScreenView && (
-        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-background">
+        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-background/50 backdrop-blur-sm sticky top-0 z-40">
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-white tracking-tighter leading-none uppercase">
               Build io
@@ -275,7 +274,7 @@ function ProfileView({ lang, onOpenLangModal }: { lang: Language, onOpenLangModa
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center mt-6 mb-8 text-center">
-        <div className="w-24 h-24 bg-[#0B1E3B] rounded-full flex items-center justify-center mb-4 border-2 border-white/5 overflow-hidden">
+        <div className="w-24 h-24 bg-[#1e2a44] rounded-full flex items-center justify-center mb-4 border-2 border-white/5 overflow-hidden shadow-xl">
            <div className="text-white font-black text-2xl italic tracking-tighter opacity-80">BIO</div>
         </div>
         <h2 className="text-2xl font-bold text-white uppercase tracking-tight">{t.name}</h2>
@@ -339,51 +338,51 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#0D121D] border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[380px] shadow-2xl">
-        <div className="relative p-6 flex flex-col items-center">
+      <DialogContent className="bg-card border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[340px] shadow-2xl">
+        <div className="relative p-5 flex flex-col items-center">
           <button 
             onClick={onClose}
             className="absolute top-4 right-4 p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors z-20"
           >
-            <X className="w-5 h-5 text-muted-foreground" />
+            <X className="w-4 h-4 text-muted-foreground" />
           </button>
 
-          <div className="w-40 h-40 mb-2 mt-4">
+          <div className="w-32 h-32 mb-1 mt-2">
             {animationData && (
               <Lottie animationData={animationData} loop={true} />
             )}
           </div>
 
-          <DialogHeader className="text-center space-y-2 mb-8">
-            <DialogTitle className="text-xl font-black text-white uppercase tracking-tight">
+          <DialogHeader className="text-center space-y-1 mb-6">
+            <DialogTitle className="text-lg font-black text-white uppercase tracking-tight">
               {t.chooseLang}
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest leading-relaxed px-4">
+            <DialogDescription className="text-muted-foreground text-[9px] font-bold uppercase tracking-widest leading-tight px-4">
               {t.chooseLangDesc}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="w-full space-y-3 mb-10">
+          <div className="w-full space-y-2 mb-8">
             {languages.map((l) => (
               <button
                 key={l.id}
                 onClick={() => setSelected(l.id as Language)}
                 className={cn(
-                  "w-full flex items-center gap-4 p-5 rounded-[1.8rem] border-2 transition-all duration-300 group",
+                  "w-full flex items-center gap-3 p-4 rounded-[1.5rem] border-2 transition-all duration-300 group",
                   selected === l.id 
                     ? "border-primary bg-primary/5" 
-                    : "border-white/5 bg-[#161C2A] hover:bg-white/5"
+                    : "border-white/5 bg-background hover:bg-white/5"
                 )}
               >
                 <div className={cn(
-                  "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
+                  "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all",
                   selected === l.id ? "border-primary" : "border-muted-foreground/30"
                 )}>
-                  {selected === l.id && <div className="w-3 h-3 rounded-full bg-primary" />}
+                  {selected === l.id && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                 </div>
                 <div className="flex flex-col items-start">
-                  <span className="text-sm font-black text-white uppercase tracking-tight">{l.name}</span>
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{l.sub}</span>
+                  <span className="text-xs font-black text-white uppercase tracking-tight">{l.name}</span>
+                  <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{l.sub}</span>
                 </div>
               </button>
             ))}
@@ -391,7 +390,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
 
           <Button 
             onClick={handleConfirm}
-            className="w-full h-14 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-base mb-2"
+            className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-sm mb-1"
           >
             {t.confirm}
           </Button>
