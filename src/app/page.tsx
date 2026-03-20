@@ -33,7 +33,7 @@ export default function Home() {
     <main className="min-h-screen max-w-2xl mx-auto bg-background selection:bg-primary selection:text-white">
       {/* App Header */}
       <header className="px-6 pt-10 pb-6 flex justify-between items-center">
-        <div>
+        <div className="flex flex-col">
           <h1 className="text-2xl font-body font-bold text-white tracking-tighter leading-none">
             Build io
           </h1>
@@ -68,36 +68,36 @@ export default function Home() {
 function ProfileView() {
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="bg-secondary rounded-3xl p-8 mb-6 mt-4 text-center">
+      <div className="bg-secondary rounded-3xl p-8 mb-6 mt-4 text-center border border-white/5">
         <div className="w-24 h-24 bg-primary/20 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-primary/50 p-1">
           <div className="w-full h-full bg-primary/20 rounded-full flex items-center justify-center overflow-hidden">
              <User className="w-12 h-12 text-primary" />
           </div>
         </div>
-        <h2 className="text-2xl font-headline font-bold">User Profile</h2>
+        <h2 className="text-2xl font-bold">User Profile</h2>
         <p className="text-primary text-sm font-bold">Member</p>
         
         <div className="flex justify-center gap-4 mt-6">
           <div className="text-center">
-            <p className="text-xl font-bold font-headline">0</p>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold">Sales</p>
+            <p className="text-xl font-bold">0</p>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Sales</p>
           </div>
           <div className="w-px h-8 bg-white/10" />
           <div className="text-center">
-            <p className="text-xl font-bold font-headline">$0</p>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold">Earned</p>
+            <p className="text-xl font-bold">$0</p>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Earned</p>
           </div>
           <div className="w-px h-8 bg-white/10" />
           <div className="text-center">
-            <p className="text-xl font-bold font-headline">0.0</p>
-            <p className="text-[10px] text-muted-foreground uppercase font-bold">Rating</p>
+            <p className="text-xl font-bold">0.0</p>
+            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Rating</p>
           </div>
         </div>
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-lg font-headline font-bold px-2">Transactions</h3>
-        <div className="bg-secondary rounded-3xl overflow-hidden divide-y divide-white/5">
+        <h3 className="text-lg font-bold px-2">Transactions</h3>
+        <div className="bg-secondary rounded-3xl overflow-hidden border border-white/5 divide-y divide-white/5">
           <div className="p-12 text-center text-muted-foreground">
             <p className="text-sm font-bold">No transactions found</p>
           </div>
