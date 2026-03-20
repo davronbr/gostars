@@ -24,7 +24,7 @@ export function Marketplace() {
   const [animationData, setAnimationData] = useState<any>(null);
 
   useEffect(() => {
-    fetch("https://lottie.host/584cf153-0667-47a3-a4ab-db613b6b46b6/5hnVllcoJz.json")
+    fetch("https://lottie.host/cf2036f9-0082-403e-b468-192acea5325e/u40R6Mla4A.json")
       .then((res) => res.json())
       .then((data) => setAnimationData(data))
       .catch((err) => console.error("Market Lottie load error:", err));
@@ -80,7 +80,7 @@ export function Marketplace() {
                   animationData={animationData}
                   loop={true} 
                   autoplay={true}
-                  className="w-full h-full"
+                  className="w-full h-full scale-125"
                 />
               ) : (
                 <div className="w-20 h-20 bg-primary/10 rounded-full animate-pulse" />

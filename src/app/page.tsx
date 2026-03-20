@@ -21,7 +21,7 @@ export default function Home() {
   const [headerPlusAnimation, setHeaderPlusAnimation] = useState<any>(null);
 
   useEffect(() => {
-    fetch("https://lottie.host/584cf153-0667-47a3-a4ab-db613b6b46b6/5hnVllcoJz.json")
+    fetch("https://lottie.host/cf2036f9-0082-403e-b468-192acea5325e/u40R6Mla4A.json")
       .then(res => res.json())
       .then(data => setHeaderPlusAnimation(data))
       .catch(err => console.error("Header Lottie load error:", err));
