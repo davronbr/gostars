@@ -224,16 +224,16 @@ export default function Home() {
           <div className="flex gap-2">
             <Button 
               size="icon" 
-              variant="ghost" 
-              className="rounded-full h-11 w-11 hover:bg-white/5 transition-all"
+              variant="outline" 
+              className="rounded-full"
               onClick={() => setActiveTab("listing")}
             >
               <Plus className="w-6 h-6 text-white" />
             </Button>
             <Button 
               size="icon" 
-              variant="ghost" 
-              className="rounded-full h-11 w-11 hover:bg-white/5 transition-all"
+              variant="outline" 
+              className="rounded-full"
               onClick={() => setActiveTab("profile")}
             >
               <Settings className="w-5 h-5 text-white" />
@@ -339,7 +339,7 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
               <button 
                 key={iIdx} 
                 onClick={item.onClick}
-                className="w-full flex items-center justify-between p-4 bg-zinc-900/80 border border-white/5 transition-all text-left group active:scale-[0.98] rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)] mb-1"
+                className="w-full flex items-center justify-between p-4 bg-zinc-900/80 border border-white/5 transition-all text-left group active:scale-[0.98] rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] mb-1"
               >
                 <div className="flex items-center gap-4">
                   <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
@@ -441,7 +441,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
 
           <Button 
             onClick={handleConfirm}
-            className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-sm mb-1 shadow-lg"
+            className="w-full"
           >
             {t.confirm}
           </Button>
@@ -521,7 +521,8 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
 
           <Button 
             onClick={handleSave}
-            className="w-full h-14 rounded-full bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-tight text-base mb-2 shadow-lg"
+            size="lg"
+            className="w-full"
           >
             {t.save}
           </Button>

@@ -93,10 +93,10 @@ export function DeveloperDirectory({ lang }: { lang: Language }) {
                 </div>
 
                 <div className="flex gap-3 mt-auto">
-                  <Button className="flex-1 rounded-2xl bg-primary text-white font-black uppercase tracking-tight hover:bg-primary/80 h-11 text-xs">
+                  <Button className="flex-1">
                     {t.contact}
                   </Button>
-                  <Button variant="outline" className="flex-1 rounded-2xl bg-secondary border-none hover:bg-white/10 font-black uppercase tracking-tight h-11 text-xs">
+                  <Button variant="outline" className="flex-1 border-none">
                     {t.portfolio}
                   </Button>
                 </div>

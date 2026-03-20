@@ -72,7 +72,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
           <Button 
             size="icon" 
             variant="ghost" 
-            className="rounded-full text-white hover:bg-white/10"
+            className="rounded-full text-white"
             onClick={onBack}
           >
             <ChevronLeft className="w-6 h-6" />
@@ -138,7 +138,7 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="rounded-full bg-background border-primary/30 text-primary gap-2 h-8 px-4 hover:bg-primary/10 font-bold text-[10px] uppercase"
+                className="rounded-full border-primary/30 text-primary gap-2 h-8 px-4"
                 onClick={handleAiSuggest}
                 disabled={loading}
               >
@@ -157,13 +157,13 @@ export function ListingForm({ onBack, lang }: ListingFormProps) {
           <div className="space-y-2">
             <Label className="font-bold text-xs uppercase tracking-tight">{t.images}</Label>
             <div className="grid grid-cols-3 gap-4">
-              <div className="aspect-square bg-background rounded-xl flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors border-dashed border-2 border-white/10">
+              <div className="aspect-square bg-background rounded-xl flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors border-dashed border-2 border-white/10 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]">
                 <Upload className="w-6 h-6 text-muted-foreground" />
               </div>
             </div>
           </div>
 
-          <Button className="w-full h-14 rounded-full bg-primary text-white font-black text-lg mt-4 uppercase tracking-tight">
+          <Button size="lg" className="w-full">
             {t.publish}
           </Button>
         </div>
