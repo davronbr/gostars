@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -35,6 +34,14 @@ const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export type NavTab = "marketplace" | "global" | "directory" | "profile" | "listing";
 export type Language = "en" | "ru" | "uz";
+
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp: any;
+    };
+  }
+}
 
 export const translations = {
   uz: {
@@ -75,17 +82,17 @@ export const translations = {
     publish: "E'lon berish",
     images: "Rasmlar",
     name: "Davron",
-    chooseLang: "TILNI TANLASH",
-    chooseLangDesc: "ILOVADA ISHLATMOQCHI BO'LGAN TILNI TANLANG.",
-    confirm: "TASDIQLASH",
-    selectWallet: "HAMYON USULINI TANLANG",
-    walletDesc: "BU STANDART SIFATIDA ISHLATILADI",
-    save: "SAQLASH"
+    chooseLang: "Tilni tanlash",
+    chooseLangDesc: "Ilovada ishlatmoqchi bo'lgan tilni tanlang.",
+    confirm: "Tasdiqlash",
+    selectWallet: "Hamyon usulini tanlang",
+    walletDesc: "Bu standart sifatida ishlatiladi",
+    save: "Saqlash"
   },
   ru: {
     market: "Маркет",
     global: "Глобал",
-    devs: "Разрабы",
+    devs: "Разработчики",
     profile: "Профиль",
     language: "Язык",
     payment: "Метод кошелька",
@@ -120,17 +127,17 @@ export const translations = {
     publish: "Опубликовать",
     images: "Изображения",
     name: "Даврон",
-    chooseLang: "ВЫБЕРИТЕ ЯЗЫК",
-    chooseLangDesc: "ВЫБЕРИТЕ ЯЗЫК, КОТОРЫЙ ВЫ ХОТИТЕ ИСПОЛЬЗОВАТЬ В ПРИЛОЖЕНИИ.",
-    confirm: "ПОДТВЕРДИТЬ",
-    selectWallet: "ВЫБЕРИТЕ СПОСОБ ОПЛАТЫ",
-    walletDesc: "ЭТО БУДЕТ ИСПОЛЬЗОВАТЬСЯ ПО УМОЛЧАНИЮ",
-    save: "СОХРАНИТЬ"
+    chooseLang: "Выберите язык",
+    chooseLangDesc: "Выберите язык, который вы хотите использовать в приложении.",
+    confirm: "Подтвердить",
+    selectWallet: "Выберите способ оплаты",
+    walletDesc: "Это будет использоваться по умолчанию",
+    save: "Сохранить"
   },
   en: {
     market: "Market",
     global: "Global",
-    devs: "Devs",
+    devs: "Developers",
     profile: "Profile",
     language: "Language",
     payment: "Wallet Method",
@@ -165,12 +172,12 @@ export const translations = {
     publish: "Publish Listing",
     images: "Images",
     name: "Davron",
-    chooseLang: "CHOOSE LANGUAGE",
-    chooseLangDesc: "SELECT THE LANGUAGE YOU WANT TO USE IN THE APPLICATION.",
-    confirm: "CONFIRM",
-    selectWallet: "SELECT WALLET METHOD",
-    walletDesc: "THIS WILL BE USED AS DEFAULT",
-    save: "SAVE"
+    chooseLang: "Choose Language",
+    chooseLangDesc: "Select the language you want to use in the application.",
+    confirm: "Confirm",
+    selectWallet: "Select Wallet Method",
+    walletDesc: "This will be used as default",
+    save: "Save"
   }
 };
 
@@ -180,6 +187,17 @@ export default function Home() {
   const [walletMethod, setWalletMethod] = useState("Payme");
   const [isLangModalOpen, setIsLangModalOpen] = useState(false);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+  const [tgUser, setTgUser] = useState<any>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+      const webapp = window.Telegram.WebApp;
+      webapp.ready();
+      if (webapp.initDataUnsafe?.user) {
+        setTgUser(webapp.initDataUnsafe.user);
+      }
+    }
+  }, []);
 
   const t = translations[lang];
 
@@ -196,6 +214,7 @@ export default function Home() {
           <ProfileView 
             lang={lang} 
             walletMethod={walletMethod}
+            tgUser={tgUser}
             onOpenLangModal={() => setIsLangModalOpen(true)} 
             onOpenWalletModal={() => setIsWalletModalOpen(true)}
           />
@@ -214,7 +233,7 @@ export default function Home() {
       {!isFullScreenView && (
         <header className="px-6 pt-12 pb-6 flex justify-between items-center bg-transparent sticky top-0 z-40">
           <div className="flex flex-col">
-            <h1 className="text-2xl font-black text-white tracking-tighter leading-none uppercase">
+            <h1 className="text-2xl font-black text-white tracking-tighter leading-none">
               Build io
             </h1>
             <p className="text-[10px] text-primary font-black uppercase tracking-[0.3em] mt-1">
@@ -222,9 +241,8 @@ export default function Home() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            {/* Balance Pill - Straight font, No Italic */}
             <div className="h-11 px-5 flex items-center justify-center bg-zinc-900/80 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
-              <span className="text-sm font-black text-white tracking-tight uppercase">0 UZS</span>
+              <span className="text-sm font-black text-white tracking-tight">0 UZS</span>
             </div>
             
             <Button 
@@ -279,9 +297,10 @@ export default function Home() {
   );
 }
 
-function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }: { 
+function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWalletModal }: { 
   lang: Language, 
   walletMethod: string,
+  tgUser: any,
   onOpenLangModal: () => void,
   onOpenWalletModal: () => void 
 }) {
@@ -331,10 +350,16 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center mt-6 mb-10 text-center">
         <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center mb-4 border border-white/10 overflow-hidden shadow-2xl">
-           <div className="text-white font-black text-2xl tracking-tighter opacity-80">BIO</div>
+           <div className="text-white font-black text-2xl tracking-tighter opacity-80">
+             {tgUser?.first_name ? tgUser.first_name[0] : "BIO"}
+           </div>
         </div>
-        <h2 className="text-2xl font-black text-white uppercase tracking-tight">{t.name}</h2>
-        <p className="text-white/40 text-xs font-black uppercase tracking-widest mt-1">@moglq</p>
+        <h2 className="text-2xl font-black text-white tracking-tight">
+          {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}` : t.name}
+        </h2>
+        <p className="text-white/40 text-xs font-black uppercase tracking-widest mt-1">
+          {tgUser?.username ? `@${tgUser.username}` : "@moglq"}
+        </p>
       </div>
 
       <div className="space-y-4 px-2">
@@ -350,10 +375,10 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
                   <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
                     <item.icon className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-black text-sm text-white uppercase tracking-tight">{item.label}</span>
+                  <span className="font-black text-sm text-white tracking-tight">{item.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-white/50 font-black uppercase tracking-tight">{item.value}</span>
+                  <span className="text-xs text-white/50 font-black tracking-tight">{item.value}</span>
                   <ChevronRight className="w-4 h-4 text-white/20 transition-colors" />
                 </div>
               </button>
@@ -387,9 +412,9 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
   };
 
   const languages = [
-    { id: "uz", name: "UZBEK", sub: "O'ZBEK" },
-    { id: "en", name: "ENGLISH", sub: "ENGLISH" },
-    { id: "ru", name: "RUSSIAN", sub: "РУССКИЙ" },
+    { id: "uz", name: "Uzbek", sub: "O'zbek" },
+    { id: "en", name: "English", sub: "English" },
+    { id: "ru", name: "Russian", sub: "Русский" },
   ] as const;
 
   return (
@@ -410,10 +435,10 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
           </div>
 
           <DialogHeader className="text-center space-y-1 mb-6">
-            <DialogTitle className="text-lg font-black text-white uppercase tracking-tight">
+            <DialogTitle className="text-lg font-black text-white tracking-tight">
               {t.chooseLang}
             </DialogTitle>
-            <DialogDescription className="text-white/60 text-[9px] font-bold uppercase tracking-widest leading-tight px-4">
+            <DialogDescription className="text-white/60 text-[10px] font-bold tracking-widest leading-tight px-4">
               {t.chooseLangDesc}
             </DialogDescription>
           </DialogHeader>
@@ -437,8 +462,8 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
                   {selected === l.id && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                 </div>
                 <div className="flex flex-col items-start">
-                  <span className="text-xs font-black text-white uppercase tracking-tight">{l.name}</span>
-                  <span className="text-[9px] font-bold text-white/50 uppercase tracking-widest">{l.sub}</span>
+                  <span className="text-xs font-black text-white tracking-tight">{l.name}</span>
+                  <span className="text-[9px] font-bold text-white/50 tracking-widest">{l.sub}</span>
                 </div>
               </button>
             ))}
@@ -514,7 +539,7 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
                     <div className={cn("w-10 h-8 rounded-lg flex items-center justify-center", w.color)}>
                       <span className="text-[10px] font-black text-white italic tracking-tighter uppercase">{w.logoText}</span>
                     </div>
-                    <span className="text-sm font-bold text-white uppercase tracking-tight">{w.name}</span>
+                    <span className="text-sm font-bold text-white tracking-tight">{w.name}</span>
                   </div>
                 </div>
                 {selected === w.id && (
