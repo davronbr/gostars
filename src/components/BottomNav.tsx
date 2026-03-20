@@ -24,7 +24,7 @@ export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
 
   return (
     <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md">
-      <nav className="bg-zinc-900/90 backdrop-blur-2xl rounded-[2.5rem] p-2 flex items-center justify-around gap-1 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden">
+      <nav className="bg-zinc-900/95 backdrop-blur-3xl rounded-[2.8rem] p-1.5 flex items-center justify-around gap-1 shadow-[0_25px_60px_rgba(0,0,0,0.8)] border border-white/10 overflow-hidden">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -33,23 +33,23 @@ export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
               key={tab.id}
               onClick={() => onTabChange(tab.id as NavTab)}
               className={cn(
-                "flex flex-col items-center justify-center transition-all duration-500 relative flex-1 py-3 px-1 rounded-[1.8rem]",
+                "flex flex-col items-center justify-center transition-all duration-300 relative flex-1 py-3 px-1 rounded-[2.2rem]",
                 isActive 
-                  ? "bg-primary/20 text-primary shadow-[inset_0_0_20px_rgba(59,130,246,0.1)]" 
-                  : "text-zinc-500 hover:text-white"
+                  ? "bg-primary/20 text-primary shadow-[0_0_20px_rgba(59,130,246,0.3),inset_0_1px_1px_rgba(255,255,255,0.2)] border border-primary/30" 
+                  : "text-zinc-500 hover:text-white border border-transparent"
               )}
             >
               <div className="relative">
                 <Icon className={cn(
-                  "w-6 h-6 transition-transform duration-300", 
+                  "w-5.5 h-5.5 transition-transform duration-300", 
                   isActive ? "scale-110 stroke-[2.5px]" : "scale-100 stroke-[2px]"
                 )} />
                 {isActive && (
-                  <div className="absolute -inset-4 bg-primary/20 blur-2xl rounded-full -z-10 animate-pulse" />
+                  <div className="absolute -inset-6 bg-primary/30 blur-2xl rounded-full -z-10 animate-pulse" />
                 )}
               </div>
               <span className={cn(
-                "text-[10px] font-black mt-1.5 uppercase tracking-tighter transition-all",
+                "text-[9px] font-black mt-1.5 uppercase tracking-tighter transition-all",
                 isActive ? "opacity-100" : "opacity-60"
               )}>
                 {tab.label}
