@@ -339,7 +339,7 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
               <button 
                 key={iIdx} 
                 onClick={item.onClick}
-                className="w-full flex items-center justify-between p-4 bg-zinc-900/40 border border-white/5 hover:bg-zinc-800/60 transition-all text-left group active:scale-[0.98] rounded-[1.5rem] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
+                className="w-full flex items-center justify-between p-4 bg-zinc-900/80 border border-white/5 transition-all text-left group active:scale-[0.98] rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)] mb-1"
               >
                 <div className="flex items-center gap-4">
                   <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
