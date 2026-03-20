@@ -356,7 +356,7 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col items-center mt-6 mb-10 text-center">
         <div className="relative w-24 h-24 mb-4">
-          <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shadow-2xl relative">
+          <div className="w-24 h-24 bg-zinc-900/80 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] relative">
             {tgUser?.photo_url ? (
               <Image 
                 src={tgUser.photo_url} 
@@ -366,7 +366,7 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
                 unoptimized
               />
             ) : tgUser?.first_name ? (
-              <div className="text-white font-black text-3xl tracking-tighter opacity-80 uppercase">
+              <div className="text-white font-black text-3xl tracking-tighter uppercase opacity-80">
                 {tgUser.first_name[0]}
               </div>
             ) : (
