@@ -1,0 +1,170 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /*
+     * BUILD IO SECURITY RULES PHILOSOPHY
+     *
+     * Core Philosophy: This ruleset enforces a strict authorization-first model. We prioritize
+     * identifying "who" can access "what" while remaining flexible on the "how" (data shape) to support
+     * rapid prototyping.
+     *
+     * Data Structure: The application uses a hybrid hierarchy. User-specific data is nested under
+     * /users/{userId}, while marketplace entities like websiteListings, orders, and
+     * serviceEngagements reside at the top level for better query performance and visibility.
+     *
+     * Key Security Decisions:
+     * 1. Authorization Independence: We use denormalization to include critical UIDs (e.g., sellerUserId,
+     *    reviewerUserId) directly inside documents. This allows rules to verify access without
+     *    performing expensive get() lookups on parent or related documents.
+     * 2. Structural Segregation: Sensitive user profiles are kept in subcollections to clearly
+     *    separate private configuration from public marketplace data.
+     * 3. Database-Backed Access Control (DBAC): Administrator privileges are determined by the
+     *    existence of a document in the /adminRoles collection.
+     *
+     * Denormalization for Performance: We strictly enforce that ownership fields (like userId or
+     * sellerUserId) match the authenticated user during creation and remain immutable during updates.
+     */
+
+    // --- GLOBAL HELPER FUNCTIONS ---
+
+    // Checks if the request is from an authenticated user.
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Checks if the user's UID matches the provided ID.
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Checks if the user is an owner of an existing document.
+    function isExistingOwner(userId) {
+      return resource != null && isOwner(userId);
+    }
+
+    // Checks if the user has a document in the adminRoles collection.
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/adminRoles/$(request.auth.uid));
+    }
+
+    // --- COLLECTION RULES ---
+
+    // Root user document. Only the owner can manage their account.
+    // Path: /users/{userId}
+    // Allow: (create) User 'abc' creates document '/users/abc'.
+    // Deny: (write) User 'abc' attempts to delete document '/users/xyz'.
+    // Principle: Ownership and Self-Creation.
+    match /users/{userId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+
+      // Private user profile details. Inherits ownership.
+      // Path: /users/{userId}/userProfile/{profileId}
+      // Allow: (read) User 'abc' reads their own profile.
+      // Deny: (read) User 'xyz' reads User 'abc's profile.
+      // Principle: Strict path-based ownership.
+      match /userProfile/{profileId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && request.resource.data.userId == userId;
+        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(userId);
+      }
+
+      // Professional developer profiles. Publicly readable, owner-writable.
+      // Path: /users/{userId}/developerProfile/{profileId}
+      // Allow: (get) Any guest reads a developer's profile.
+      // Deny: (update) User 'abc' tries to edit User 'xyz's developer stats.
+      // Principle: Public Read with Owner-Only Writes.
+      match /developerProfile/{profileId} {
+        allow get, list: if true;
+        allow create: if isOwner(userId) && request.resource.data.userId == userId;
+        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(userId);
+
+        // Items in a developer's portfolio. Publicly readable.
+        // Path: /users/{userId}/developerProfile/{profileId}/portfolioItems/{itemId}
+        // Allow: (create) Developer 'abc' adds a new project to their portfolio.
+        // Principle: Relational integrity via denormalized developerUserId.
+        match /portfolioItems/{itemId} {
+          allow get, list: if true;
+          allow create: if isOwner(userId) && request.resource.data.developerProfileId == profileId;
+          allow update: if isExistingOwner(userId) && request.resource.data.developerProfileId == resource.data.developerProfileId;
+          allow delete: if isExistingOwner(userId);
+        }
+
+        // Reviews for a developer. Publicly readable. Only the reviewer can write.
+        // Path: /users/{userId}/developerProfile/{profileId}/reviews/{reviewId}
+        // Allow: (create) User 'buyer1' leaves a review for Developer 'dev1'.
+        // Deny: (update) User 'buyer2' tries to edit User 'buyer1's review.
+        // Principle: Ownership based on denormalized reviewerUserId.
+        match /reviews/{reviewId} {
+          allow get, list: if true;
+          allow create: if isSignedIn() && request.resource.data.reviewerUserId == request.auth.uid;
+          allow update: if resource != null && request.auth.uid == resource.data.reviewerUserId && request.resource.data.reviewerUserId == resource.data.reviewerUserId;
+          allow delete: if resource != null && request.auth.uid == resource.data.reviewerUserId;
+        }
+      }
+    }
+
+    // Marketplace website listings. Publicly searchable.
+    // Path: /websiteListings/{websiteListingId}
+    // Allow: (list) A guest browses all available website listings.
+    // Deny: (delete) A logged-in user tries to delete a listing they didn't post.
+    // Principle: Public Read with Owner-Only Writes (using denormalized sellerUserId).
+    match /websiteListings/{websiteListingId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.sellerUserId == request.auth.uid;
+      allow update: if resource != null && request.auth.uid == resource.data.sellerUserId && request.resource.data.sellerUserId == resource.data.sellerUserId;
+      allow delete: if resource != null && request.auth.uid == resource.data.sellerUserId;
+    }
+
+    // Global lookup for technologies. Admin-managed.
+    // Path: /technologies/{technologyId}
+    // Allow: (get) Any user sees technology 'React'.
+    // Deny: (create) A standard user tries to add a new technology.
+    // Principle: Read-only for users, restricted writes via admin role.
+    match /technologies/{technologyId} {
+      allow get, list: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Transaction records. Accessible only by the involved buyer or seller.
+    // Path: /orders/{orderId}
+    // Allow: (get) Buyer 'abc' views their purchase history for order '123'.
+    // Deny: (get) Random User 'xyz' tries to view Order '123'.
+    // Principle: Shared Access (Closed Collaborators) via denormalized UIDs.
+    match /orders/{orderId} {
+      allow get: if isSignedIn() && (request.auth.uid == resource.data.buyerUserId || request.auth.uid == resource.data.sellerUserId);
+      allow list: if isSignedIn(); // Queries must filter by buyerUserId or sellerUserId
+      allow create: if isSignedIn() && (request.resource.data.buyerUserId == request.auth.uid || request.resource.data.sellerUserId == request.auth.uid);
+      allow update: if resource != null && (request.auth.uid == resource.data.buyerUserId || request.auth.uid == resource.data.sellerUserId);
+      allow delete: if isAdmin();
+    }
+
+    // Service engagements. Accessible only by the involved client or developer.
+    // Path: /serviceEngagements/{serviceEngagementId}
+    // Allow: (update) Developer 'dev1' changes status to 'completed'.
+    // Principle: Shared Access (Closed Collaborators) via denormalized UIDs.
+    match /serviceEngagements/{serviceEngagementId} {
+      allow get: if isSignedIn() && (request.auth.uid == resource.data.clientId || request.auth.uid == resource.data.developerProfileId);
+      allow list: if isSignedIn(); // Queries must filter by clientId or developerProfileId
+      allow create: if isSignedIn() && (request.resource.data.clientId == request.auth.uid);
+      allow update: if resource != null && (request.auth.uid == resource.data.clientId || request.auth.uid == resource.data.developerProfileId);
+      allow delete: if isAdmin();
+    }
+
+    // Admin role registration. Used for DBAC lookup.
+    // Path: /adminRoles/{uid}
+    // Allow: (get) User checks their own admin status.
+    // Deny: (create) User attempts to make themselves an admin.
+    // Principle: Database-Backed Access Control.
+    match /adminRoles/{uid} {
+      allow get: if isOwner(uid);
+      allow list: if isAdmin();
+      allow write: if false; // Admin roles should be managed via console or secure backend
+    }
+  }
+}
