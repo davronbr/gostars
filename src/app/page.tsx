@@ -21,7 +21,7 @@ export default function Home() {
       case "directory":
         return <DeveloperDirectory />;
       case "global":
-        return <GlobalChat />;
+        return <GlobalChat onBack={() => setActiveTab("marketplace")} />;
       case "profile":
         return <ProfileView />;
       default:
@@ -61,7 +61,10 @@ export default function Home() {
         {renderContent()}
       </div>
 
-      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      {/* Hide Bottom Nav on Global Hub */}
+      {activeTab !== "global" && (
+        <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      )}
       <Toaster />
     </main>
   );
