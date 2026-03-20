@@ -212,7 +212,7 @@ export default function Home() {
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body">
       {!isFullScreenView && (
-        <header className="px-6 pt-10 pb-4 flex justify-between items-center bg-transparent sticky top-0 z-40">
+        <header className="px-6 pt-12 pb-6 flex justify-between items-center bg-transparent sticky top-0 z-40">
           <div className="flex flex-col">
             <h1 className="text-2xl font-black text-white tracking-tighter leading-none uppercase italic">
               Build io
