@@ -21,44 +21,41 @@ import { nftCollections, type NftCollectionItem } from "@/lib/collections";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
-const WEBSITES: any[] = [];
-
-function CollectionItem({ item }: { item: NftCollectionItem }) {
+function NftItemCard({ item }: { item: NftCollectionItem }) {
   return (
-    <button className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-zinc-900 transition-colors text-left">
-      <Image 
-        src={item.imageUrl} 
-        alt={item.name} 
-        width={40} 
-        height={40} 
-        className="rounded-lg"
-        data-ai-hint={item.imageHint}
-      />
-      <div className="flex flex-col">
-        <span className="font-bold text-sm text-white tracking-tight">{item.name}</span>
-        {item.date && <span className="text-xs font-bold text-zinc-500 tracking-wide mt-0.5">{item.date}</span>}
+    <div className="bg-secondary rounded-[1.5rem] p-3 border border-white/5 shadow-2xl flex flex-col gap-3 transition-all hover:border-primary/30">
+      <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-background">
+        <Image 
+          src={item.imageUrl.replace('/64/64', '/400/400')}
+          alt={item.name} 
+          fill
+          className="object-cover" 
+          data-ai-hint={item.imageHint}
+        />
       </div>
-    </button>
+      <div className="flex flex-col px-1">
+        <h3 className="font-bold text-white tracking-tight truncate">{item.name}</h3>
+        <span className="text-xs font-bold text-primary tracking-widest uppercase">1.00 TON</span>
+      </div>
+    </div>
   );
 }
 
+
 export function Marketplace({ lang }: { lang: Language }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("collections");
   const [animationData, setAnimationData] = useState<any>(null);
 
   const t = translations[lang];
 
   useEffect(() => {
-    if (activeTab === 'items') {
-      fetch("https://lottie.host/cf2036f9-0082-403e-b468-192acea5325e/u40R6Mla4A.json")
-        .then((res) => res.json())
-        .then((data) => setAnimationData(data))
-        .catch((err) => console.error("Market Lottie load error:", err));
-    }
-  }, [activeTab]);
+    fetch("https://lottie.host/cf2036f9-0082-403e-b468-192acea5325e/u40R6Mla4A.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data))
+      .catch((err) => console.error("Market Lottie load error:", err));
+  }, []);
 
-  const filteredCollections = nftCollections.filter(item => 
+  const filteredItems = nftCollections.filter(item => 
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -66,12 +63,7 @@ export function Marketplace({ lang }: { lang: Language }) {
     <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md pt-6 pb-4 px-4 border-b border-white/5">
         <div className="flex items-baseline gap-4 mb-4">
-          <button onClick={() => setActiveTab("items")} className={`font-bold transition-colors ${activeTab === 'items' ? 'text-white text-2xl' : 'text-muted-foreground text-lg'}`}>
-            {t.allItems}
-          </button>
-          <button onClick={() => setActiveTab("collections")} className={`font-bold transition-colors ${activeTab === 'collections' ? 'text-white text-2xl' : 'text-muted-foreground text-lg'}`}>
-            {t.collections}
-          </button>
+          <h2 className="font-bold text-white text-2xl">{t.allItems}</h2>
         </div>
 
         <div className="space-y-3">
@@ -118,15 +110,9 @@ export function Marketplace({ lang }: { lang: Language }) {
         </div>
       </div>
 
-      <div className="mt-4">
-        {activeTab === 'collections' ? (
-          <div className="px-4 space-y-1">
-            {filteredCollections.map(item => (
-              <CollectionItem key={item.id} item={item} />
-            ))}
-          </div>
-        ) : WEBSITES.length === 0 ? (
-          <div className="px-4 mt-8">
+      <div className="mt-4 px-4">
+        {filteredItems.length === 0 ? (
+          <div className="mt-8">
             <div className="bg-secondary rounded-[2.5rem] p-16 text-center flex flex-col items-center gap-6 border border-white/5 shadow-2xl">
               <div className="w-48 h-48 flex items-center justify-center">
                 {animationData ? (
@@ -149,8 +135,10 @@ export function Marketplace({ lang }: { lang: Language }) {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-6 px-4">
-            {/* Website cards would go here */}
+          <div className="grid grid-cols-2 gap-4">
+            {filteredItems.map(item => (
+              <NftItemCard key={item.id} item={item} />
+            ))}
           </div>
         )}
       </div>
