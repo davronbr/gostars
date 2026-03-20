@@ -47,7 +47,7 @@ const TELEGRAM_EMOJIS = [
   "👨‍💻", "🎗️", "🎀", "😢", "😮", "💧", "🏆", "💸", "🇺🇿", "🏇", "💀", "🥂", "😪", "❤️", "😊", "👍", 
   "☺️", "😅", "💋", "😒", "😳", "😜", "😉", "🥲", "😝", "😱", "😡", "😏", "😚", "👌", "😇", "🤔",
   "🤡", "🥳", "🤯", "🥶", "🥵", "🥺", "🤫", "🤥", "🤤", "🤢", "🤮", "🤧", "🤠", "🧐", "🤓", "😎",
-  "✨", "🎉", "🔥", "💯", "🙌", "🙏", "💪", "🚀", "⚡️", "🌈", "🍎", "🍕", "🚗", "💻", "📱", "🎮"
+  "✨", "🎉", "💯", "🙌", "🙏", "💪", "🚀", "⚡️", "🌈", "🍎", "🍕", "🚗", "💻", "📱", "🎮"
 ];
 
 interface GlobalChatProps {
@@ -210,9 +210,9 @@ export function GlobalChat({ onBack }: GlobalChatProps) {
             <PopoverContent side="top" align="start" className="w-[340px] bg-secondary/95 backdrop-blur-xl border-white/10 p-0 rounded-3xl overflow-hidden shadow-2xl mb-2">
               <ScrollArea className="h-[300px] p-4">
                 <div className="grid grid-cols-7 gap-1">
-                  {TELEGRAM_EMOJIS.map((emoji) => (
+                  {TELEGRAM_EMOJIS.map((emoji, index) => (
                     <button 
-                      key={emoji} 
+                      key={`${emoji}-${index}`} 
                       className="text-3xl hover:bg-white/10 p-2 rounded-xl transition-all active:scale-75 select-none"
                       onClick={() => handleSend(undefined, undefined, emoji)}
                     >
