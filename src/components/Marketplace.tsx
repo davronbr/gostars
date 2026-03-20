@@ -35,10 +35,10 @@ export function Marketplace() {
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md pt-6 pb-4 px-4 border-b border-white/5">
         <div className="flex items-center gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input 
               placeholder="Search assets..." 
-              className="pl-10 bg-secondary border-none rounded-full h-12 focus-visible:ring-primary font-bold"
+              className="pl-11 bg-secondary border-none rounded-full h-12 focus-visible:ring-primary font-bold text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -54,7 +54,7 @@ export function Marketplace() {
               {CATEGORIES.map((category) => (
                 <DropdownMenuItem 
                   key={category}
-                  className="rounded-xl font-bold cursor-pointer hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary"
+                  className="rounded-xl font-bold cursor-pointer hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary uppercase text-[10px] tracking-widest"
                   onClick={() => setActiveCategory(category)}
                 >
                   {category}
@@ -65,7 +65,7 @@ export function Marketplace() {
         </div>
         
         <div className="mt-4 flex items-center justify-between px-2">
-          <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">
+          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
             Filtering: <span className="text-primary">{activeCategory}</span>
           </p>
         </div>
@@ -73,7 +73,7 @@ export function Marketplace() {
 
       <div className="px-4 mt-8">
         {WEBSITES.length === 0 ? (
-          <div className="bg-secondary rounded-3xl p-16 text-center flex flex-col items-center gap-6 border border-white/5">
+          <div className="bg-secondary rounded-[2.5rem] p-16 text-center flex flex-col items-center gap-6 border border-white/5 shadow-2xl">
             <div className="w-48 h-48 flex items-center justify-center">
               {animationData ? (
                 <Lottie 
@@ -87,12 +87,9 @@ export function Marketplace() {
               )}
             </div>
             <div>
-              <h3 className="text-2xl font-bold mb-2 uppercase tracking-tight">Market is Empty</h3>
-              <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto uppercase tracking-widest">Be the first to list a premium digital asset on Build io.</p>
+              <h3 className="text-2xl font-black mb-2 uppercase tracking-tight">Market is Empty</h3>
+              <p className="text-muted-foreground text-sm font-bold max-w-[240px] mx-auto uppercase tracking-widest leading-relaxed">Be the first to list a premium digital asset on Build io.</p>
             </div>
-            <Button className="rounded-full px-10 h-14 font-black bg-primary text-white hover:bg-primary/80 transition-all uppercase tracking-tight">
-              Create Listing
-            </Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6">
