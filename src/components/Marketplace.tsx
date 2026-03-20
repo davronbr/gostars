@@ -14,6 +14,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import dynamic from "next/dynamic";
 import type { Language } from "@/app/page";
 import { translations } from "@/app/page";
@@ -44,6 +50,7 @@ function NftItemCard({ item }: { item: NftCollectionItem }) {
 
 export function Marketplace({ lang }: { lang: Language }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [collectionFilter, setCollectionFilter] = useState<string | null>(null);
   const [animationData, setAnimationData] = useState<any>(null);
 
   const t = translations[lang];
@@ -55,9 +62,11 @@ export function Marketplace({ lang }: { lang: Language }) {
       .catch((err) => console.error("Market Lottie load error:", err));
   }, []);
 
-  const filteredItems = nftCollections.filter(item => 
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredItems = nftCollections
+    .filter(item => !collectionFilter || item.name === collectionFilter)
+    .filter(item => 
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
   return (
     <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -95,10 +104,26 @@ export function Marketplace({ lang }: { lang: Language }) {
               <ArrowUpDown className="w-5 h-5 text-zinc-400" />
             </Button>
             <Separator orientation="vertical" className="h-6 bg-white/10 mx-1" />
-            <Button variant="outline" className="h-11 px-5 flex-1 justify-between bg-zinc-900 border-white/10 rounded-full font-bold text-sm">
-              <span>{t.collection}</span>
-              <ChevronDown className="w-4 h-4 text-zinc-500" />
-            </Button>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="h-11 px-5 flex-1 justify-between bg-zinc-900 border-white/10 rounded-full font-bold text-sm">
+                  <span className="truncate">{collectionFilter || t.collection}</span>
+                  <ChevronDown className="w-4 h-4 text-zinc-500 flex-shrink-0" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-zinc-900 border-white/10 text-white w-[--radix-dropdown-menu-trigger-width]">
+                <DropdownMenuItem onSelect={() => setCollectionFilter(null)}>
+                  {t.collections}
+                </DropdownMenuItem>
+                {nftCollections.map(collection => (
+                  <DropdownMenuItem key={collection.id} onSelect={() => setCollectionFilter(collection.name)}>
+                    {collection.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Button variant="outline" className="h-11 px-5 flex-1 justify-center bg-zinc-900 border-white/10 rounded-full font-bold text-sm">
               <span>{t.model}</span>
             </Button>
