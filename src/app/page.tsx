@@ -212,28 +212,28 @@ export default function Home() {
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body">
       {!isFullScreenView && (
-        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-zinc-900/90 backdrop-blur-xl sticky top-0 z-40 border-b border-white/10 shadow-lg">
+        <header className="px-6 pt-10 pb-6 flex justify-between items-center bg-black/80 backdrop-blur-xl sticky top-0 z-40 border-b border-white/5">
           <div className="flex flex-col">
-            <h1 className="text-2xl font-bold text-white tracking-tighter leading-none uppercase">
+            <h1 className="text-2xl font-black text-white tracking-tighter leading-none uppercase italic">
               Build io
             </h1>
-            <p className="text-[10px] text-primary font-bold uppercase tracking-[0.3em] mt-1">
+            <p className="text-[10px] text-primary font-black uppercase tracking-[0.3em] mt-1">
               {t.foundry}
             </p>
           </div>
           <div className="flex gap-2">
             <Button 
               size="icon" 
-              variant="secondary" 
-              className="bg-zinc-800 rounded-full border border-white/5 h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md shadow-md"
+              variant="ghost" 
+              className="rounded-full h-11 w-11 hover:bg-white/5 transition-all"
               onClick={() => setActiveTab("listing")}
             >
               <Plus className="w-6 h-6 text-white" />
             </Button>
             <Button 
               size="icon" 
-              variant="secondary" 
-              className="bg-zinc-800 rounded-full border border-white/5 h-11 w-11 hover:bg-primary/20 hover:text-primary transition-all backdrop-blur-md shadow-md"
+              variant="ghost" 
+              className="rounded-full h-11 w-11 hover:bg-white/5 transition-all"
               onClick={() => setActiveTab("profile")}
             >
               <Settings className="w-5 h-5 text-white" />
@@ -324,32 +324,32 @@ function ProfileView({ lang, walletMethod, onOpenLangModal, onOpenWalletModal }:
 
   return (
     <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col items-center mt-6 mb-8 text-center">
-        <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center mb-4 border-2 border-white/20 overflow-hidden shadow-xl">
+      <div className="flex flex-col items-center mt-6 mb-10 text-center">
+        <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center mb-4 border border-white/10 overflow-hidden shadow-2xl">
            <div className="text-white font-black text-2xl italic tracking-tighter opacity-80">BIO</div>
         </div>
-        <h2 className="text-2xl font-bold text-white uppercase tracking-tight">{t.name}</h2>
-        <p className="text-white/70 text-sm font-bold tracking-tight opacity-70">@moglq</p>
+        <h2 className="text-2xl font-black text-white uppercase tracking-tight italic">{t.name}</h2>
+        <p className="text-white/40 text-xs font-black uppercase tracking-widest mt-1">@moglq</p>
       </div>
 
-      <div className="space-y-4 px-2">
+      <div className="space-y-2 px-2">
         {settingsGroups.map((group, gIdx) => (
-          <div key={gIdx} className="bg-zinc-900/90 backdrop-blur-3xl rounded-[2.2rem] overflow-hidden border border-white/10 divide-y divide-white/5 shadow-[0_15px_45px_rgba(0,0,0,0.6)]">
+          <div key={gIdx} className="mb-6">
             {group.items.map((item, iIdx) => (
               <button 
                 key={iIdx} 
                 onClick={item.onClick}
-                className="w-full flex items-center justify-between p-5 hover:bg-white/5 transition-all text-left group active:scale-[0.98]"
+                className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-all text-left group active:scale-[0.98] rounded-2xl mb-1"
               >
                 <div className="flex items-center gap-4">
                   <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
                     <item.icon className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-bold text-[14px] text-white uppercase tracking-tight">{item.label}</span>
+                  <span className="font-black text-sm text-white uppercase tracking-tight">{item.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[13px] text-white font-black uppercase tracking-tight opacity-80">{item.value}</span>
-                  <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+                  <span className="text-xs text-white/50 font-black uppercase tracking-tight">{item.value}</span>
+                  <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white transition-colors" />
                 </div>
               </button>
             ))}
