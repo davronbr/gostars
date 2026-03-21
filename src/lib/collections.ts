@@ -18,7 +18,7 @@ export const nftCollections: NftCollectionItem[] = [
   {
     id: '#54522',
     name: 'Santa Hat',
-    collection: 'Christmas Gifts',
+    collection: 'Santa Hat',
     lottieUrl: 'https://nft.fragment.com/gift/SantaHat-54522.lottie.json',
     price: '65 000 UZS',
     imageHint: 'santa hat christmas',
