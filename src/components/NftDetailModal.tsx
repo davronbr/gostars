@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -75,7 +76,7 @@ export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalPro
 
         <div className="p-6 pt-0 flex flex-col">
             <div className="text-center mb-6">
-                <h2 className="text-3xl font-bold text-white tracking-tight">{nft.name}</h2>
+                <DialogTitle className="text-3xl font-bold text-white tracking-tight">{nft.name}</DialogTitle>
                 <p className="text-white/50 font-bold text-sm">{nft.id}</p>
             </div>
             
