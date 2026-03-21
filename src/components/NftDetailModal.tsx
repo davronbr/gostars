@@ -49,9 +49,9 @@ export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalPro
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#18181b] border-zinc-800 rounded-t-3xl p-0 w-full max-w-2xl mx-auto fixed bottom-0 left-0 right-0 translate-y-0 sm:rounded-3xl sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 animate-in slide-in-from-bottom-full duration-500 data-[state=closed]:slide-out-to-bottom-full">
+      <DialogContent className="bg-[#18181b] border-zinc-800 rounded-t-3xl p-0 w-full max-w-sm mx-auto fixed bottom-0 left-0 right-0 translate-y-0 sm:rounded-3xl sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 animate-in slide-in-from-bottom-full duration-500 data-[state=closed]:slide-out-to-bottom-full">
         
-        <div className="relative w-full aspect-square -mb-24" style={{ background: 'radial-gradient(circle at 50% 40%, #2E3B6E 0%, #18181B 50%)'}}>
+        <div className="relative w-full aspect-square max-w-xs mx-auto -mb-24" style={{ background: 'radial-gradient(circle at 50% 40%, #2E3B6E 0%, #18181B 50%)'}}>
             <div className="absolute top-4 right-4 flex gap-2 z-10">
                 <Button size="icon" variant="outline" className="bg-black/20 backdrop-blur-sm rounded-full h-10 w-10 border-white/10">
                     <Eye className="w-5 h-5 text-white" />
@@ -65,7 +65,7 @@ export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalPro
                 <X className="w-5 h-5 text-white" />
             </button>
             
-            <div className="w-full h-full scale-75">
+            <div className="w-full h-full">
                 {animationData ? (
                 <Lottie animationData={animationData} loop={true} />
                 ) : (
@@ -75,10 +75,12 @@ export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalPro
         </div>
 
         <div className="p-6 pt-0 flex flex-col">
-            <div className="text-center mb-6">
-                <DialogTitle className="text-3xl font-bold text-white tracking-tight">{nft.name}</DialogTitle>
-                <p className="text-white/50 font-bold text-sm">{nft.id}</p>
-            </div>
+            <DialogTitle asChild>
+                <div className="text-center mb-6">
+                    <h2 className="text-3xl font-bold text-white tracking-tight">{nft.name}</h2>
+                    <p className="text-white/50 font-bold text-sm">{nft.id}</p>
+                </div>
+            </DialogTitle>
             
             <div className="bg-zinc-800/50 border border-white/5 rounded-2xl p-4 mb-4 space-y-3">
                 {details.map((item, index) => (
