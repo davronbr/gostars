@@ -62,11 +62,16 @@ export function Marketplace({ lang }: { lang: Language }) {
       .catch((err) => console.error("Market Lottie load error:", err));
   }, []);
 
-  const filteredItems = nftCollections
-    .filter(item => !collectionFilter || item.name === collectionFilter)
-    .filter(item => 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  // Show items only if a filter is applied or a search term is entered.
+  const showItems = collectionFilter || searchTerm;
+
+  const filteredItems = showItems
+    ? nftCollections
+        .filter(item => !collectionFilter || item.name === collectionFilter)
+        .filter(item => 
+          item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    : [];
 
   return (
     <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
