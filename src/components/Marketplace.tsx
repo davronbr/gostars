@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { 
   Search, 
@@ -88,18 +88,21 @@ export function Marketplace({ lang, onNftSelect }: { lang: Language; onNftSelect
       .catch((err) => console.error("Market Lottie load error:", err));
   }, []);
 
-  const getFilteredItems = () => {
-    if (!searchTerm && !collectionFilter) {
-      return [];
-    }
-    return nftCollections
-      .filter(item => !collectionFilter || item.name === collectionFilter)
-      .filter(item => 
-        !searchTerm || item.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-  }
+  const uniqueCollections = useMemo(
+    () => [...new Set(nftCollections.map((item) => item.collection))],
+    []
+  );
 
-  const filteredItems = getFilteredItems();
+  const filteredItems = useMemo(() => {
+    return nftCollections
+      .filter((item) => !collectionFilter || item.collection === collectionFilter)
+      .filter(
+        (item) =>
+          !searchTerm ||
+          item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+  }, [collectionFilter, searchTerm]);
+
 
   return (
     <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -149,9 +152,9 @@ export function Marketplace({ lang, onNftSelect }: { lang: Language; onNftSelect
                 <DropdownMenuItem onSelect={() => setCollectionFilter(null)}>
                   {t.collections}
                 </DropdownMenuItem>
-                {nftCollections.map(collection => (
-                  <DropdownMenuItem key={collection.id} onSelect={() => setCollectionFilter(collection.name)}>
-                    {collection.name}
+                {uniqueCollections.map(collection => (
+                  <DropdownMenuItem key={collection} onSelect={() => setCollectionFilter(collection)}>
+                    {collection}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
