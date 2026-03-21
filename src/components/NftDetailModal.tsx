@@ -49,7 +49,7 @@ export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalPro
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#18181b] border-zinc-800 rounded-t-3xl p-0 w-full max-w-sm mx-auto fixed bottom-0 left-0 right-0 translate-y-0 sm:rounded-3xl sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 animate-in slide-in-from-bottom-full duration-500 data-[state=closed]:slide-out-to-bottom-full">
+      <DialogContent className="bg-[#18181b] border-zinc-800 p-0 fixed top-auto bottom-0 left-0 right-0 w-full rounded-t-3xl sm:top-1/2 sm:left-1/2 sm:bottom-auto sm:w-full sm:max-w-sm sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-3xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom-full data-[state=open]:slide-in-from-bottom-full duration-500">
         
         <div className="relative w-full aspect-square max-w-xs mx-auto -mb-24" style={{ background: 'radial-gradient(circle at 50% 40%, #2E3B6E 0%, #18181B 50%)'}}>
             <div className="absolute top-4 right-4 flex gap-2 z-10">
@@ -67,14 +67,14 @@ export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalPro
             
             <div className="w-full h-full">
                 {animationData ? (
-                <Lottie animationData={animationData} loop={true} />
+                <Lottie animationData={animationData} loop={true} className="w-full h-full" />
                 ) : (
                 <div className="w-full h-full animate-pulse" />
                 )}
             </div>
         </div>
 
-        <div className="p-6 pt-0 flex flex-col">
+        <div className="p-6 pt-28 flex flex-col">
             <DialogTitle asChild>
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-white tracking-tight">{nft.name}</h2>
