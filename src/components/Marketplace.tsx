@@ -5,11 +5,9 @@ import Image from "next/image";
 import { 
   Search, 
   Activity,
-  Equal,
   ChevronDown,
   Filter,
   ArrowUpDown,
-  ChevronRight,
   ShoppingCart
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -112,7 +110,7 @@ export function Marketplace({ lang, onNftSelect }: { lang: Language; onNftSelect
         </div>
 
         <div className="space-y-3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
               <Input 
@@ -124,12 +122,6 @@ export function Marketplace({ lang, onNftSelect }: { lang: Language; onNftSelect
             </div>
             <Button size="icon" variant="outline" className="rounded-full w-11 h-11 bg-zinc-900 border-white/10">
               <Activity className="w-5 h-5 text-zinc-400" />
-            </Button>
-            <Button size="icon" variant="outline" className="rounded-full w-11 h-11 bg-zinc-900 border-white/10">
-              <Equal className="w-5 h-5 text-zinc-400" />
-            </Button>
-            <Button size="icon" variant="outline" className="rounded-full w-11 h-11 bg-zinc-900 border-white/10">
-              <ChevronDown className="w-5 h-5 text-zinc-400" />
             </Button>
           </div>
           <div className="flex items-center gap-2">
@@ -160,13 +152,6 @@ export function Marketplace({ lang, onNftSelect }: { lang: Language; onNftSelect
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button variant="outline" className="h-11 px-5 flex-1 justify-center bg-zinc-900 border-white/10 rounded-full font-bold text-sm">
-              <span>{t.model}</span>
-            </Button>
-            <Button variant="outline" className="h-11 px-5 flex-1 justify-between bg-zinc-900 border-white/10 rounded-full font-bold text-sm">
-              <span>{t.back}</span>
-              <ChevronRight className="w-4 h-4 text-zinc-500" />
-            </Button>
           </div>
         </div>
       </div>
