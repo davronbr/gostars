@@ -10,8 +10,6 @@ export interface NftCollectionItem {
   symbol: { value: string; rarity: string; };
   backdrop: { value: string; rarity: string; };
   floorPrice: string;
-  purchaseReward: number;
-  cashback: number;
   offerPrice: string;
 }
 
@@ -26,8 +24,6 @@ export const nftCollections: NftCollectionItem[] = [
     symbol: { value: 'Snowflake', rarity: '1.2%' },
     backdrop: { value: 'Winter Night', rarity: '3%' },
     floorPrice: '45 000 UZS',
-    purchaseReward: 878,
-    cashback: 0,
     offerPrice: '60 000 UZS'
   },
 ];
