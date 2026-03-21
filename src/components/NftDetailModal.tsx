@@ -49,32 +49,34 @@ export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalPro
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#18181b] border-zinc-800 p-0 fixed top-auto bottom-0 left-0 right-0 w-full rounded-t-3xl sm:top-1/2 sm:left-1/2 sm:bottom-auto sm:w-full sm:max-w-sm sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-3xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom-full data-[state=open]:slide-in-from-bottom-full duration-500">
+      <DialogContent className="bg-[#18181b] border-zinc-800 p-0 fixed top-auto bottom-0 left-0 right-0 w-full rounded-t-3xl sm:top-1/2 sm:left-1/2 sm:bottom-auto sm:w-full sm:max-w-sm sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-3xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom-full data-[state=open]:slide-in-from-bottom-full duration-500 overflow-visible">
         
-        <div className="relative w-64 h-64 mx-auto -mb-20" style={{ background: 'radial-gradient(circle at 50% 40%, #2E3B6E 0%, #18181B 50%)'}}>
-            <div className="absolute top-4 right-4 flex gap-2 z-10">
-                <Button size="icon" variant="outline" className="bg-black/20 backdrop-blur-sm rounded-full h-10 w-10 border-white/10">
-                    <Eye className="w-5 h-5 text-white" />
-                </Button>
-                <Button size="icon" variant="outline" className="bg-black/20 backdrop-blur-sm rounded-full h-10 w-10 border-white/10">
-                    <Share2 className="w-5 h-5 text-white" />
-                </Button>
-            </div>
-            
-            <button onClick={onClose} className="absolute top-4 left-4 p-2 bg-black/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors z-20">
-                <X className="w-5 h-5 text-white" />
-            </button>
-            
-            <div className="w-full h-full">
-                {animationData ? (
-                <Lottie animationData={animationData} loop={true} className="w-full h-full" />
-                ) : (
-                <div className="w-full h-full animate-pulse" />
-                )}
-            </div>
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-64 h-64 z-20">
+          <div className="relative w-full h-full" style={{ background: 'radial-gradient(circle at 50% 40%, #2E3B6E 0%, #18181B 50%)'}}>
+              <div className="absolute top-4 right-4 flex gap-2 z-10">
+                  <Button size="icon" variant="outline" className="bg-black/20 backdrop-blur-sm rounded-full h-10 w-10 border-white/10">
+                      <Eye className="w-5 h-5 text-white" />
+                  </Button>
+                  <Button size="icon" variant="outline" className="bg-black/20 backdrop-blur-sm rounded-full h-10 w-10 border-white/10">
+                      <Share2 className="w-5 h-5 text-white" />
+                  </Button>
+              </div>
+              
+              <button onClick={onClose} className="absolute top-4 left-4 p-2 bg-black/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors z-20">
+                  <X className="w-5 h-5 text-white" />
+              </button>
+              
+              <div className="w-full h-full scale-75">
+                  {animationData ? (
+                  <Lottie animationData={animationData} loop={true} className="w-full h-full" />
+                  ) : (
+                  <div className="w-full h-full animate-pulse" />
+                  )}
+              </div>
+          </div>
         </div>
 
-        <div className="p-6 pt-24 flex flex-col">
+        <div className="p-6 pt-36 flex flex-col bg-transparent">
             <DialogTitle asChild>
                 <div className="text-center mb-6">
                     <h2 className="text-3xl font-bold text-white tracking-tight">{nft.name}</h2>
