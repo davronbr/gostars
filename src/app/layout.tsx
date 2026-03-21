@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import Script from 'next/script';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'Tez Nft | Digital Marketplace',
@@ -24,8 +25,12 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased bg-background text-foreground min-h-screen" suppressHydrationWarning>
-        {children}
+        <FirebaseClientProvider>
+          {children}
+        </FirebaseClientProvider>
       </body>
     </html>
   );
 }
+
+    

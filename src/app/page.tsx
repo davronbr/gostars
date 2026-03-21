@@ -7,6 +7,7 @@ import { Leaderboard } from "@/components/Leaderboard";
 import { MyGifts } from "@/components/MyGifts";
 import { ListingForm } from "@/components/ListingForm";
 import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Settings, 
   Wallet, 
@@ -18,7 +19,8 @@ import {
   Check,
   User as UserIcon,
   Info,
-  Globe
+  Globe,
+  Link
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -33,6 +35,11 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { NftDetailModal } from "@/components/NftDetailModal";
 import type { NftCollectionItem } from "@/lib/collections";
+import { useFirebase, initiateAnonymousSignIn, useDoc, useFirestore, useMemoFirebase, useUser } from "@/firebase";
+import { doc } from 'firebase/firestore';
+import { setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
+import type { User } from "firebase/auth";
+
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
@@ -113,10 +120,15 @@ export const translations = {
     symbol: "Simvol",
     backdrop: "Fon",
     floorPrice: "Minimal narx",
-    purchaseReward: "Xarid uchun mukofot",
-    cashback: "Keshbek",
     makeOffer: "Taklif qilish",
     buyGift: "Sovg'ani sotib olish",
+    connectTelegram: "Telegram'ni ulash",
+    connected: "Ulangan",
+    telegramConnected: "Telegram uladi!",
+    telegramConnectedDesc: "Akkauntingiz muvaffaqiyatli ulandi.",
+    error: "Xatolik",
+    loginToConnect: "Telegram'ni ulash uchun tizimga kiring.",
+    openInTelegram: "Ilovani Telegram orqali oching.",
   },
   ru: {
     market: "Маркет",
@@ -183,10 +195,15 @@ export const translations = {
     symbol: "Символ",
     backdrop: "Фон",
     floorPrice: "Минимальная цена",
-    purchaseReward: "Награда за покупку",
-    cashback: "Кэшбэк",
     makeOffer: "Предложить цену",
     buyGift: "Купить подарок",
+    connectTelegram: "Подключить Telegram",
+    connected: "Подключено",
+    telegramConnected: "Telegram подключен!",
+    telegramConnectedDesc: "Ваш аккаунт успешно подключен.",
+    error: "Ошибка",
+    loginToConnect: "Войдите, чтобы подключить Telegram.",
+    openInTelegram: "Откройте приложение в Telegram.",
   },
   en: {
     market: "Market",
@@ -253,10 +270,15 @@ export const translations = {
     symbol: "Symbol",
     backdrop: "Backdrop",
     floorPrice: "Floor Price",
-    purchaseReward: "Purchase reward",
-    cashback: "Cashback",
     makeOffer: "Make an offer",
     buyGift: "Buy gift",
+    connectTelegram: "Connect Telegram",
+    connected: "Connected",
+    telegramConnected: "Telegram Connected!",
+    telegramConnectedDesc: "Your account has been successfully linked.",
+    error: "Error",
+    loginToConnect: "Please log in to connect Telegram.",
+    openInTelegram: "Please open the app in Telegram.",
   }
 };
 
@@ -270,6 +292,8 @@ export default function Home() {
   const [tgUser, setTgUser] = useState<any>(null);
   const [selectedNft, setSelectedNft] = useState<NftCollectionItem | null>(null);
 
+  const { auth, user, isUserLoading } = useFirebase();
+
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
       const webapp = window.Telegram.WebApp;
@@ -279,7 +303,11 @@ export default function Home() {
         setTgUser(webapp.initDataUnsafe.user);
       }
     }
-  }, []);
+
+    if (auth && !user && !isUserLoading) {
+      initiateAnonymousSignIn(auth);
+    }
+  }, [auth, user, isUserLoading]);
 
   const t = translations[lang];
 
@@ -297,6 +325,7 @@ export default function Home() {
             lang={lang} 
             walletMethod={walletMethod}
             tgUser={tgUser}
+            user={user}
             onOpenLangModal={() => setIsLangModalOpen(true)} 
             onOpenWalletModal={() => setIsWalletModalOpen(true)}
             onOpenOfferModal={() => setIsOfferModalOpen(true)}
@@ -385,15 +414,53 @@ export default function Home() {
   );
 }
 
-function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWalletModal, onOpenOfferModal }: { 
+function ProfileView({ lang, walletMethod, tgUser, user, onOpenLangModal, onOpenWalletModal, onOpenOfferModal }: { 
   lang: Language, 
   walletMethod: string,
   tgUser: any,
+  user: User | null,
   onOpenLangModal: () => void,
   onOpenWalletModal: () => void,
   onOpenOfferModal: () => void 
 }) {
   const t = translations[lang];
+  const { toast } = useToast();
+  const firestore = useFirestore();
+
+  const userProfileRef = useMemoFirebase(() => 
+    user ? doc(firestore, 'users', user.uid) : null, 
+    [user, firestore]
+  );
+  const { data: userProfile } = useDoc<{telegramUserId?: string}>(userProfileRef);
+
+  const isTelegramConnected = !!userProfile?.telegramUserId;
+
+  const handleConnectTelegram = () => {
+    if (user && tgUser?.id) {
+      const userRef = doc(firestore, 'users', user.uid);
+      setDocumentNonBlocking(userRef, { 
+        telegramUserId: tgUser.id 
+      }, { merge: true });
+      
+      toast({
+          title: t.telegramConnected,
+          description: t.telegramConnectedDesc,
+      });
+    } else if (!user) {
+        toast({
+            title: t.error,
+            description: t.loginToConnect,
+            variant: "destructive"
+        });
+    } else if (!tgUser?.id) {
+         toast({
+            title: t.error,
+            description: t.openInTelegram,
+            variant: "destructive"
+        });
+    }
+  };
+
 
   const settingsGroups = [
     {
@@ -403,28 +470,40 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
           label: t.language, 
           value: t.langName, 
           color: "bg-purple-500",
-          onClick: onOpenLangModal
+          onClick: onOpenLangModal,
+          disabled: false,
         },
         { 
           icon: Wallet, 
           label: t.payment, 
           value: walletMethod, 
           color: "bg-blue-500",
-          onClick: onOpenWalletModal
+          onClick: onOpenWalletModal,
+          disabled: false,
+        },
+        {
+          icon: Link,
+          label: t.connectTelegram,
+          value: isTelegramConnected ? t.connected : "",
+          color: "bg-sky-500",
+          onClick: handleConnectTelegram,
+          disabled: isTelegramConnected,
         },
         { 
           icon: MessageCircle, 
           label: t.help, 
           value: "@moglq", 
           color: "bg-orange-500",
-          onClick: () => window.open("https://t.me/moglq", "_blank")
+          onClick: () => window.open("https://t.me/moglq", "_blank"),
+          disabled: false,
         },
         { 
           icon: Lightbulb, 
           label: t.news, 
           value: "@tez_nft", 
           color: "bg-yellow-500",
-          onClick: () => window.open("https://t.me/tez_nft", "_blank")
+          onClick: () => window.open("https://t.me/tez_nft", "_blank"),
+          disabled: false,
         },
       ]
     },
@@ -435,7 +514,8 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
           label: t.offer, 
           value: "", 
           color: "bg-green-500",
-          onClick: onOpenOfferModal
+          onClick: onOpenOfferModal,
+          disabled: false,
         },
       ]
     }
@@ -482,7 +562,8 @@ function ProfileView({ lang, walletMethod, tgUser, onOpenLangModal, onOpenWallet
               <button 
                 key={iIdx} 
                 onClick={item.onClick}
-                className="w-full flex items-center justify-between p-4 bg-zinc-900 border border-white/10 transition-all text-left group rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] mb-1"
+                disabled={item.disabled}
+                className="w-full flex items-center justify-between p-4 bg-zinc-900 border border-white/10 transition-all text-left group rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] mb-1 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="flex items-center gap-4">
                   <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
@@ -711,3 +792,5 @@ function OfferModal({ isOpen, onClose, lang }: {
     </Dialog>
   );
 }
+
+    
