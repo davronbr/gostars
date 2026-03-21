@@ -28,7 +28,7 @@ import { nftCollections, type NftCollectionItem } from "@/lib/collections";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
-function NftItemCard({ item }: { item: NftCollectionItem }) {
+function NftItemCard({ item, onSelect }: { item: NftCollectionItem; onSelect: () => void; }) {
   const [animationData, setAnimationData] = useState<any>(null);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function NftItemCard({ item }: { item: NftCollectionItem }) {
   }, [item.lottieUrl]);
 
   return (
-    <div className="bg-secondary rounded-[1.5rem] p-3 border border-white/5 shadow-2xl flex flex-col gap-3 transition-all hover:border-primary/30">
+    <div onClick={onSelect} className="bg-secondary rounded-[1.5rem] p-3 border border-white/5 shadow-2xl flex flex-col gap-3 transition-all hover:border-primary/30 cursor-pointer">
       <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-zinc-800 flex items-center justify-center">
         {item.lottieUrl && animationData ? (
           <Lottie animationData={animationData} loop={true} />
@@ -74,7 +74,7 @@ function NftItemCard({ item }: { item: NftCollectionItem }) {
 }
 
 
-export function Marketplace({ lang }: { lang: Language }) {
+export function Marketplace({ lang, onNftSelect }: { lang: Language; onNftSelect: (nft: NftCollectionItem) => void; }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [collectionFilter, setCollectionFilter] = useState<string | null>(null);
   const [animationData, setAnimationData] = useState<any>(null);
@@ -88,16 +88,23 @@ export function Marketplace({ lang }: { lang: Language }) {
       .catch((err) => console.error("Market Lottie load error:", err));
   }, []);
 
-  const filteredItems = nftCollections
+  const getFilteredItems = () => {
+    if (!searchTerm && !collectionFilter) {
+      return [];
+    }
+    return nftCollections
       .filter(item => !collectionFilter || item.name === collectionFilter)
       .filter(item => 
         !searchTerm || item.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
+  }
+
+  const filteredItems = getFilteredItems();
 
   return (
     <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md pt-6 pb-4 px-4 border-b border-white/5">
-        <div className="flex items-baseline gap-4 mb-4">
+      <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-md pt-0 pb-4 px-4 border-b border-white/5">
+        <div className="flex items-baseline gap-4 mb-4 pt-6">
           <h2 className="font-bold text-white text-2xl">{t.allItems}</h2>
         </div>
 
@@ -188,7 +195,7 @@ export function Marketplace({ lang }: { lang: Language }) {
         ) : (
           <div className="grid grid-cols-2 gap-4">
             {filteredItems.map(item => (
-              <NftItemCard key={item.id} item={item} />
+              <NftItemCard key={item.id} item={item} onSelect={() => onNftSelect(item)} />
             ))}
           </div>
         )}

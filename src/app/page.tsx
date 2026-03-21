@@ -31,6 +31,8 @@ import {
 } from "@/components/ui/dialog";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { NftDetailModal } from "@/components/NftDetailModal";
+import type { NftCollectionItem } from "@/lib/collections";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
@@ -108,6 +110,13 @@ export const translations = {
     howToAddGifts: "Sovg'alarni qanday qo'shaman?",
     allItems: "Barcha narsalar",
     collections: "Kolleksiyalar",
+    symbol: "Simvol",
+    backdrop: "Fon",
+    floorPrice: "Minimal narx",
+    purchaseReward: "Xarid uchun mukofot",
+    cashback: "Keshbek",
+    makeOffer: "Taklif qilish",
+    buyGift: "Sovg'ani sotib olish",
   },
   ru: {
     market: "Маркет",
@@ -171,6 +180,13 @@ export const translations = {
     howToAddGifts: "Как добавить подарки?",
     allItems: "Все товары",
     collections: "Коллекции",
+    symbol: "Символ",
+    backdrop: "Фон",
+    floorPrice: "Минимальная цена",
+    purchaseReward: "Награда за покупку",
+    cashback: "Кэшбэк",
+    makeOffer: "Предложить цену",
+    buyGift: "Купить подарок",
   },
   en: {
     market: "Market",
@@ -234,6 +250,13 @@ export const translations = {
     howToAddGifts: "How do I add gifts?",
     allItems: "All items",
     collections: "Collections",
+    symbol: "Symbol",
+    backdrop: "Backdrop",
+    floorPrice: "Floor Price",
+    purchaseReward: "Purchase reward",
+    cashback: "Cashback",
+    makeOffer: "Make an offer",
+    buyGift: "Buy gift",
   }
 };
 
@@ -245,6 +268,7 @@ export default function Home() {
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [tgUser, setTgUser] = useState<any>(null);
+  const [selectedNft, setSelectedNft] = useState<NftCollectionItem | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -262,7 +286,7 @@ export default function Home() {
   const renderContent = () => {
     switch (activeTab) {
       case "marketplace":
-        return <Marketplace lang={lang} />;
+        return <Marketplace lang={lang} onNftSelect={setSelectedNft} />;
       case "leaderboard":
         return <Leaderboard lang={lang} />;
       case "gifts":
@@ -281,7 +305,7 @@ export default function Home() {
       case "listing":
         return <ListingForm onBack={() => setActiveTab("marketplace")} lang={lang} />;
       default:
-        return <Marketplace lang={lang} />;
+        return <Marketplace lang={lang} onNftSelect={setSelectedNft} />;
     }
   };
 
@@ -290,7 +314,7 @@ export default function Home() {
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body">
       {!isFullScreenView && (
-        <header className="px-6 pt-12 pb-6 flex justify-between items-center bg-transparent sticky top-0 z-40">
+        <header className="px-6 pt-12 pb-6 flex justify-between items-center bg-transparent">
           <div className="flex flex-col">
             <h1 className="text-2xl font-black text-white tracking-tighter leading-none">
               Tez Nft
@@ -346,6 +370,13 @@ export default function Home() {
       <OfferModal
         isOpen={isOfferModalOpen}
         onClose={() => setIsOfferModalOpen(false)}
+        lang={lang}
+      />
+
+      <NftDetailModal
+        isOpen={!!selectedNft}
+        onClose={() => setSelectedNft(null)}
+        nft={selectedNft}
         lang={lang}
       />
       
