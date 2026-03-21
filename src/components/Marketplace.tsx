@@ -9,7 +9,8 @@ import {
   ChevronDown,
   Filter,
   ArrowUpDown,
-  ChevronRight
+  ChevronRight,
+  ShoppingCart
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,20 +29,45 @@ import { nftCollections, type NftCollectionItem } from "@/lib/collections";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 function NftItemCard({ item }: { item: NftCollectionItem }) {
+  const [animationData, setAnimationData] = useState<any>(null);
+
+  useEffect(() => {
+    if (item.lottieUrl) {
+      fetch(item.lottieUrl)
+        .then((res) => res.json())
+        .then((data) => setAnimationData(data))
+        .catch(console.error);
+    }
+  }, [item.lottieUrl]);
+
   return (
     <div className="bg-secondary rounded-[1.5rem] p-3 border border-white/5 shadow-2xl flex flex-col gap-3 transition-all hover:border-primary/30">
-      <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-background">
-        <Image 
-          src={item.imageUrl.replace('/64/64', '/400/400')}
-          alt={item.name} 
-          fill
-          className="object-cover" 
-          data-ai-hint={item.imageHint}
-        />
+      <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-zinc-800 flex items-center justify-center">
+        {item.lottieUrl && animationData ? (
+          <Lottie animationData={animationData} loop={true} />
+        ) : item.imageUrl ? (
+          <Image 
+            src={item.imageUrl.replace('/64/64', '/400/400')}
+            alt={item.name} 
+            fill
+            className="object-cover" 
+            data-ai-hint={item.imageHint}
+          />
+        ) : (
+           <div className="w-full h-full bg-zinc-900 animate-pulse" />
+        )}
       </div>
-      <div className="flex flex-col px-1">
+      <div className="flex flex-col px-1 gap-1">
         <h3 className="font-bold text-white tracking-tight truncate">{item.name}</h3>
-        <span className="text-xs font-bold text-primary tracking-widest uppercase">1.00 TON</span>
+        <p className="text-xs text-zinc-400 font-bold tracking-tight">{item.id}</p>
+        <div className="flex items-center gap-2 mt-2">
+          <Button className="flex-1 h-10 text-sm">
+            {item.price}
+          </Button>
+          <Button size="icon" variant="outline" className="h-10 w-10 flex-shrink-0">
+            <ShoppingCart className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -62,16 +88,11 @@ export function Marketplace({ lang }: { lang: Language }) {
       .catch((err) => console.error("Market Lottie load error:", err));
   }, []);
 
-  // Show items only if a filter is applied or a search term is entered.
-  const showItems = collectionFilter || searchTerm;
-
-  const filteredItems = showItems
-    ? nftCollections
-        .filter(item => !collectionFilter || item.name === collectionFilter)
-        .filter(item => 
-          item.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-    : [];
+  const filteredItems = nftCollections
+      .filter(item => !collectionFilter || item.name === collectionFilter)
+      .filter(item => 
+        !searchTerm || item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
   return (
     <div className="pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
