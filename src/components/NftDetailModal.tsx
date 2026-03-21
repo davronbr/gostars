@@ -49,7 +49,7 @@ export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalPro
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#18181b] border-zinc-800 p-0 fixed top-auto bottom-0 left-0 right-0 w-full rounded-t-3xl sm:top-1/2 sm:left-1/2 sm:bottom-auto sm:w-full sm:max-w-sm sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-3xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom-full data-[state=open]:slide-in-from-bottom-full duration-500 overflow-visible">
+      <DialogContent className="bg-[#18181b] border-zinc-800 p-0 fixed top-auto bottom-0 left-0 right-0 w-full translate-x-0 translate-y-0 rounded-t-3xl sm:top-1/2 sm:left-1/2 sm:bottom-auto sm:w-full sm:max-w-sm sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-3xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom-full data-[state=open]:slide-in-from-bottom-full duration-500 overflow-visible">
         
         <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-64 h-64 z-20">
           <div className="relative w-full h-full" style={{ background: 'radial-gradient(circle at 50% 40%, #2E3B6E 0%, #18181B 50%)'}}>
@@ -76,7 +76,7 @@ export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalPro
           </div>
         </div>
 
-        <div className="p-6 pt-36 flex flex-col bg-transparent">
+        <div className="p-6 pt-36 flex flex-col bg-transparent break-words">
             <DialogTitle asChild>
                 <div className="text-center mb-6 break-words">
                     <h2 className="text-3xl font-bold text-white tracking-tight">{nft.name}</h2>
