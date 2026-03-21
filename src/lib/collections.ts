@@ -15,17 +15,17 @@ export interface NftCollectionItem {
 }
 
 export const nftCollections: NftCollectionItem[] = [
-  { 
-    id: '#10311', 
-    name: 'Spooky Ghost', 
-    collection: 'Halloween Specials',
-    imageUrl: 'https://picsum.photos/seed/ghost/400/400',
-    price: '70 000 UZS',
-    imageHint: 'spooky ghost',
-    model: { value: 'Ethereal', rarity: '2%' },
-    symbol: { value: 'Moon', rarity: '1.8%' },
-    backdrop: { value: 'Haunted Forest', rarity: '2.5%' },
-    floorPrice: '65 000 UZS',
-    offerPrice: '68 000 UZS'
-  },
+  {
+    id: '#54522',
+    name: 'Santa Hat',
+    collection: 'Christmas Gifts',
+    lottieUrl: 'https://nft.fragment.com/gift/SantaHat-54522.lottie.json',
+    price: '65 000 UZS',
+    imageHint: 'santa hat christmas',
+    model: { value: 'Festive', rarity: '5%' },
+    symbol: { value: 'Snowflake', rarity: '4.5%' },
+    backdrop: { value: 'Winter Night', rarity: '6%' },
+    floorPrice: '60 000 UZS',
+    offerPrice: '62 000 UZS'
+  }
 ];
