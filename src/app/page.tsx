@@ -59,8 +59,8 @@ declare global {
 export const translations = {
   uz: {
     market: "Go Stars",
-    gifts: "Referral",
-    leaderboard: "Hamyon",
+    gifts: "Gifts",
+    leaderboard: "Leaderboard",
     profile: "Tarix",
     language: "Til",
     payment: "Hamyon usuli",
@@ -146,8 +146,8 @@ export const translations = {
   },
   ru: {
     market: "Go Stars",
-    gifts: "Referral",
-    leaderboard: "Hamyon",
+    gifts: "Gifts",
+    leaderboard: "Leaderboard",
     profile: "Tarix",
     language: "Язык",
     payment: "Метод кошелька",
@@ -233,8 +233,8 @@ export const translations = {
   },
   en: {
     market: "Go Stars",
-    gifts: "Referral",
-    leaderboard: "Hamyon",
+    gifts: "Gifts",
+    leaderboard: "Leaderboard",
     profile: "Tarix",
     language: "Language",
     payment: "Wallet method",
