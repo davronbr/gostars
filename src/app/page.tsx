@@ -22,7 +22,8 @@ import {
   Info,
   Globe,
   Link,
-  History
+  History,
+  Star as StarIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -136,6 +137,12 @@ export const translations = {
     buyStars: "Stars sotib olish",
     starsTitle: "Telegram Stars",
     starsDesc: "Click, Payme yoki Paynet orqali Stars balansini to'ldiring — o'zingiz yoki yaqinlaringiz uchun.",
+    historyTitle: "Buyurtmalar tarixi",
+    all: "Hammasi",
+    unpaid: "TO'LANMAGAN",
+    expired: "MUDDATI O'TGAN",
+    starsTab: "Stars",
+    premiumTab: "Premium",
   },
   ru: {
     market: "Go Stars",
@@ -216,6 +223,12 @@ export const translations = {
     buyStars: "Купить Stars",
     starsTitle: "Telegram Stars",
     starsDesc: "Пополните баланс Stars через Click, Payme или Paynet — для себя или своих близких.",
+    historyTitle: "История заказов",
+    all: "Все",
+    unpaid: "НЕ ОПЛАЧЕНО",
+    expired: "ИСТЕКЛО",
+    starsTab: "Stars",
+    premiumTab: "Premium",
   },
   en: {
     market: "Go Stars",
@@ -296,6 +309,12 @@ export const translations = {
     buyStars: "Buy Stars",
     starsTitle: "Telegram Stars",
     starsDesc: "Top up your Stars balance via Click, Payme or Paynet — for yourself or your loved ones.",
+    historyTitle: "Order history",
+    all: "All",
+    unpaid: "UNPAID",
+    expired: "EXPIRED",
+    starsTab: "Stars",
+    premiumTab: "Premium",
   }
 };
 
@@ -338,14 +357,8 @@ export default function Home() {
         return <MyGifts lang={lang} />;
       case "profile":
         return (
-          <ProfileView 
+          <HistoryView 
             lang={lang} 
-            walletMethod={walletMethod}
-            tgUser={tgUser}
-            user={user}
-            onOpenLangModal={() => setIsLangModalOpen(true)} 
-            onOpenWalletModal={() => setIsWalletModalOpen(true)}
-            onOpenOfferModal={() => setIsOfferModalOpen(true)}
           />
         );
       case "listing":
@@ -426,6 +439,119 @@ export default function Home() {
       
       <Toaster />
     </main>
+  );
+}
+
+function HistoryView({ lang }: { lang: Language }) {
+  const t = translations[lang];
+  const [activeFilter, setActiveFilter] = useState<"all" | "stars" | "premium">("all");
+
+  const orders = [
+    {
+      id: "1",
+      user: "@moglq",
+      stars: 50,
+      method: "Paynet",
+      date: "21 Mar 2026, 12:53",
+      price: "12999 so'm",
+      status: "expired",
+      type: "stars"
+    },
+    {
+      id: "2",
+      user: "@Nullprime",
+      stars: 100,
+      method: "Click",
+      date: "28 Dek 2025, 11:39",
+      price: "23999 so'm",
+      status: "unpaid",
+      type: "stars"
+    },
+    {
+      id: "3",
+      user: "@nullprime",
+      stars: 150,
+      method: "Click",
+      date: "07 Dek 2025, 23:44",
+      price: "34999 so'm",
+      status: "unpaid",
+      type: "stars"
+    }
+  ];
+
+  const filteredOrders = activeFilter === "all" 
+    ? orders 
+    : orders.filter(o => o.type === activeFilter);
+
+  return (
+    <div className="p-6 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <h2 className="text-3xl font-bold text-white mb-8 tracking-tight">{t.historyTitle}</h2>
+
+      <div className="flex gap-2 mb-8">
+        <button
+          onClick={() => setActiveFilter("all")}
+          className={cn(
+            "px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border border-white/5",
+            activeFilter === "all" ? "bg-primary text-white" : "bg-zinc-900 text-zinc-500"
+          )}
+        >
+          {t.all}
+        </button>
+        <button
+          onClick={() => setActiveFilter("stars")}
+          className={cn(
+            "px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border border-white/5 flex items-center gap-2",
+            activeFilter === "stars" ? "bg-zinc-800 text-white border-primary/30" : "bg-zinc-900 text-zinc-500"
+          )}
+        >
+          <StarIcon className="w-4 h-4 fill-yellow-500 text-yellow-500" />
+          {t.starsTab}
+        </button>
+        <button
+          onClick={() => setActiveFilter("premium")}
+          className={cn(
+            "px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border border-white/5 flex items-center gap-2",
+            activeFilter === "premium" ? "bg-zinc-800 text-white border-primary/30" : "bg-zinc-900 text-zinc-500"
+          )}
+        >
+          <StarIcon className="w-4 h-4 fill-blue-500 text-blue-500" />
+          {t.premiumTab}
+        </button>
+      </div>
+
+      <div className="bg-zinc-900/40 border border-white/10 rounded-[2rem] p-4 space-y-4">
+        {filteredOrders.map((order) => (
+          <div key={order.id} className="flex items-center justify-between p-4 border-b border-white/5 last:border-0">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center border border-white/10 shadow-lg">
+                <StarIcon className="w-6 h-6 fill-yellow-500 text-yellow-500" />
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-white text-base">{order.user}</span>
+                  <span className="bg-yellow-500/10 text-yellow-500 text-[10px] font-black px-2 py-0.5 rounded-lg border border-yellow-500/20">
+                    {order.stars} STARS
+                  </span>
+                </div>
+                <span className="text-xs text-zinc-500 font-bold mt-1">
+                  {order.method} - {order.date}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-end gap-1.5">
+              <span className="font-bold text-white text-sm">{order.price}</span>
+              <span className={cn(
+                "text-[10px] font-black px-2 py-1 rounded-lg",
+                order.status === "expired" ? "bg-zinc-800 text-zinc-500" : "bg-yellow-500/20 text-yellow-500"
+              )}>
+                {order.status === "expired" ? t.expired : t.unpaid}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
