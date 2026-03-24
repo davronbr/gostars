@@ -1,9 +1,13 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import type { Language } from "@/app/page";
 import { translations } from "@/app/page";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 interface MarketplaceProps {
   lang: Language;
@@ -12,6 +16,22 @@ interface MarketplaceProps {
 
 export function Marketplace({ lang, subTab }: MarketplaceProps) {
   const t = translations[lang];
+  const [starsAnim, setStarsAnim] = useState<any>(null);
+  const [premiumAnim, setPremiumAnim] = useState<any>(null);
+
+  useEffect(() => {
+    // Stars animation
+    fetch("https://lottie.host/fb94bf98-c523-488c-8ab6-df7218649653/al2EJYZN81.json")
+      .then((res) => res.json())
+      .then((data) => setStarsAnim(data))
+      .catch((err) => console.error("Stars Lottie error:", err));
+
+    // Premium animation
+    fetch("https://lottie.host/361e7ecf-6af1-4413-9008-017aad9cd3c5/U1vvCnDPk3.json")
+      .then((res) => res.json())
+      .then((data) => setPremiumAnim(data))
+      .catch((err) => console.error("Premium Lottie error:", err));
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white font-body animate-in fade-in duration-700 pb-32">
@@ -20,15 +40,21 @@ export function Marketplace({ lang, subTab }: MarketplaceProps) {
         {/* Central Card */}
         <div className="w-full max-w-sm bg-zinc-900 rounded-[2.8rem] border border-white/10 p-10 flex flex-col items-center text-center shadow-2xl relative overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
           
-          {/* Star Icon */}
-          <div className="relative w-36 h-36 mb-10">
-             {/* Yellow Star Shape SVG */}
-             <svg viewBox="0 0 100 100" className="w-full h-full">
-                <path 
-                  fill="#facc15" 
-                  d="M50 5 L62 38 L95 38 L68 58 L78 91 L50 71 L22 91 L32 58 L5 38 L38 38 Z"
-                />
-             </svg>
+          {/* Lottie Animation Display */}
+          <div className="relative w-40 h-40 mb-10 flex items-center justify-center">
+            {subTab === "stars" ? (
+              starsAnim ? (
+                <Lottie animationData={starsAnim} loop={true} className="w-full h-full scale-125" />
+              ) : (
+                <div className="w-24 h-24 bg-white/5 rounded-full animate-pulse" />
+              )
+            ) : (
+              premiumAnim ? (
+                <Lottie animationData={premiumAnim} loop={true} className="w-full h-full scale-150" />
+              ) : (
+                <div className="w-24 h-24 bg-white/5 rounded-full animate-pulse" />
+              )
+            )}
           </div>
 
           <h2 className="text-3xl font-black mb-4 tracking-tight text-white">
