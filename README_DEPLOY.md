@@ -3,14 +3,26 @@
 Ushbu loyihani Render platformasiga chiqarish uchun quyidagi qadamlarni bajaring:
 
 ### 1. Kodni GitHub-ga yuklash
-Firebase Studio terminalida quyidagi buyruqlarni ketma-ket yozing:
+Agar sizda "No configured push destination" xatosi chiqsa, demak hali GitHub linkini qo'shmagansiz. Terminalda quyidagilarni bajaring:
+
 ```bash
+# 1. Git-ni qayta sozlash (agar kerak bo'lsa)
 git init
+
+# 2. Barcha fayllarni tayyorlash
 git add .
+
+# 3. Saqlash (Commit)
 git commit -m "Initial commit"
-# GitHub-da yangi repozitoriy ochib, uning linkini qo'shing:
+
+# 4. GitHub-da yangi repozitoriy ochib, uning linkini nusxalab quyidagiga qo'shing:
+# DIQQAT: Linkni o'zingizniki bilan almashtiring!
 git remote add origin https://github.com/USER_NOMINGIZ/REPO_NOMINGIZ.git
+
+# 5. Asosiy tarmoqni (branch) belgilash
 git branch -M main
+
+# 6. Kodni yuborish
 git push -u origin main
 ```
 
@@ -29,5 +41,3 @@ Agar `.env` faylingizda maxfiy kalitlar bo'lsa (masalan, `GEMINI_API_KEY`), ular
 ### 4. Telegram Bot Webhook-ni sozlash
 Botga xabarlar kelishi uchun Webhook-ni o'rnatish kerak. Brauzerda quyidagi manzilni oching:
 `https://api.telegram.org/bot<SIZNING_BOT_TOKENINGIZ>/setWebhook?url=https://sizning-saytingiz.onrender.com/api/telegram`
-
-**Eslatma:** Render-ning bepul tarifida sayt 15 daqiqa ishlatilmasa "uyquga" ketadi. Birinchi marta botga yozganingizda uyg'onishi uchun biroz vaqt (30-60 soniya) kerak bo'lishi mumkin.
