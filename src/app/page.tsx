@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -22,7 +23,8 @@ import {
   Globe,
   Link,
   History,
-  Star as StarIcon
+  Star as StarIcon,
+  Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -394,9 +396,12 @@ export default function Home() {
       
       {/* Global Header */}
       <header className="px-6 pt-12 pb-6 flex items-center justify-between sticky top-0 bg-black/80 backdrop-blur-md z-30">
-        {/* Left Balance Display */}
-        <div className="h-11 px-5 flex items-center justify-center bg-zinc-900 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]">
-          <span className="text-sm font-bold text-white tracking-tight">0 UZS</span>
+        {/* Left Balance Display with Top Up Button */}
+        <div className="h-11 pl-5 pr-2 flex items-center justify-between gap-3 bg-zinc-900 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]">
+          <span className="text-sm font-bold text-white tracking-tight whitespace-nowrap">0 UZS</span>
+          <button className="w-7 h-7 bg-zinc-800 rounded-full flex items-center justify-center border border-white/5 active:scale-95 transition-all group hover:bg-zinc-700">
+            <Plus className="w-4 h-4 text-white" />
+          </button>
         </div>
 
         {/* Center Toggle (Only for Marketplace) */}
