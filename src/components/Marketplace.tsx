@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -81,7 +80,7 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
 
           <Button 
             size="lg"
-            className="w-full h-16 rounded-[1.8rem] text-base font-black border-none"
+            className="w-full"
             onClick={() => subTab === "stars" && setShowPurchase(true)}
           >
             {subTab === "stars" ? t.buyStars : "Premium sotib olish"}
@@ -187,7 +186,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
             <label className="text-xs font-black text-zinc-500 uppercase tracking-widest px-2">Kimga?</label>
             <div className="bg-zinc-900 border border-white/5 rounded-2xl p-4 flex items-center justify-between shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]">
                 <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center border border-white/10 shadow-lg">
+                    <div className="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center border border-white/10 shadow-lg">
                         <span className="text-white font-black text-sm">{user?.displayName?.[0] || 'A'}</span>
                     </div>
                     <div className="flex flex-col">
@@ -208,7 +207,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
               <Input
                 type="number"
                 placeholder="50 — 10 000 oralig'ida"
-                className="bg-zinc-900 border border-white/5 h-16 pl-14 rounded-2xl font-black text-white focus-visible:ring-blue-500 transition-all shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]"
+                className="bg-zinc-900 border border-white/5 h-16 pl-14 rounded-2xl font-black text-white focus-visible:ring-zinc-500 transition-all shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]"
                 value={customValue}
                 onChange={(e) => setCustomValue(e.target.value)}
               />
@@ -225,16 +224,16 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
                         className={cn(
                             "w-full p-4 rounded-2xl border-2 flex items-center justify-between transition-all duration-300",
                             selectedPackage === idx 
-                                ? "border-blue-500 bg-blue-500/5" 
+                                ? "border-zinc-500 bg-zinc-800" 
                                 : "border-white/5 bg-zinc-900/40 hover:bg-zinc-900"
                         )}
                     >
                         <div className="flex items-center gap-4">
                             <div className={cn(
                                 "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
-                                selectedPackage === idx ? "border-blue-500" : "border-white/20"
+                                selectedPackage === idx ? "border-zinc-500" : "border-white/20"
                             )}>
-                                {selectedPackage === idx && <div className="w-3 h-3 rounded-full bg-blue-500" />}
+                                {selectedPackage === idx && <div className="w-3 h-3 rounded-full bg-zinc-500" />}
                             </div>
                             <div className="flex items-center gap-2">
                                 <Star className="w-5 h-5 fill-yellow-500 text-yellow-500" />
@@ -252,7 +251,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
           {!showAllPackages && (
             <button 
               onClick={handleShowAll}
-              className="w-full flex items-center justify-center gap-2 py-4 text-blue-500 text-xs font-black bg-zinc-900/40 rounded-2xl border border-white/5 transition-colors hover:bg-zinc-800"
+              className="w-full flex items-center justify-center gap-2 py-4 text-white text-xs font-black bg-zinc-900/40 rounded-2xl border border-white/5 transition-colors hover:bg-zinc-800"
             >
               Barcha to'plamlar <ChevronDown className="w-4 h-4" />
             </button>
@@ -263,8 +262,8 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
             className={cn(
               "w-full flex items-center justify-center gap-2 py-4 text-xs font-black rounded-2xl border transition-all duration-300",
               isCustomAmount 
-                ? "text-blue-500 bg-blue-500/10 border-blue-500/20" 
-                : "text-blue-500 bg-zinc-900/40 border-white/5 hover:bg-zinc-800"
+                ? "text-white bg-zinc-800 border-zinc-700" 
+                : "text-white bg-zinc-900/40 border-white/5 hover:bg-zinc-800"
             )}
           >
             Boshqa miqdor <ChevronDown className="w-4 h-4" />
@@ -274,14 +273,14 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
         <Button 
             size="lg"
             disabled={isCustomAmount && (!customValue || parseInt(customValue) < 1)}
-            className="w-full h-16 bg-blue-500 hover:bg-blue-600 text-white rounded-[1.8rem] text-sm font-black border-none shadow-xl disabled:opacity-50"
+            className="w-full"
         >
             {getButtonLabel()}
         </Button>
 
         <button 
             onClick={onGoToHistory}
-            className="text-blue-500 text-xs font-black mt-6 hover:underline"
+            className="text-zinc-500 text-xs font-black mt-6 hover:underline hover:text-white"
         >
             Xaridlar tarixi
         </button>

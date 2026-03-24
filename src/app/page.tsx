@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -142,7 +141,7 @@ export const translations = {
     expired: "MUDDATI O'TGAN",
     starsTab: "Stars",
     premiumTab: "Premium",
-    settings: "Sozlamalar",
+    settings: "Sozalamalar",
     writeMessage: "Xabar yozing...",
     global: "Global",
     hub: "Markaz",
@@ -391,19 +390,19 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body overflow-x-hidden relative">
+    <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-zinc-800 selection:text-white font-body overflow-x-hidden relative">
       
       {/* Global Header */}
       <header className="px-6 pt-12 pb-6 flex items-center justify-between sticky top-0 bg-black/80 backdrop-blur-md z-30">
         {/* Left Balance Display */}
-        <div className="h-11 px-5 flex items-center justify-center bg-zinc-900 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
+        <div className="h-11 px-5 flex items-center justify-center bg-zinc-900 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]">
           <span className="text-sm font-bold text-white tracking-tight">0 UZS</span>
         </div>
 
         {/* Center Toggle (Only for Marketplace) */}
         <div className="flex-1 flex justify-center px-2">
           {activeTab === "marketplace" ? (
-            <div className="bg-zinc-900 p-1 rounded-full flex items-center border border-white/5 shadow-inner">
+            <div className="bg-zinc-900 p-1 rounded-full flex items-center border border-white/5">
               <button
                 onClick={() => setMarketSubTab("stars")}
                 className={cn(
@@ -430,9 +429,9 @@ export default function Home() {
 
         {/* Right Settings */}
         <Button 
-          variant="outline" 
+          variant="default" 
           size="icon" 
-          className="rounded-full border-white/10"
+          className="rounded-full"
           onClick={() => setIsSettingsModalOpen(true)}
         >
           <Settings className="w-5 h-5 text-white" />
@@ -848,15 +847,15 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
                 className={cn(
                   "w-full flex items-center gap-3 p-4 rounded-[1.5rem] border-2 transition-all duration-300 group shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]",
                   selected === l.id 
-                    ? "border-primary bg-primary/10" 
+                    ? "border-zinc-500 bg-zinc-800" 
                     : "border-white/10 bg-black/30 hover:bg-white/10"
                 )}
               >
                 <div className={cn(
                   "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all",
-                  selected === l.id ? "border-primary" : "border-white/30"
+                  selected === l.id ? "border-zinc-500" : "border-white/30"
                 )}>
-                  {selected === l.id && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                  {selected === l.id && <div className="w-2.5 h-2.5 rounded-full bg-zinc-500" />}
                 </div>
                 <div className="flex flex-col items-start">
                   <span className="text-xs font-bold text-white tracking-tight">{l.name}</span>
@@ -921,16 +920,16 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
                 className={cn(
                   "w-full flex items-center justify-between p-4 rounded-[1.2rem] border-2 transition-all duration-300 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]",
                   selected === w.id 
-                    ? "border-primary bg-primary/5" 
+                    ? "border-zinc-500 bg-zinc-800" 
                     : "border-white/5 bg-white/5 hover:bg-white/10"
                 )}
               >
                 <div className="flex items-center gap-4">
                   <div className={cn(
                     "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
-                    selected === w.id ? "border-primary" : "border-white/20"
+                    selected === w.id ? "border-zinc-500" : "border-white/20"
                   )}>
-                    {selected === w.id && <div className="w-3 h-3 rounded-full bg-primary" />}
+                    {selected === w.id && <div className="w-3 h-3 rounded-full bg-zinc-500" />}
                   </div>
                   <div className="flex items-center gap-3">
                     <div className={cn("w-10 h-8 rounded-lg flex items-center justify-center", w.color)}>
@@ -940,7 +939,7 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
                   </div>
                 </div>
                 {selected === w.id && (
-                  <Check className="w-4 h-4 text-primary" />
+                  <Check className="w-4 h-4 text-zinc-500" />
                 )}
               </button>
             ))}
@@ -970,8 +969,8 @@ function OfferModal({ isOpen, onClose, lang }: {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-zinc-900 border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[90%] sm:max-w-[420px] shadow-2xl backdrop-blur-xl">
         <div className="p-8 flex flex-col items-center">
-          <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 border border-primary/20">
-            <Info className="w-8 h-8 text-primary" />
+          <div className="w-16 h-16 bg-zinc-800 rounded-2xl flex items-center justify-center mb-6 border border-white/10">
+            <Info className="w-8 h-8 text-white" />
           </div>
           
           <DialogHeader className="text-center space-y-4 mb-8">
