@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { Globe, ChevronRight } from "lucide-react";
+import { Settings, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Language } from "@/app/page";
@@ -10,10 +10,10 @@ import { translations } from "@/app/page";
 
 interface MarketplaceProps {
   lang: Language;
-  onOpenLangModal: () => void;
+  onOpenSettings: () => void;
 }
 
-export function Marketplace({ lang, onOpenLangModal }: MarketplaceProps) {
+export function Marketplace({ lang, onOpenSettings }: MarketplaceProps) {
   const [activeTab, setActiveTab] = useState<"stars" | "premium">("stars");
   const t = translations[lang];
 
@@ -21,18 +21,13 @@ export function Marketplace({ lang, onOpenLangModal }: MarketplaceProps) {
     <div className="min-h-screen bg-black text-white font-body animate-in fade-in duration-700 pb-32">
       {/* Custom Header */}
       <header className="px-6 pt-12 pb-6 flex items-center justify-between sticky top-0 bg-black/80 backdrop-blur-md z-30">
-        {/* Left F1 Logo Style */}
-        <div className="flex items-center gap-2 bg-zinc-900 p-1.5 rounded-full border border-white/10 pr-4 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)] group cursor-pointer hover:bg-zinc-800 transition-all">
-          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center overflow-hidden shadow-lg">
-            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
-              <path d="M21 16.5c0 .38-.21.71-.53.88l-7.97 4.19c-.32.17-.69.17-1.01 0l-7.97-4.19c-.32-.17-.53-.5-.53-.88V7.5c0-.38.21-.71.53-.88l7.97-4.19c.32-.17.69-.17 1.01 0l7.97 4.19c.32.17.53.5.53.88v9z"/>
-            </svg>
-          </div>
-          <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+        {/* Left Balance Display */}
+        <div className="h-11 px-5 flex items-center justify-center bg-zinc-900 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
+          <span className="text-sm font-bold text-white tracking-tight">0 UZS</span>
         </div>
 
         {/* Center Toggle */}
-        <div className="bg-zinc-900 p-1 rounded-full flex items-center border border-white/5 shadow-inner">
+        <div className="bg-zinc-900 p-1 rounded-full flex items-center border border-white/5 shadow-inner mx-2">
           <button
             onClick={() => setActiveTab("stars")}
             className={cn(
@@ -53,14 +48,14 @@ export function Marketplace({ lang, onOpenLangModal }: MarketplaceProps) {
           </button>
         </div>
 
-        {/* Right Globe */}
+        {/* Right Settings */}
         <Button 
           variant="ghost" 
           size="icon" 
           className="rounded-full bg-zinc-900 border border-white/10 hover:bg-zinc-800 transition-colors shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]"
-          onClick={onOpenLangModal}
+          onClick={onOpenSettings}
         >
-          <Globe className="w-5 h-5 text-white" />
+          <Settings className="w-5 h-5 text-white" />
         </Button>
       </header>
 
