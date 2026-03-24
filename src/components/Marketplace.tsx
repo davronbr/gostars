@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import type { Language, NavTab } from "@/app/page";
 import { translations } from "@/app/page";
 import dynamic from "next/dynamic";
-import { Star, User as UserIcon, Check, ChevronDown, X } from "lucide-react";
+import { Star, User as UserIcon, Check, ChevronDown, X, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useFirebase } from "@/firebase";
@@ -112,56 +112,34 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
     <div className="min-h-screen bg-black text-white p-6 pb-32 animate-in slide-in-from-right duration-500">
       <div className="flex flex-col items-center max-w-md mx-auto">
         
-        {/* Mockup Preview Area */}
-        <div className="w-full aspect-[4/5] bg-blue-500 rounded-[2.5rem] relative mb-10 overflow-hidden shadow-2xl flex items-center justify-center">
-            <div className="w-[85%] h-[90%] bg-white rounded-[2rem] p-4 flex flex-col items-center">
-                <div className="flex justify-between w-full mb-4">
-                    <button onClick={onBack} className="text-[10px] font-bold text-blue-500 flex items-center gap-1">
-                        <ChevronDown className="w-3 h-3 rotate-90" /> Back
-                    </button>
-                    <div className="flex gap-1">
-                        <div className="w-4 h-1 bg-zinc-200 rounded-full" />
-                        <div className="w-1 h-1 bg-zinc-200 rounded-full" />
-                    </div>
-                </div>
-                <div className="w-24 h-24 relative mt-2 flex items-center justify-center">
-                    {starsAnim ? (
-                      <Lottie animationData={starsAnim} loop={true} className="w-full h-full scale-125" />
-                    ) : (
-                      <Star className="w-16 h-16 fill-yellow-400 text-yellow-400 filter drop-shadow-md" />
-                    )}
-                </div>
-                <h3 className="text-zinc-900 font-bold text-lg mt-2">Telegram Stars</h3>
-                <p className="text-zinc-400 text-[10px] text-center px-4 leading-tight mt-1">
-                    Buy Stars to unlock content and services in mini apps on Telegram.
-                </p>
-                <div className="bg-zinc-50 rounded-2xl w-full p-4 mt-6 flex flex-col items-center border border-zinc-100">
-                    <div className="flex items-center gap-2 mb-1">
-                        <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                        <span className="text-2xl font-black text-zinc-900">33 500</span>
-                    </div>
-                    <span className="text-zinc-400 text-[9px] font-bold uppercase tracking-widest">your balance</span>
-                </div>
-                <button className="w-full bg-blue-500 text-white rounded-xl py-2 text-[11px] font-bold mt-4 flex items-center justify-center gap-2">
-                    <div className="w-3 h-3 bg-white/20 rounded-full flex items-center justify-center">
-                        <Check className="w-2 h-2" />
-                    </div>
-                    Buy More Stars
-                </button>
-                <button className="text-blue-500 text-[9px] font-bold mt-3 flex items-center gap-1">
-                    <Star className="w-2.5 h-2.5 fill-blue-500" /> Gift Stars to Friends
-                </button>
-            </div>
+        {/* Simplified Header Area */}
+        <div className="w-full flex items-center mb-8">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onBack}
+            className="rounded-full bg-zinc-900 border border-white/5"
+          >
+            <ChevronLeft className="w-6 h-6 text-white" />
+          </Button>
+        </div>
+
+        <div className="w-24 h-24 relative mb-6 flex items-center justify-center">
+            {starsAnim ? (
+              <Lottie animationData={starsAnim} loop={true} className="w-full h-full scale-125" />
+            ) : (
+              <Star className="w-16 h-16 fill-yellow-400 text-yellow-400" />
+            )}
         </div>
 
         <h2 className="text-2xl font-black mb-2 tracking-tight flex items-center gap-2 text-center px-4">
-          Telegram Stars olish <Star className="w-6 h-6 fill-yellow-500 text-yellow-500" />
+          Telegram Stars olish
         </h2>
-        <p className="text-zinc-400 text-[11px] font-bold text-center leading-relaxed mb-8 px-6">
+        <p className="text-zinc-400 text-[11px] font-bold text-center leading-relaxed mb-10 px-6">
           Click, Payme yoki Paynet orqali Stars balansini to'ldiring — o'zingiz yoki yaqinlaringiz uchun.
         </p>
 
-        {/* Kimga Section */}
+        {/* Recipient Section */}
         <div className="w-full space-y-3 mb-8">
             <label className="text-xs font-black text-zinc-500 uppercase tracking-widest px-2">Kimga?</label>
             <div className="bg-zinc-900 border border-white/5 rounded-2xl p-4 flex items-center justify-between shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]">
