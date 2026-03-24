@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       const giftId = text.split(' ')[1];
       if (!giftId) {
         // Haqiqiy botda foydalanuvchiga buyruqni qanday ishlatish haqida javob yuborish kerak.
-        return NextResponse.json({ status: 'error', message: 'Sovg\'a ID\'si topilmadi.' });
+        return NextResponse.json({ status: 'error', message: "Sovg'a ID'si topilmadi." });
       }
 
       // 3. Firestore (yoki boshqa) ma'lumotlar bazasidan foydalanuvchini topish.
@@ -69,10 +69,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Agar xabar bizning buyruqlarimizga to'g'ri kelmasa, shunchaki OK qaytaramiz.
-    return NextResponse.json({ status: 'ok', message: 'Xabar qabul qilindi, lekin hech qanday amal bajarilmadi.' });
+    return NextResponse.json({ status: 'ok', message: 'Xabar qabul dili, lekin hech qanday amal bajarilmadi.' });
 
   } catch (error: any) {
-    console.error('Telegram webhook'ni qayta ishlashda xatolik:', error);
+    console.error("Telegram webhook'ni qayta ishlashda xatolik:", error);
     // Xatolik yuz bersa, 500 status bilan javob qaytaramiz.
     return NextResponse.json({ status: 'error', message: error.message }, { status: 500 });
   }
