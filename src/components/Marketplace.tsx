@@ -45,6 +45,7 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
         onBack={() => setShowPurchase(false)} 
         onGoToHistory={() => onTabChange?.("profile")}
         user={user}
+        starsAnim={starsAnim}
       />
     );
   }
@@ -91,11 +92,12 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
   );
 }
 
-function StarsPurchaseView({ lang, onBack, onGoToHistory, user }: { 
+function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: { 
   lang: Language; 
   onBack: () => void; 
   onGoToHistory: () => void;
   user: any;
+  starsAnim: any;
 }) {
   const t = translations[lang];
   const [selectedPackage, setSelectedPackage] = useState(0);
@@ -114,16 +116,20 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user }: {
         <div className="w-full aspect-[4/5] bg-blue-500 rounded-[2.5rem] relative mb-10 overflow-hidden shadow-2xl flex items-center justify-center">
             <div className="w-[85%] h-[90%] bg-white rounded-[2rem] p-4 flex flex-col items-center">
                 <div className="flex justify-between w-full mb-4">
-                    <span className="text-[10px] font-bold text-blue-500 flex items-center gap-1">
+                    <button onClick={onBack} className="text-[10px] font-bold text-blue-500 flex items-center gap-1">
                         <ChevronDown className="w-3 h-3 rotate-90" /> Back
-                    </span>
+                    </button>
                     <div className="flex gap-1">
                         <div className="w-4 h-1 bg-zinc-200 rounded-full" />
                         <div className="w-1 h-1 bg-zinc-200 rounded-full" />
                     </div>
                 </div>
-                <div className="w-16 h-16 relative mt-2">
-                    <Star className="w-full h-full fill-yellow-400 text-yellow-400 filter drop-shadow-md" />
+                <div className="w-24 h-24 relative mt-2 flex items-center justify-center">
+                    {starsAnim ? (
+                      <Lottie animationData={starsAnim} loop={true} className="w-full h-full scale-125" />
+                    ) : (
+                      <Star className="w-16 h-16 fill-yellow-400 text-yellow-400 filter drop-shadow-md" />
+                    )}
                 </div>
                 <h3 className="text-zinc-900 font-bold text-lg mt-2">Telegram Stars</h3>
                 <p className="text-zinc-400 text-[10px] text-center px-4 leading-tight mt-1">
@@ -148,7 +154,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user }: {
             </div>
         </div>
 
-        <h2 className="text-2xl font-black mb-2 tracking-tight flex items-center gap-2">
+        <h2 className="text-2xl font-black mb-2 tracking-tight flex items-center gap-2 text-center px-4">
           Telegram Stars olish <Star className="w-6 h-6 fill-yellow-500 text-yellow-500" />
         </h2>
         <p className="text-zinc-400 text-[11px] font-bold text-center leading-relaxed mb-8 px-6">
@@ -161,10 +167,10 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user }: {
             <div className="bg-zinc-900 border border-white/5 rounded-2xl p-4 flex items-center justify-between shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]">
                 <div className="flex items-center gap-4">
                     <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center border border-white/10 shadow-lg">
-                        <span className="text-white font-black text-sm">根</span>
+                        <span className="text-white font-black text-sm">{user?.displayName?.[0] || 'A'}</span>
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-sm font-bold text-white tracking-tight">根 <span className="text-zinc-500">(siz)</span></span>
+                        <span className="text-sm font-bold text-white tracking-tight">{user?.displayName || t.name} <span className="text-zinc-500">(siz)</span></span>
                     </div>
                 </div>
                 <X className="w-5 h-5 text-zinc-600" />
