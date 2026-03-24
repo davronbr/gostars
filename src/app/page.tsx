@@ -143,6 +143,12 @@ export const translations = {
     starsTab: "Stars",
     premiumTab: "Premium",
     settings: "Sozlamalar",
+    writeMessage: "Xabar yozing...",
+    global: "Global",
+    hub: "Markaz",
+    welcomeChat: "Xush kelibsiz!",
+    partners: "Hamkorlar",
+    devDirectoryDesc: "Katalog to'ldirilmoqda...",
   },
   ru: {
     market: "Go Stars",
@@ -230,6 +236,12 @@ export const translations = {
     starsTab: "Stars",
     premiumTab: "Premium",
     settings: "Настройки",
+    writeMessage: "Написать сообщение...",
+    global: "Глобальный",
+    hub: "Хаб",
+    welcomeChat: "Добро пожаловать!",
+    partners: "Партнеры",
+    devDirectoryDesc: "Каталог наполняется...",
   },
   en: {
     market: "Go Stars",
@@ -317,6 +329,12 @@ export const translations = {
     starsTab: "Stars",
     premiumTab: "Premium",
     settings: "Settings",
+    writeMessage: "Write a message...",
+    global: "Global",
+    hub: "Hub",
+    welcomeChat: "Welcome!",
+    partners: "Partners",
+    devDirectoryDesc: "Directory is being populated...",
   }
 };
 
@@ -703,7 +721,7 @@ function SettingsModal({ isOpen, onClose, lang, walletMethod, tgUser, user, onOp
       <DialogContent className="bg-zinc-950 border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[95%] sm:max-w-[420px] shadow-2xl">
         <div className="p-6 pb-10">
           <div className="flex items-center justify-between mb-8 px-2">
-            <h2 className="text-xl font-bold text-white tracking-tight">{t.settings}</h2>
+            <DialogTitle className="text-xl font-bold text-white tracking-tight">{t.settings}</DialogTitle>
             <button onClick={onClose} className="p-2 bg-zinc-900 rounded-full border border-white/5">
               <X className="w-5 h-5 text-white/50" />
             </button>
