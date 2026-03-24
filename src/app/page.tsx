@@ -21,7 +21,8 @@ import {
   User as UserIcon,
   Info,
   Globe,
-  Link
+  Link,
+  History
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -67,7 +68,7 @@ export const translations = {
     news: "Yangiliklar",
     offer: "Ommaviy taklif",
     offerTitle: "Tez Nft nima?",
-    offerContent: "Tez Nft — bu raqamli aktivlar (veb-saytlar, SaaS, skriptlar) va professional dasturchilar uchun mo'ljallangan premium platforma. Bizning maqsadimiz: tayyor bizneslarni sotish, sotib olish va tajribali mutaxassislar bilan xavfsiz bog'lanish uchun qulay markaz yaratishdir.",
+    offerContent: "Tez Nft — bu raqamli aktivlar (veb-saytlar, SaaS, skriptlar) va professional dasturchilar uchun mo'ljallangan premium platforma.",
     listAsset: "Asset qo'shish",
     online: "Onlayn",
     search: "Qidirish...",
@@ -130,6 +131,11 @@ export const translations = {
     error: "Xatolik",
     loginToConnect: "Telegram'ni ulash uchun tizimga kiring.",
     openInTelegram: "Ilovani Telegram orqali oching.",
+    stars: "Stars",
+    premium: "Premium",
+    buyStars: "Stars sotib olish",
+    starsTitle: "Telegram Stars",
+    starsDesc: "Click, Payme yoki Paynet orqali Stars balansini to'ldiring — o'zingiz yoki yaqinlaringiz uchun.",
   },
   ru: {
     market: "Go Stars",
@@ -142,7 +148,7 @@ export const translations = {
     news: "Канал новостей",
     offer: "Публичная оферта",
     offerTitle: "Что такое Tez Nft?",
-    offerContent: "Tez Nft — это премиальная платформа для цифровых активов (сайты, SaaS, скрипты) и профессиональных разработчиков. Наша цель: создать удобный центр для покупки, продажи готового бизнеса и безопасного взаимодействия с опытными специалистами.",
+    offerContent: "Tez Nft — это премиальная платформа для цифровых активов.",
     listAsset: "Добавить актив",
     online: "В сети",
     search: "Поиск...",
@@ -205,6 +211,11 @@ export const translations = {
     error: "Ошибка",
     loginToConnect: "Войдите, чтобы подключить Telegram.",
     openInTelegram: "Откройте приложение в Telegram.",
+    stars: "Stars",
+    premium: "Premium",
+    buyStars: "Купить Stars",
+    starsTitle: "Telegram Stars",
+    starsDesc: "Пополните баланс Stars через Click, Payme или Paynet — для себя или своих близких.",
   },
   en: {
     market: "Go Stars",
@@ -217,7 +228,7 @@ export const translations = {
     news: "News channel",
     offer: "Public offer",
     offerTitle: "What is Tez Nft?",
-    offerContent: "Tez Nft is a premium platform for digital assets (websites, SaaS, scripts) and professional developers. Our goal: to create a convenient hub for buying, selling ready-made businesses, and safe connection with experienced specialists.",
+    offerContent: "Tez Nft is a premium platform for digital assets and professional developers.",
     listAsset: "List asset",
     online: "Online",
     search: "Search assets...",
@@ -280,6 +291,11 @@ export const translations = {
     error: "Error",
     loginToConnect: "Please log in to connect Telegram.",
     openInTelegram: "Please open the app in Telegram.",
+    stars: "Stars",
+    premium: "Premium",
+    buyStars: "Buy Stars",
+    starsTitle: "Telegram Stars",
+    starsDesc: "Top up your Stars balance via Click, Payme or Paynet — for yourself or your loved ones.",
   }
 };
 
@@ -315,7 +331,7 @@ export default function Home() {
   const renderContent = () => {
     switch (activeTab) {
       case "marketplace":
-        return <Marketplace lang={lang} onNftSelect={setSelectedNft} />;
+        return <Marketplace lang={lang} onOpenLangModal={() => setIsLangModalOpen(true)} />;
       case "leaderboard":
         return <Leaderboard lang={lang} />;
       case "gifts":
@@ -335,15 +351,15 @@ export default function Home() {
       case "listing":
         return <ListingForm onBack={() => setActiveTab("marketplace")} lang={lang} />;
       default:
-        return <Marketplace lang={lang} onNftSelect={setSelectedNft} />;
+        return <Marketplace lang={lang} onOpenLangModal={() => setIsLangModalOpen(true)} />;
     }
   };
 
-  const isFullScreenView = activeTab === "listing";
+  const isFullScreenView = activeTab === "listing" || activeTab === "marketplace";
 
   return (
-    <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body">
-      {!isFullScreenView && (
+    <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body overflow-x-hidden">
+      {(!isFullScreenView) && (
         <header className="px-6 pt-12 pb-6 flex justify-between items-center bg-transparent">
           <div className="flex flex-col">
             <h1 className="text-2xl font-black text-white tracking-tighter leading-none">
@@ -374,13 +390,11 @@ export default function Home() {
         {renderContent()}
       </div>
 
-      {!isFullScreenView && (
-        <BottomNav 
-          activeTab={activeTab === "listing" ? "marketplace" : activeTab} 
-          onTabChange={setActiveTab} 
-          lang={lang}
-        />
-      )}
+      <BottomNav 
+        activeTab={activeTab === "listing" ? "marketplace" : activeTab} 
+        onTabChange={setActiveTab} 
+        lang={lang}
+      />
       
       <LanguageModal 
         isOpen={isLangModalOpen} 
