@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import { Star, ChevronDown, X, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFirebase } from "@/firebase";
+import { Input } from "@/components/ui/input";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
@@ -100,6 +101,8 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
   const t = translations[lang];
   const [selectedPackage, setSelectedPackage] = useState(0);
   const [showAllPackages, setShowAllPackages] = useState(false);
+  const [isCustomAmount, setIsCustomAmount] = useState(false);
+  const [customValue, setCustomValue] = useState("");
 
   const packages = [
     { stars: 50, price: "10 000", label: "50 Stars" },
@@ -118,6 +121,34 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
   ];
 
   const visiblePackages = showAllPackages ? packages : packages.slice(0, 3);
+
+  const handleShowAll = () => {
+    setShowAllPackages(true);
+    setIsCustomAmount(false);
+    setCustomValue("");
+  };
+
+  const handleCustomToggle = () => {
+    setIsCustomAmount(true);
+    setShowAllPackages(false);
+    setSelectedPackage(-1);
+  };
+
+  const calculateFinalPrice = () => {
+    if (isCustomAmount) {
+      const amount = parseInt(customValue) || 0;
+      return (amount * 200).toLocaleString().replace(/,/g, ' ');
+    }
+    return packages[selectedPackage]?.price || "0";
+  };
+
+  const getButtonLabel = () => {
+    if (isCustomAmount) {
+      const amount = parseInt(customValue) || 0;
+      return `${amount} Stars — ${calculateFinalPrice()} so'm`;
+    }
+    return `${packages[selectedPackage]?.label} — ${calculateFinalPrice()} so'm`;
+  };
 
   return (
     <div className="min-h-screen bg-black text-white p-6 pb-32 animate-in slide-in-from-right duration-500 overflow-y-auto no-scrollbar">
@@ -164,7 +195,24 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
             </div>
         </div>
 
-        <div className="w-full space-y-3 mb-10">
+        {isCustomAmount ? (
+          <div className="w-full space-y-3 mb-8 animate-in fade-in slide-in-from-top-2">
+            <label className="text-xs font-black text-zinc-500 uppercase tracking-widest px-2">Miqdorni kiriting</label>
+            <div className="relative">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2">
+                <Star className="w-5 h-5 fill-yellow-500 text-yellow-500" />
+              </div>
+              <Input
+                type="number"
+                placeholder="50 — 10 000 oralig'ida"
+                className="bg-zinc-900 border border-white/5 h-16 pl-14 rounded-2xl font-black text-white focus-visible:ring-blue-500 transition-all shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]"
+                value={customValue}
+                onChange={(e) => setCustomValue(e.target.value)}
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="w-full space-y-3 mb-8 animate-in fade-in slide-in-from-bottom-2">
             <label className="text-xs font-black text-zinc-500 uppercase tracking-widest px-2">To'plamni tanlang</label>
             <div className="space-y-2">
                 {visiblePackages.map((pkg, idx) => (
@@ -194,26 +242,37 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
                     </button>
                 ))}
             </div>
+          </div>
+        )}
 
-            {!showAllPackages && (
-              <button 
-                onClick={() => setShowAllPackages(true)}
-                className="w-full flex items-center justify-center gap-2 py-4 text-blue-500 text-xs font-black bg-zinc-900/40 rounded-2xl border border-white/5 mt-4 transition-colors hover:bg-zinc-800"
-              >
-                Barcha to'plamlar <ChevronDown className="w-4 h-4" />
-              </button>
-            )}
-            
-            <button className="w-full flex items-center justify-center gap-2 py-4 text-blue-500 text-xs font-black bg-zinc-900/40 rounded-2xl border border-white/5 mt-2 transition-colors hover:bg-zinc-800">
-                Boshqa miqdor <ChevronDown className="w-4 h-4" />
+        <div className="w-full space-y-2 mb-10">
+          {!showAllPackages && (
+            <button 
+              onClick={handleShowAll}
+              className="w-full flex items-center justify-center gap-2 py-4 text-blue-500 text-xs font-black bg-zinc-900/40 rounded-2xl border border-white/5 transition-colors hover:bg-zinc-800"
+            >
+              Barcha to'plamlar <ChevronDown className="w-4 h-4" />
             </button>
+          )}
+          
+          <button 
+            onClick={handleCustomToggle}
+            className={cn(
+              "w-full flex items-center justify-center gap-2 py-4 text-xs font-black rounded-2xl border transition-all duration-300",
+              isCustomAmount 
+                ? "text-blue-500 bg-blue-500/10 border-blue-500/20" 
+                : "text-blue-500 bg-zinc-900/40 border-white/5 hover:bg-zinc-800"
+            )}
+          >
+            Boshqa miqdor <ChevronDown className="w-4 h-4" />
+          </button>
         </div>
 
         <Button 
             size="lg"
             className="w-full h-16 bg-blue-500 hover:bg-blue-600 text-white rounded-[1.8rem] text-sm font-black border-none shadow-xl"
         >
-            {packages[selectedPackage].label} — {packages[selectedPackage].price} so'm
+            {getButtonLabel()}
         </Button>
 
         <button 
