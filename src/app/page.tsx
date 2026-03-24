@@ -322,6 +322,7 @@ export const translations = {
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<NavTab>("marketplace");
+  const [marketSubTab, setMarketSubTab] = useState<"stars" | "premium">("stars");
   const [lang, setLang] = useState<Language>("uz");
   const [walletMethod, setWalletMethod] = useState("Payme");
   const [isLangModalOpen, setIsLangModalOpen] = useState(false);
@@ -353,7 +354,7 @@ export default function Home() {
   const renderContent = () => {
     switch (activeTab) {
       case "marketplace":
-        return <Marketplace lang={lang} onOpenSettings={() => setIsSettingsModalOpen(true)} />;
+        return <Marketplace lang={lang} subTab={marketSubTab} />;
       case "leaderboard":
         return <Leaderboard lang={lang} />;
       case "gifts":
@@ -367,12 +368,59 @@ export default function Home() {
       case "listing":
         return <ListingForm onBack={() => setActiveTab("marketplace")} lang={lang} />;
       default:
-        return <Marketplace lang={lang} onOpenSettings={() => setIsSettingsModalOpen(true)} />;
+        return <Marketplace lang={lang} subTab={marketSubTab} />;
     }
   };
 
   return (
-    <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body overflow-x-hidden">
+    <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body overflow-x-hidden relative">
+      
+      {/* Global Header */}
+      <header className="px-6 pt-12 pb-6 flex items-center justify-between sticky top-0 bg-black/80 backdrop-blur-md z-30">
+        {/* Left Balance Display */}
+        <div className="h-11 px-5 flex items-center justify-center bg-zinc-900 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
+          <span className="text-sm font-bold text-white tracking-tight">0 UZS</span>
+        </div>
+
+        {/* Center Toggle (Only for Marketplace) */}
+        <div className="flex-1 flex justify-center px-2">
+          {activeTab === "marketplace" ? (
+            <div className="bg-zinc-900 p-1 rounded-full flex items-center border border-white/5 shadow-inner">
+              <button
+                onClick={() => setMarketSubTab("stars")}
+                className={cn(
+                  "px-6 py-1.5 rounded-full text-xs font-bold transition-all duration-300",
+                  marketSubTab === "stars" ? "bg-white text-black shadow-md" : "text-zinc-500 hover:text-zinc-300"
+                )}
+              >
+                {t.stars}
+              </button>
+              <button
+                onClick={() => setMarketSubTab("premium")}
+                className={cn(
+                  "px-6 py-1.5 rounded-full text-xs font-bold transition-all duration-300",
+                  marketSubTab === "premium" ? "bg-white text-black shadow-md" : "text-zinc-500 hover:text-zinc-300"
+                )}
+              >
+                {t.premium}
+              </button>
+            </div>
+          ) : (
+            <div className="h-11" /> // Spacer for non-marketplace tabs
+          )}
+        </div>
+
+        {/* Right Settings */}
+        <Button 
+          variant="outline" 
+          size="icon" 
+          className="rounded-full border-white/10"
+          onClick={() => setIsSettingsModalOpen(true)}
+        >
+          <Settings className="w-5 h-5 text-white" />
+        </Button>
+      </header>
+
       <div className="relative">
         {renderContent()}
       </div>
