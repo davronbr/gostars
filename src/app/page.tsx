@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -38,7 +37,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { NftDetailModal } from "@/components/NftDetailModal";
 import type { NftCollectionItem } from "@/lib/collections";
-import { useFirebase, initiateAnonymousSignIn, useDoc, useFirestore, useMemoFirebase, useUser } from "@/firebase";
+import { useFirebase, initiateAnonymousSignIn, useDoc, useFirestore, useMemoFirebase } from "@/firebase";
 import { doc } from 'firebase/firestore';
 import { setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import type { User } from "firebase/auth";
@@ -359,6 +358,12 @@ export default function Home() {
         return (
           <HistoryView 
             lang={lang} 
+            onOpenLangModal={() => setIsLangModalOpen(true)}
+            onOpenWalletModal={() => setIsWalletModalOpen(true)}
+            onOpenOfferModal={() => setIsOfferModalOpen(true)}
+            walletMethod={walletMethod}
+            tgUser={tgUser}
+            user={user}
           />
         );
       case "listing":
@@ -372,33 +377,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body overflow-x-hidden">
-      {(!isFullScreenView) && (
-        <header className="px-6 pt-12 pb-6 flex justify-between items-center bg-transparent">
-          <div className="flex flex-col">
-            <h1 className="text-2xl font-black text-white tracking-tighter leading-none">
-              Tez Nft
-            </h1>
-            <p className="text-[10px] text-primary font-black tracking-[0.3em]">
-              {t.market.toUpperCase()}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-11 px-5 flex items-center justify-center bg-zinc-900 border border-white/10 rounded-full shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
-              <span className="text-sm font-bold text-white tracking-tight">0 UZS</span>
-            </div>
-            
-            <Button 
-              size="icon" 
-              variant="outline" 
-              className="rounded-full"
-              onClick={() => setActiveTab("profile")}
-            >
-              <Settings className="w-5 h-5 text-white" />
-            </Button>
-          </div>
-        </header>
-      )}
-
       <div className="relative">
         {renderContent()}
       </div>
@@ -442,7 +420,15 @@ export default function Home() {
   );
 }
 
-function HistoryView({ lang }: { lang: Language }) {
+function HistoryView({ lang, onOpenLangModal, onOpenWalletModal, onOpenOfferModal, walletMethod, tgUser, user }: { 
+  lang: Language, 
+  onOpenLangModal: () => void,
+  onOpenWalletModal: () => void,
+  onOpenOfferModal: () => void,
+  walletMethod: string,
+  tgUser: any,
+  user: any
+}) {
   const t = translations[lang];
   const [activeFilter, setActiveFilter] = useState<"all" | "stars" | "premium">("all");
 
@@ -488,38 +474,35 @@ function HistoryView({ lang }: { lang: Language }) {
       <h2 className="text-3xl font-bold text-white mb-8 tracking-tight">{t.historyTitle}</h2>
 
       <div className="flex gap-2 mb-8">
-        <button
+        <Button
           onClick={() => setActiveFilter("all")}
-          className={cn(
-            "px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border border-white/5",
-            activeFilter === "all" ? "bg-primary text-white" : "bg-zinc-900 text-zinc-500"
-          )}
+          variant={activeFilter === "all" ? "default" : "outline"}
+          size="sm"
+          className="rounded-full px-6"
         >
           {t.all}
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setActiveFilter("stars")}
-          className={cn(
-            "px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border border-white/5 flex items-center gap-2",
-            activeFilter === "stars" ? "bg-zinc-800 text-white border-primary/30" : "bg-zinc-900 text-zinc-500"
-          )}
+          variant={activeFilter === "stars" ? "default" : "outline"}
+          size="sm"
+          className="rounded-full px-6 flex items-center gap-2"
         >
           <StarIcon className="w-4 h-4 fill-yellow-500 text-yellow-500" />
           {t.starsTab}
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setActiveFilter("premium")}
-          className={cn(
-            "px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border border-white/5 flex items-center gap-2",
-            activeFilter === "premium" ? "bg-zinc-800 text-white border-primary/30" : "bg-zinc-900 text-zinc-500"
-          )}
+          variant={activeFilter === "premium" ? "default" : "outline"}
+          size="sm"
+          className="rounded-full px-6 flex items-center gap-2"
         >
           <StarIcon className="w-4 h-4 fill-blue-500 text-blue-500" />
           {t.premiumTab}
-        </button>
+        </Button>
       </div>
 
-      <div className="bg-zinc-900/40 border border-white/10 rounded-[2rem] p-4 space-y-4">
+      <div className="bg-zinc-900/40 border border-white/10 rounded-[2rem] p-4 space-y-4 mb-10">
         {filteredOrders.map((order) => (
           <div key={order.id} className="flex items-center justify-between p-4 border-b border-white/5 last:border-0">
             <div className="flex items-center gap-4">
@@ -551,6 +534,16 @@ function HistoryView({ lang }: { lang: Language }) {
           </div>
         ))}
       </div>
+
+      <ProfileView 
+        lang={lang} 
+        walletMethod={walletMethod} 
+        tgUser={tgUser} 
+        user={user} 
+        onOpenLangModal={onOpenLangModal}
+        onOpenWalletModal={onOpenWalletModal}
+        onOpenOfferModal={onOpenOfferModal}
+      />
     </div>
   );
 }
@@ -559,7 +552,7 @@ function ProfileView({ lang, walletMethod, tgUser, user, onOpenLangModal, onOpen
   lang: Language, 
   walletMethod: string,
   tgUser: any,
-  user: User | null,
+  user: any,
   onOpenLangModal: () => void,
   onOpenWalletModal: () => void,
   onOpenOfferModal: () => void 
@@ -663,8 +656,8 @@ function ProfileView({ lang, walletMethod, tgUser, user, onOpenLangModal, onOpen
   ];
 
   return (
-    <div className="p-4 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col items-center mt-6 mb-10 text-center">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col items-center mb-10 text-center">
         <div className="relative w-24 h-24 mb-4">
           <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] relative">
             {tgUser?.photo_url ? (

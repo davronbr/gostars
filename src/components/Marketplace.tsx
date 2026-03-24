@@ -1,8 +1,7 @@
-
 "use client";
 
 import { useState } from "react";
-import { Settings, ChevronRight } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Language } from "@/app/page";
@@ -50,9 +49,9 @@ export function Marketplace({ lang, onOpenSettings }: MarketplaceProps) {
 
         {/* Right Settings */}
         <Button 
-          variant="ghost" 
+          variant="outline" 
           size="icon" 
-          className="rounded-full bg-zinc-900 border border-white/10 hover:bg-zinc-800 transition-colors shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]"
+          className="rounded-full border-white/10"
           onClick={onOpenSettings}
         >
           <Settings className="w-5 h-5 text-white" />
@@ -63,28 +62,16 @@ export function Marketplace({ lang, onOpenSettings }: MarketplaceProps) {
       <div className="px-6 pt-12 flex flex-col items-center">
         {/* Central Card */}
         <div className="w-full max-w-sm bg-zinc-900 rounded-[2.8rem] border border-white/10 p-10 flex flex-col items-center text-center shadow-2xl relative overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
-          {/* Decorative elements */}
-          <div className="absolute top-10 left-10 w-2 h-2 bg-primary/20 rounded-full blur-sm" />
-          <div className="absolute bottom-20 right-10 w-3 h-3 bg-primary/20 rounded-full blur-sm" />
-
+          
           {/* Star Icon */}
-          <div className="relative w-36 h-36 mb-10 animate-bounce-short">
+          <div className="relative w-36 h-36 mb-10">
              {/* Yellow Star Shape SVG */}
-             <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_25px_rgba(250,204,21,0.4)]">
+             <svg viewBox="0 0 100 100" className="w-full h-full">
                 <path 
                   fill="#facc15" 
                   d="M50 5 L62 38 L95 38 L68 58 L78 91 L50 71 L22 91 L32 58 L5 38 L38 38 Z"
                 />
-                <path 
-                  fill="#ffffff33" 
-                  d="M50 5 L62 38 L95 38 L68 58 L78 91 L50 71 L22 91 L32 58 L5 38 L38 38 Z"
-                  className="animate-pulse"
-                />
              </svg>
-             {/* Small sparkle dots around the star */}
-             <div className="absolute top-0 left-0 text-yellow-400 text-sm animate-pulse">✦</div>
-             <div className="absolute bottom-4 right-2 text-yellow-400 text-xs animate-pulse delay-700">✦</div>
-             <div className="absolute top-6 right-0 text-yellow-400 text-xs animate-pulse delay-300">✦</div>
           </div>
 
           <h2 className="text-3xl font-black mb-4 tracking-tight text-white">{t.starsTitle}</h2>
@@ -95,7 +82,7 @@ export function Marketplace({ lang, onOpenSettings }: MarketplaceProps) {
 
           <Button 
             size="lg"
-            className="w-full h-16 bg-primary hover:bg-primary/90 text-primary-foreground rounded-[1.8rem] text-base font-black shadow-lg shadow-primary/20 transition-all active:scale-[0.98] border-none"
+            className="w-full h-16 rounded-[1.8rem] text-base font-black border-none"
           >
             {t.buyStars}
           </Button>
