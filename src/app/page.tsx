@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -56,10 +57,10 @@ declare global {
 
 export const translations = {
   uz: {
-    market: "Market",
-    gifts: "Sovg'alar",
-    leaderboard: "Leaderboard",
-    profile: "Profil",
+    market: "Go Stars",
+    gifts: "Referral",
+    leaderboard: "Hamyon",
+    profile: "Tarix",
     language: "Til",
     payment: "Hamyon usuli",
     help: "Yordam",
@@ -131,10 +132,10 @@ export const translations = {
     openInTelegram: "Ilovani Telegram orqali oching.",
   },
   ru: {
-    market: "Маркет",
-    gifts: "Подарки",
-    leaderboard: "Лидерборд",
-    profile: "Профиль",
+    market: "Go Stars",
+    gifts: "Referral",
+    leaderboard: "Hamyon",
+    profile: "Tarix",
     language: "Язык",
     payment: "Метод кошелька",
     help: "Помощь",
@@ -206,10 +207,10 @@ export const translations = {
     openInTelegram: "Откройте приложение в Telegram.",
   },
   en: {
-    market: "Market",
-    gifts: "Gifts",
-    leaderboard: "Leaderboard",
-    profile: "Profile",
+    market: "Go Stars",
+    gifts: "Referral",
+    leaderboard: "Hamyon",
+    profile: "Tarix",
     language: "Language",
     payment: "Wallet method",
     help: "Support",
@@ -792,5 +793,3 @@ function OfferModal({ isOpen, onClose, lang }: {
     </Dialog>
   );
 }
-
-    

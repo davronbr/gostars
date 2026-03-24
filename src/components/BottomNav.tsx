@@ -1,6 +1,7 @@
+
 "use client";
 
-import { Home, Gift, Users, User } from "lucide-react";
+import { Star, Users, Wallet, History } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NavTab, Language } from "@/app/page";
 import { translations } from "@/app/page";
@@ -15,10 +16,10 @@ export function BottomNav({ activeTab, onTabChange, lang }: BottomNavProps) {
   const t = translations[lang];
 
   const tabs = [
-    { id: "marketplace", icon: Home, label: t.market },
-    { id: "gifts", icon: Gift, label: t.gifts },
-    { id: "leaderboard", icon: Users, label: t.leaderboard },
-    { id: "profile", icon: User, label: t.profile },
+    { id: "marketplace", icon: Star, label: t.market },
+    { id: "gifts", icon: Users, label: t.gifts },
+    { id: "leaderboard", icon: Wallet, label: t.leaderboard },
+    { id: "profile", icon: History, label: t.profile },
   ] as const;
 
   const activeIndex = tabs.findIndex(tab => tab.id === activeTab);
