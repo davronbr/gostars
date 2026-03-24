@@ -51,7 +51,7 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
   return (
     <div className="min-h-screen bg-black text-white font-body animate-in fade-in duration-700 pb-32">
       <div className="px-6 pt-12 flex flex-col items-center">
-        <div className="w-full max-w-sm bg-zinc-900 rounded-[2.8rem] border border-white/10 p-10 flex flex-col items-center text-center shadow-2xl relative overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
+        <div className="w-full max-sm bg-zinc-900 rounded-[2.8rem] border border-white/10 p-10 flex flex-col items-center text-center shadow-2xl relative overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
           
           <div className="relative w-40 h-40 mb-10 flex items-center justify-center">
             {subTab === "stars" ? (
@@ -99,6 +99,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
 }) {
   const t = translations[lang];
   const [selectedPackage, setSelectedPackage] = useState(0);
+  const [showAllPackages, setShowAllPackages] = useState(false);
 
   const packages = [
     { stars: 50, price: "10 000", label: "50 Stars" },
@@ -115,6 +116,8 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
     { stars: 5000, price: "1 000 000", label: "5K Stars" },
     { stars: 10000, price: "2 000 000", label: "10K Stars" },
   ];
+
+  const visiblePackages = showAllPackages ? packages : packages.slice(0, 3);
 
   return (
     <div className="min-h-screen bg-black text-white p-6 pb-32 animate-in slide-in-from-right duration-500 overflow-y-auto no-scrollbar">
@@ -164,7 +167,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
         <div className="w-full space-y-3 mb-10">
             <label className="text-xs font-black text-zinc-500 uppercase tracking-widest px-2">To'plamni tanlang</label>
             <div className="space-y-2">
-                {packages.map((pkg, idx) => (
+                {visiblePackages.map((pkg, idx) => (
                     <button
                         key={idx}
                         onClick={() => setSelectedPackage(idx)}
@@ -192,10 +195,16 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
                 ))}
             </div>
 
-            <button className="w-full flex items-center justify-center gap-2 py-4 text-blue-500 text-xs font-black bg-zinc-900/40 rounded-2xl border border-white/5 mt-4">
+            {!showAllPackages && (
+              <button 
+                onClick={() => setShowAllPackages(true)}
+                className="w-full flex items-center justify-center gap-2 py-4 text-blue-500 text-xs font-black bg-zinc-900/40 rounded-2xl border border-white/5 mt-4 transition-colors hover:bg-zinc-800"
+              >
                 Barcha to'plamlar <ChevronDown className="w-4 h-4" />
-            </button>
-            <button className="w-full flex items-center justify-center gap-2 py-4 text-blue-500 text-xs font-black bg-zinc-900/40 rounded-2xl border border-white/5">
+              </button>
+            )}
+            
+            <button className="w-full flex items-center justify-center gap-2 py-4 text-blue-500 text-xs font-black bg-zinc-900/40 rounded-2xl border border-white/5 mt-2 transition-colors hover:bg-zinc-800">
                 Boshqa miqdor <ChevronDown className="w-4 h-4" />
             </button>
         </div>
