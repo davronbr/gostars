@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -126,6 +127,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
     setShowAllPackages(true);
     setIsCustomAmount(false);
     setCustomValue("");
+    if (selectedPackage === -1) setSelectedPackage(0);
   };
 
   const handleCustomToggle = () => {
@@ -147,7 +149,8 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
       const amount = parseInt(customValue) || 0;
       return `${amount} Stars — ${calculateFinalPrice()} so'm`;
     }
-    return `${packages[selectedPackage]?.label} — ${calculateFinalPrice()} so'm`;
+    const pkg = packages[selectedPackage];
+    return pkg ? `${pkg.label} — ${pkg.price} so'm` : "Tanlang";
   };
 
   return (
@@ -173,7 +176,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
             )}
         </div>
 
-        <h2 className="text-2xl font-black mb-2 tracking-tight flex items-center gap-2 text-center px-4">
+        <h2 className="text-2xl font-black mb-2 tracking-tight text-center px-4">
           Telegram Stars olish
         </h2>
         <p className="text-zinc-400 text-[11px] font-bold text-center leading-relaxed mb-10 px-6">
@@ -270,7 +273,8 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
 
         <Button 
             size="lg"
-            className="w-full h-16 bg-blue-500 hover:bg-blue-600 text-white rounded-[1.8rem] text-sm font-black border-none shadow-xl"
+            disabled={isCustomAmount && (!customValue || parseInt(customValue) < 1)}
+            className="w-full h-16 bg-blue-500 hover:bg-blue-600 text-white rounded-[1.8rem] text-sm font-black border-none shadow-xl disabled:opacity-50"
         >
             {getButtonLabel()}
         </Button>
