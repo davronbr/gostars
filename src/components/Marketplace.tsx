@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -6,9 +5,8 @@ import { Button } from "@/components/ui/button";
 import type { Language, NavTab } from "@/app/page";
 import { translations } from "@/app/page";
 import dynamic from "next/dynamic";
-import { Star, User as UserIcon, Check, ChevronDown, X, ChevronLeft } from "lucide-react";
+import { Star, ChevronDown, X, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { useFirebase } from "@/firebase";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
@@ -103,16 +101,25 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
   const [selectedPackage, setSelectedPackage] = useState(0);
 
   const packages = [
-    { stars: 50, price: "12 999", label: "50 Stars" },
-    { stars: 100, price: "25 999", label: "100 Stars" },
-    { stars: 500, price: "129 999", label: "500 Stars" },
+    { stars: 50, price: "10 000", label: "50 Stars" },
+    { stars: 75, price: "15 000", label: "75 Stars" },
+    { stars: 100, price: "20 000", label: "100 Stars" },
+    { stars: 150, price: "30 000", label: "150 Stars" },
+    { stars: 250, price: "50 000", label: "250 Stars" },
+    { stars: 350, price: "70 000", label: "350 Stars" },
+    { stars: 500, price: "100 000", label: "500 Stars" },
+    { stars: 750, price: "150 000", label: "750 Stars" },
+    { stars: 1000, price: "200 000", label: "1K Stars" },
+    { stars: 1500, price: "300 000", label: "1.5K Stars" },
+    { stars: 2500, price: "500 000", label: "2.5K Stars" },
+    { stars: 5000, price: "1 000 000", label: "5K Stars" },
+    { stars: 10000, price: "2 000 000", label: "10K Stars" },
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 pb-32 animate-in slide-in-from-right duration-500">
+    <div className="min-h-screen bg-black text-white p-6 pb-32 animate-in slide-in-from-right duration-500 overflow-y-auto no-scrollbar">
       <div className="flex flex-col items-center max-w-md mx-auto">
         
-        {/* Simplified Header Area */}
         <div className="w-full flex items-center mb-8">
           <Button 
             variant="ghost" 
@@ -139,7 +146,6 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
           Click, Payme yoki Paynet orqali Stars balansini to'ldiring — o'zingiz yoki yaqinlaringiz uchun.
         </p>
 
-        {/* Recipient Section */}
         <div className="w-full space-y-3 mb-8">
             <label className="text-xs font-black text-zinc-500 uppercase tracking-widest px-2">Kimga?</label>
             <div className="bg-zinc-900 border border-white/5 rounded-2xl p-4 flex items-center justify-between shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]">
@@ -155,7 +161,6 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
             </div>
         </div>
 
-        {/* Package Section */}
         <div className="w-full space-y-3 mb-10">
             <label className="text-xs font-black text-zinc-500 uppercase tracking-widest px-2">To'plamni tanlang</label>
             <div className="space-y-2">
@@ -195,7 +200,6 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: {
             </button>
         </div>
 
-        {/* Action Button */}
         <Button 
             size="lg"
             className="w-full h-16 bg-blue-500 hover:bg-blue-600 text-white rounded-[1.8rem] text-sm font-black border-none shadow-xl"
