@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -40,7 +41,6 @@ import type { NftCollectionItem } from "@/lib/collections";
 import { useFirebase, initiateAnonymousSignIn, useDoc, useFirestore, useMemoFirebase } from "@/firebase";
 import { doc } from 'firebase/firestore';
 import { setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
-import type { User } from "firebase/auth";
 
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
@@ -142,6 +142,7 @@ export const translations = {
     expired: "MUDDATI O'TGAN",
     starsTab: "Stars",
     premiumTab: "Premium",
+    settings: "Sozlamalar",
   },
   ru: {
     market: "Go Stars",
@@ -228,6 +229,7 @@ export const translations = {
     expired: "ИСТЕКЛО",
     starsTab: "Stars",
     premiumTab: "Premium",
+    settings: "Настройки",
   },
   en: {
     market: "Go Stars",
@@ -314,6 +316,7 @@ export const translations = {
     expired: "EXPIRED",
     starsTab: "Stars",
     premiumTab: "Premium",
+    settings: "Settings",
   }
 };
 
@@ -324,6 +327,7 @@ export default function Home() {
   const [isLangModalOpen, setIsLangModalOpen] = useState(false);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [tgUser, setTgUser] = useState<any>(null);
   const [selectedNft, setSelectedNft] = useState<NftCollectionItem | null>(null);
 
@@ -349,7 +353,7 @@ export default function Home() {
   const renderContent = () => {
     switch (activeTab) {
       case "marketplace":
-        return <Marketplace lang={lang} onOpenSettings={() => setActiveTab("profile")} />;
+        return <Marketplace lang={lang} onOpenSettings={() => setIsSettingsModalOpen(true)} />;
       case "leaderboard":
         return <Leaderboard lang={lang} />;
       case "gifts":
@@ -358,22 +362,14 @@ export default function Home() {
         return (
           <HistoryView 
             lang={lang} 
-            onOpenLangModal={() => setIsLangModalOpen(true)}
-            onOpenWalletModal={() => setIsWalletModalOpen(true)}
-            onOpenOfferModal={() => setIsOfferModalOpen(true)}
-            walletMethod={walletMethod}
-            tgUser={tgUser}
-            user={user}
           />
         );
       case "listing":
         return <ListingForm onBack={() => setActiveTab("marketplace")} lang={lang} />;
       default:
-        return <Marketplace lang={lang} onOpenSettings={() => setActiveTab("profile")} />;
+        return <Marketplace lang={lang} onOpenSettings={() => setIsSettingsModalOpen(true)} />;
     }
   };
-
-  const isFullScreenView = activeTab === "listing" || activeTab === "marketplace";
 
   return (
     <main className="min-h-screen max-w-2xl mx-auto bg-black selection:bg-primary selection:text-white font-body overflow-x-hidden">
@@ -408,6 +404,18 @@ export default function Home() {
         lang={lang}
       />
 
+      <SettingsModal
+        isOpen={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
+        lang={lang}
+        walletMethod={walletMethod}
+        tgUser={tgUser}
+        user={user}
+        onOpenLangModal={() => { setIsSettingsModalOpen(false); setIsLangModalOpen(true); }}
+        onOpenWalletModal={() => { setIsSettingsModalOpen(false); setIsWalletModalOpen(true); }}
+        onOpenOfferModal={() => { setIsSettingsModalOpen(false); setIsOfferModalOpen(true); }}
+      />
+
       <NftDetailModal
         isOpen={!!selectedNft}
         onClose={() => setSelectedNft(null)}
@@ -420,15 +428,7 @@ export default function Home() {
   );
 }
 
-function HistoryView({ lang, onOpenLangModal, onOpenWalletModal, onOpenOfferModal, walletMethod, tgUser, user }: { 
-  lang: Language, 
-  onOpenLangModal: () => void,
-  onOpenWalletModal: () => void,
-  onOpenOfferModal: () => void,
-  walletMethod: string,
-  tgUser: any,
-  user: any
-}) {
+function HistoryView({ lang }: { lang: Language }) {
   const t = translations[lang];
   const [activeFilter, setActiveFilter] = useState<"all" | "stars" | "premium">("all");
 
@@ -503,59 +503,55 @@ function HistoryView({ lang, onOpenLangModal, onOpenWalletModal, onOpenOfferModa
       </div>
 
       <div className="bg-zinc-900/40 border border-white/10 rounded-[2rem] p-4 space-y-4 mb-10">
-        {filteredOrders.map((order) => (
-          <div key={order.id} className="flex items-center justify-between p-4 border-b border-white/5 last:border-0">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center border border-white/10 shadow-lg">
-                <StarIcon className="w-6 h-6 fill-yellow-500 text-yellow-500" />
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-white text-base">{order.user}</span>
-                  <span className="bg-yellow-500/10 text-yellow-500 text-[10px] font-black px-2 py-0.5 rounded-lg border border-yellow-500/20">
-                    {order.stars} STARS
+        {filteredOrders.length === 0 ? (
+          <p className="text-center py-10 text-zinc-500 font-bold text-sm uppercase tracking-widest">Bo'sh</p>
+        ) : (
+          filteredOrders.map((order) => (
+            <div key={order.id} className="flex items-center justify-between p-4 border-b border-white/5 last:border-0">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center border border-white/10 shadow-lg">
+                  <StarIcon className="w-6 h-6 fill-yellow-500 text-yellow-500" />
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-white text-base">{order.user}</span>
+                    <span className="bg-yellow-500/10 text-yellow-500 text-[10px] font-black px-2 py-0.5 rounded-lg border border-yellow-500/20">
+                      {order.stars} STARS
+                    </span>
+                  </div>
+                  <span className="text-xs text-zinc-500 font-bold mt-1">
+                    {order.method} - {order.date}
                   </span>
                 </div>
-                <span className="text-xs text-zinc-500 font-bold mt-1">
-                  {order.method} - {order.date}
+              </div>
+
+              <div className="flex flex-col items-end gap-1.5">
+                <span className="font-bold text-white text-sm">{order.price}</span>
+                <span className={cn(
+                  "text-[10px] font-black px-2 py-1 rounded-lg",
+                  order.status === "expired" ? "bg-zinc-800 text-zinc-500" : "bg-yellow-500/20 text-yellow-500"
+                )}>
+                  {order.status === "expired" ? t.expired : t.unpaid}
                 </span>
               </div>
             </div>
-
-            <div className="flex flex-col items-end gap-1.5">
-              <span className="font-bold text-white text-sm">{order.price}</span>
-              <span className={cn(
-                "text-[10px] font-black px-2 py-1 rounded-lg",
-                order.status === "expired" ? "bg-zinc-800 text-zinc-500" : "bg-yellow-500/20 text-yellow-500"
-              )}>
-                {order.status === "expired" ? t.expired : t.unpaid}
-              </span>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
-
-      <ProfileView 
-        lang={lang} 
-        walletMethod={walletMethod} 
-        tgUser={tgUser} 
-        user={user} 
-        onOpenLangModal={onOpenLangModal}
-        onOpenWalletModal={onOpenWalletModal}
-        onOpenOfferModal={onOpenOfferModal}
-      />
     </div>
   );
 }
 
-function ProfileView({ lang, walletMethod, tgUser, user, onOpenLangModal, onOpenWalletModal, onOpenOfferModal }: { 
-  lang: Language, 
-  walletMethod: string,
-  tgUser: any,
-  user: any,
-  onOpenLangModal: () => void,
-  onOpenWalletModal: () => void,
-  onOpenOfferModal: () => void 
+function SettingsModal({ isOpen, onClose, lang, walletMethod, tgUser, user, onOpenLangModal, onOpenWalletModal, onOpenOfferModal }: { 
+  isOpen: boolean;
+  onClose: () => void;
+  lang: Language;
+  walletMethod: string;
+  tgUser: any;
+  user: any;
+  onOpenLangModal: () => void;
+  onOpenWalletModal: () => void;
+  onOpenOfferModal: () => void;
 }) {
   const t = translations[lang];
   const { toast } = useToast();
@@ -594,7 +590,6 @@ function ProfileView({ lang, walletMethod, tgUser, user, onOpenLangModal, onOpen
         });
     }
   };
-
 
   const settingsGroups = [
     {
@@ -656,65 +651,73 @@ function ProfileView({ lang, walletMethod, tgUser, user, onOpenLangModal, onOpen
   ];
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col items-center mb-10 text-center">
-        <div className="relative w-24 h-24 mb-4">
-          <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] relative">
-            {tgUser?.photo_url ? (
-              <Image 
-                src={tgUser.photo_url} 
-                alt="Profile" 
-                fill 
-                className="object-cover"
-                unoptimized
-              />
-            ) : tgUser?.first_name ? (
-              <div className="text-white font-bold text-3xl tracking-tighter">
-                {tgUser.first_name[0]}
-              </div>
-            ) : (
-              <UserIcon className="w-10 h-10 text-white/20" />
-            )}
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="bg-zinc-950 border-none rounded-[2.5rem] p-0 overflow-hidden max-w-[95%] sm:max-w-[420px] shadow-2xl">
+        <div className="p-6 pb-10">
+          <div className="flex items-center justify-between mb-8 px-2">
+            <h2 className="text-xl font-bold text-white tracking-tight">{t.settings}</h2>
+            <button onClick={onClose} className="p-2 bg-zinc-900 rounded-full border border-white/5">
+              <X className="w-5 h-5 text-white/50" />
+            </button>
           </div>
-          <div className="absolute bottom-0 right-0 w-6 h-6 bg-primary rounded-full border-2 border-black flex items-center justify-center shadow-lg">
-            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-          </div>
-        </div>
-        
-        <h2 className="text-2xl font-bold text-white tracking-tight">
-          {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}`.trim() : t.name}
-        </h2>
-        <p className="text-white/40 text-xs font-bold tracking-widest mt-1">
-          {tgUser?.username ? `@${tgUser.username}` : t.anonymous}
-        </p>
-      </div>
 
-      <div className="space-y-4 px-2">
-        {settingsGroups.map((group, gIdx) => (
-          <div key={gIdx} className="space-y-2">
-            {group.items.map((item, iIdx) => (
-              <button 
-                key={iIdx} 
-                onClick={item.onClick}
-                disabled={item.disabled}
-                className="w-full flex items-center justify-between p-4 bg-zinc-900 border border-white/10 transition-all text-left group rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)] mb-1 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <div className="flex items-center gap-4">
-                  <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
-                    <item.icon className="w-5 h-5 text-white" />
+          <div className="flex flex-col items-center mb-10 text-center">
+            <div className="relative w-24 h-24 mb-4">
+              <div className="w-24 h-24 bg-zinc-900 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)] relative">
+                {tgUser?.photo_url ? (
+                  <Image 
+                    src={tgUser.photo_url} 
+                    alt="Profile" 
+                    fill 
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : tgUser?.first_name ? (
+                  <div className="text-white font-bold text-3xl tracking-tighter">
+                    {tgUser.first_name[0]}
                   </div>
-                  <span className="font-bold text-sm text-white tracking-tight">{item.label}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-white/50 font-bold tracking-tight">{item.value}</span>
-                  <ChevronRight className="w-4 h-4 text-white/20 transition-colors" />
-                </div>
-              </button>
+                ) : (
+                  <UserIcon className="w-10 h-10 text-white/20" />
+                )}
+              </div>
+            </div>
+            
+            <h2 className="text-2xl font-bold text-white tracking-tight">
+              {tgUser?.first_name ? `${tgUser.first_name} ${tgUser.last_name || ""}`.trim() : t.name}
+            </h2>
+            <p className="text-white/40 text-xs font-bold tracking-widest mt-1">
+              {tgUser?.username ? `@${tgUser.username}` : t.anonymous}
+            </p>
+          </div>
+
+          <div className="space-y-4 px-2">
+            {settingsGroups.map((group, gIdx) => (
+              <div key={gIdx} className="space-y-2">
+                {group.items.map((item, iIdx) => (
+                  <button 
+                    key={iIdx} 
+                    onClick={item.onClick}
+                    disabled={item.disabled}
+                    className="w-full flex items-center justify-between p-4 bg-zinc-900 border border-white/10 transition-all text-left group rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)] mb-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
+                        <item.icon className="w-5 h-5 text-white" />
+                      </div>
+                      <span className="font-bold text-sm text-white tracking-tight">{item.label}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-white/50 font-bold tracking-tight">{item.value}</span>
+                      <ChevronRight className="w-4 h-4 text-white/20 transition-colors" />
+                    </div>
+                  </button>
+                ))}
+              </div>
             ))}
           </div>
-        ))}
-      </div>
-    </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -777,7 +780,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
                 key={l.id}
                 onClick={() => setSelected(l.id as Language)}
                 className={cn(
-                  "w-full flex items-center gap-3 p-4 rounded-[1.5rem] border-2 transition-all duration-300 group shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]",
+                  "w-full flex items-center gap-3 p-4 rounded-[1.5rem] border-2 transition-all duration-300 group shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]",
                   selected === l.id 
                     ? "border-primary bg-primary/10" 
                     : "border-white/10 bg-black/30 hover:bg-white/10"
@@ -850,7 +853,7 @@ function WalletModal({ isOpen, onClose, currentWallet, onSelectWallet, lang }: {
                 key={w.id}
                 onClick={() => setSelected(w.id)}
                 className={cn(
-                  "w-full flex items-center justify-between p-4 rounded-[1.2rem] border-2 transition-all duration-300 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]",
+                  "w-full flex items-center justify-between p-4 rounded-[1.2rem] border-2 transition-all duration-300 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]",
                   selected === w.id 
                     ? "border-primary bg-primary/5" 
                     : "border-white/5 bg-white/5 hover:bg-white/10"
