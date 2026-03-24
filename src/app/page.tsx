@@ -432,15 +432,34 @@ export default function Home() {
           )}
         </div>
 
-        {/* Right Settings */}
-        <Button 
-          variant="default" 
-          size="icon" 
-          className="rounded-full"
-          onClick={() => setIsSettingsModalOpen(true)}
-        >
-          <Settings className="w-5 h-5 text-white" />
-        </Button>
+        {/* Right Actions */}
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={() => setIsSettingsModalOpen(true)}
+            className="w-11 h-11 bg-zinc-900 rounded-full flex items-center justify-center border border-white/10 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)] active:scale-95 transition-all overflow-hidden"
+          >
+            {tgUser?.photo_url ? (
+              <Image 
+                src={tgUser.photo_url} 
+                alt="Profile" 
+                width={44} 
+                height={44} 
+                className="object-cover"
+                unoptimized
+              />
+            ) : (
+              <UserIcon className="w-5 h-5 text-white" />
+            )}
+          </button>
+          <Button 
+            variant="default" 
+            size="icon" 
+            className="rounded-full"
+            onClick={() => setIsSettingsModalOpen(true)}
+          >
+            <Settings className="w-5 h-5 text-white" />
+          </Button>
+        </div>
       </header>
 
       <div className="relative">
