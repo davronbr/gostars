@@ -354,7 +354,7 @@ export default function Home() {
   const renderContent = () => {
     switch (activeTab) {
       case "marketplace":
-        return <Marketplace lang={lang} subTab={marketSubTab} />;
+        return <Marketplace lang={lang} subTab={marketSubTab} onTabChange={setActiveTab} />;
       case "leaderboard":
         return <Leaderboard lang={lang} />;
       case "gifts":
@@ -368,7 +368,7 @@ export default function Home() {
       case "listing":
         return <ListingForm onBack={() => setActiveTab("marketplace")} lang={lang} />;
       default:
-        return <Marketplace lang={lang} subTab={marketSubTab} />;
+        return <Marketplace lang={lang} subTab={marketSubTab} onTabChange={setActiveTab} />;
     }
   };
 
