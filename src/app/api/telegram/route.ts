@@ -1,6 +1,3 @@
-
-'use client';
-
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -27,7 +24,6 @@ export async function POST(req: NextRequest) {
         `kirishingiz mumkin: <tg-emoji emoji-id="5470177992950946662">👇</tg-emoji>`;
 
       // Webhook Response usuli: Telegram-ga darhol javob qaytarish
-      // Bu usul fetch-ga qaraganda tezroq va ishonchliroq
       return NextResponse.json({
         method: 'sendMessage',
         chat_id: chatId,

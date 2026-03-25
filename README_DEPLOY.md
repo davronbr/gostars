@@ -2,10 +2,18 @@
 
 Loyiha Render platformasida bepul ishlashi uchun quyidagilarni bajaring:
 
-### 1. GitHub-ga yuklash
-1. Terminalda `git push` qiling.
-2. Username: GitHub login.
-3. Password: [Personal Access Token](https://github.com/settings/tokens).
+### 1. GitHub-ga yuklash (Autentifikatsiya xatosi yechimi)
+Agar terminalda "Authentication failed" xatosi chiqsa, quyidagi buyruqni bajaring (Tokeningizni qo'shib):
+
+1. Avval GitHub-dan [Personal Access Token](https://github.com/settings/tokens) oling (repo huquqi bilan).
+2. Terminalda quyidagicha yozing:
+   ```bash
+   git remote set-url origin https://TOKEN_SHU_YERGA@github.com/davronbr/gostars.git
+   ```
+3. Endi push qiling:
+   ```bash
+   git push
+   ```
 
 ### 2. Render-da Web Service ochish
 1. [Render Dashboard](https://dashboard.render.com) -> **New +** -> **Web Service**.
@@ -23,4 +31,4 @@ Render-da pullik Background Worker ochish shart emas. Botni faollashtirish uchun
 Agar ekranda `{"ok":true,"result":true,"description":"Webhook was set"}` yozuvini ko'rsangiz, demak botingiz ishlashni boshladi!
 
 ### Nega endi tekin?
-Chunki bot endi alohida dastur sifatida emas, balki saytingizning bir qismi (Webhook) sifatida ishlaydi. Kimdir botga yozsa, Telegram avtomatik ravishda saytingizga xabar yuboradi.
+Chunki bot endi alohida dastur sifatida emas, balki saytingizning bir qismi (Webhook) sifatida ishlaydi. Kimdir botga yozsa, Telegram avtomatik ravishda saytingizga xabar yuboradi. Sayt "uxlab" qolgan bo'lsa, birinchi xabarda uyg'onadi (bu 30 soniya vaqt olishi mumkin).
