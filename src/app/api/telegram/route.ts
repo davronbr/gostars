@@ -1,4 +1,5 @@
-'use server';
+
+'use client';
 
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -9,29 +10,26 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const botToken = "8711207347:AAH38kfcpBK04gB0Xm0wOSLPsz_VcYph80w";
     const webAppUrl = "https://gostars.onrender.com";
 
+    // Telegram yuborgan xabarni olish
     const message = body.message;
-    if (!message || !message.text) {
-      return NextResponse.json({ ok: true });
-    }
+    
+    // Agar xabar matnli bo'lsa va /start bilan boshlansa
+    if (message && message.text && message.text.startsWith('/start')) {
+      const chatId = message.chat.id;
+      const firstName = message.from.first_name || "Foydalanuvchi";
 
-    const chatId = message.chat.id;
-    const text = message.text;
-    const firstName = message.from.first_name || "Foydalanuvchi";
-
-    if (text === '/start') {
       // Premium emojilar bilan salomlashish matni
-      // 5798587088077066898 -> Tovuq
-      // 5767374504175078683 -> Do'kon
-      // 5470177992950946662 -> Qo'l
       const welcomeText = 
         `<tg-emoji emoji-id="5798587088077066898">🐥</tg-emoji> Salom, ${firstName}!\n\n` +
         `<tg-emoji emoji-id="5767374504175078683">🛒</tg-emoji> Pastdagi tugma orqali do'konimizga\n` +
         `kirishingiz mumkin: <tg-emoji emoji-id="5470177992950946662">👇</tg-emoji>`;
 
-      const payload = {
+      // Webhook Response usuli: Telegram-ga darhol javob qaytarish
+      // Bu usul fetch-ga qaraganda tezroq va ishonchliroq
+      return NextResponse.json({
+        method: 'sendMessage',
         chat_id: chatId,
         text: welcomeText,
         parse_mode: 'HTML',
@@ -45,19 +43,13 @@ export async function POST(req: NextRequest) {
             ]
           ]
         }
-      };
-
-      // Telegram API-ga javob yuborish
-      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
       });
     }
 
+    // Boshqa turdagi xabarlar uchun shunchaki OK qaytarish
     return NextResponse.json({ ok: true });
   } catch (error: any) {
-    console.error("Webhook error:", error);
-    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+    // Xatolik bo'lsa ham 200 qaytaramiz, aks holda Telegram qayta-qayta so'rov yuboraveradi
+    return NextResponse.json({ ok: false, error: error.message }, { status: 200 });
   }
 }
