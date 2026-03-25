@@ -24,7 +24,6 @@ function GiftIcon({ gift }: { gift: GiftItem }) {
 
   useEffect(() => {
     if (gift.lottieUrl) {
-      // Telegram yoki LottieHost sovg'alari uchun animatsiya yuklash
       fetch(gift.lottieUrl)
         .then((res) => {
           if (!res.ok) throw new Error("Animatsiyani yuklab bo'lmadi");
@@ -35,7 +34,6 @@ function GiftIcon({ gift }: { gift: GiftItem }) {
           setHasError(false);
         })
         .catch((err) => {
-          // Xatolik yuz bersa, fallback emoji ko'rsatiladi
           console.warn(`Lottie yuklashda xatolik (${gift.name}):`, err.message);
           setHasError(true);
         });
@@ -71,7 +69,7 @@ export function MyGifts({ lang }: { lang: Language }) {
       name: "HEART GIFT", 
       price: 15, 
       icon: "💖", 
-      lottieUrl: "https://nft.fragment.com/gift/Heart-5170145012310081615.lottie.json" 
+      lottieUrl: "https://lottie.host/4e0919e7-d52e-4cb7-b212-8fc156ec1bf1/jDRkz6axpL.json" 
     },
     { 
       id: "2", 
