@@ -24,7 +24,7 @@ function GiftIcon({ gift }: { gift: GiftItem }) {
 
   useEffect(() => {
     if (gift.lottieUrl) {
-      // Telegram sovg'alari uchun animatsiya yuklash
+      // Telegram yoki LottieHost sovg'alari uchun animatsiya yuklash
       fetch(gift.lottieUrl)
         .then((res) => {
           if (!res.ok) throw new Error("Animatsiyani yuklab bo'lmadi");
@@ -36,11 +36,11 @@ function GiftIcon({ gift }: { gift: GiftItem }) {
         })
         .catch((err) => {
           // Xatolik yuz bersa, fallback emoji ko'rsatiladi
-          console.warn("Lottie yuklashda xatolik:", err.message);
+          console.warn(`Lottie yuklashda xatolik (${gift.name}):`, err.message);
           setHasError(true);
         });
     }
-  }, [gift.lottieUrl]);
+  }, [gift.lottieUrl, gift.name]);
 
   if (gift.lottieUrl && animationData && !hasError) {
     return (
@@ -73,7 +73,13 @@ export function MyGifts({ lang }: { lang: Language }) {
       icon: "💖", 
       lottieUrl: "https://nft.fragment.com/gift/Heart-5170145012310081615.lottie.json" 
     },
-    { id: "2", name: "TEDDY BEAR", price: 15, icon: "🧸" },
+    { 
+      id: "2", 
+      name: "TEDDY BEAR", 
+      price: 15, 
+      icon: "🧸",
+      lottieUrl: "https://lottie.host/6547aee4-3dd9-4b4b-93cb-7f0a25103582/5aSHKFW5zO.json"
+    },
     { id: "3", name: "GIFT BOX", price: 25, icon: "🎁" },
     { id: "4", name: "ROSE", price: 25, icon: "🌹" },
     { id: "5", name: "LOVE BEAR", price: 50, icon: "🧸❤️" },
