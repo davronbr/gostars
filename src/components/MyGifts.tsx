@@ -20,17 +20,27 @@ interface GiftItem {
 
 function GiftIcon({ gift }: { gift: GiftItem }) {
   const [animationData, setAnimationData] = useState<any>(null);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     if (gift.lottieUrl) {
       fetch(gift.lottieUrl)
-        .then((res) => res.json())
-        .then((data) => setAnimationData(data))
-        .catch((err) => console.error("Lottie load error:", err));
+        .then((res) => {
+          if (!res.ok) throw new Error("Network response was not ok");
+          return res.json();
+        })
+        .then((data) => {
+          setAnimationData(data);
+          setHasError(false);
+        })
+        .catch((err) => {
+          // CORS yoki tarmoq xatoligi bo'lsa, fallback emoji ko'rsatiladi
+          setHasError(true);
+        });
     }
   }, [gift.lottieUrl]);
 
-  if (gift.lottieUrl && animationData) {
+  if (gift.lottieUrl && animationData && !hasError) {
     return (
       <div className="w-full h-full flex items-center justify-center scale-150">
         <Lottie animationData={animationData} loop={true} />
@@ -39,7 +49,7 @@ function GiftIcon({ gift }: { gift: GiftItem }) {
   }
 
   return (
-    <div className="flex-1 flex items-center justify-center text-5xl mb-2 drop-shadow-2xl group-hover:scale-110 transition-transform duration-500">
+    <div className="flex-1 flex items-center justify-center text-5xl mb-2 drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 select-none">
       {gift.icon}
     </div>
   );
@@ -54,6 +64,7 @@ export function MyGifts({ lang }: { lang: Language }) {
       name: "HEART GIFT", 
       price: 15, 
       icon: "💖", 
+      // Fragment/Telegram animatsiyalari ba'zan CORS tufayli fetch bo'lmasligi mumkin
       lottieUrl: "https://nft.fragment.com/gift/Heart-5170145012310081615.lottie.json" 
     },
     { id: "2", name: "TEDDY BEAR", price: 15, icon: "🧸" },
@@ -90,7 +101,7 @@ export function MyGifts({ lang }: { lang: Language }) {
               <GiftIcon gift={gift} />
             </div>
 
-            <h3 className="text-[9px] font-black text-white/80 tracking-tighter mb-2 text-center uppercase mt-2">
+            <h3 className="text-[9px] font-black text-white/80 tracking-tighter mb-2 text-center uppercase mt-2 truncate w-full px-1">
               {gift.name}
             </h3>
 
