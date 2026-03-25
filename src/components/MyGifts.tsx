@@ -44,7 +44,7 @@ function GiftIcon({ gift }: { gift: GiftItem }) {
 
   if (gift.lottieUrl && animationData && !hasError) {
     return (
-      <div className="w-full h-full flex items-center justify-center scale-150 pointer-events-none">
+      <div className="w-full h-full flex items-center justify-center scale-110 pointer-events-none">
         <Lottie 
           animationData={animationData} 
           loop={true} 
@@ -56,7 +56,7 @@ function GiftIcon({ gift }: { gift: GiftItem }) {
   }
 
   return (
-    <div className="flex-1 flex items-center justify-center text-5xl mb-2 drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 select-none">
+    <div className="flex-1 flex items-center justify-center text-4xl mb-2 drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 select-none">
       {gift.icon}
     </div>
   );
