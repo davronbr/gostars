@@ -109,7 +109,7 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
   return (
     <div className="min-h-screen bg-black text-white font-body animate-in fade-in duration-700 pb-40">
       <div className="px-6 pt-12 flex flex-col items-center">
-        <div className="w-full max-w-sm bg-zinc-900 rounded-[2.8rem] border border-white/10 p-10 flex flex-col items-center text-center shadow-2xl relative overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
+        <div className="w-full max-sm bg-zinc-900 rounded-[2.8rem] border border-white/10 p-10 flex flex-col items-center text-center shadow-2xl relative overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
           
           <div className="relative w-40 h-40 mb-10 flex items-center justify-center">
             {subTab === "stars" ? (
@@ -120,7 +120,7 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
               )
             ) : (
               premiumAnim ? (
-                <Lottie animationData={premiumAnim} loop={true} className="w-full h-full scale-150" />
+                <Lottie animationData={premiumAnim} loop={true} className="w-full h-full scale-125" />
               ) : (
                 <div className="w-24 h-24 bg-white/5 rounded-full animate-pulse" />
               )
@@ -371,7 +371,7 @@ function PremiumPurchaseView({ lang, onBack, onGoToHistory, user, premiumAnim, f
       <div className="flex flex-col items-center mb-10">
         <div className="w-32 h-32 mb-6 flex items-center justify-center">
           {premiumAnim ? (
-            <Lottie animationData={premiumAnim} loop={true} className="w-full h-full scale-150" />
+            <Lottie animationData={premiumAnim} loop={true} className="w-full h-full scale-125" />
           ) : (
             <div className="w-24 h-24 bg-white/5 rounded-full animate-pulse" />
           )}
