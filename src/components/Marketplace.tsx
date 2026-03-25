@@ -59,6 +59,44 @@ function StarLottie({ className }: { className?: string }) {
   );
 }
 
+function PremiumLottieIcon({ className }: { className?: string }) {
+  const [animationData, setAnimationData] = useState<any>(null);
+  const lottieRef = useRef<any>(null);
+
+  useEffect(() => {
+    fetch("https://lottie.host/71c610a3-f462-4807-898b-3755a6837ab8/JHBQAf41C0.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data))
+      .catch((err) => console.error("Premium Lottie error:", err));
+  }, []);
+
+  useEffect(() => {
+    if (!animationData) return;
+
+    const interval = setInterval(() => {
+      if (lottieRef.current) {
+        lottieRef.current.goToAndPlay(0);
+      }
+    }, 10000); // Har 10 soniyada
+
+    return () => clearInterval(interval);
+  }, [animationData]);
+
+  if (!animationData) return <Gem className={cn("w-5 h-5 text-blue-500", className)} />;
+
+  return (
+    <div className={cn("w-5 h-5 flex items-center justify-center", className)}>
+      <Lottie 
+        lottieRef={lottieRef}
+        animationData={animationData} 
+        loop={false} 
+        autoplay={true}
+        className="w-full h-full scale-150" 
+      />
+    </div>
+  );
+}
+
 export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
   const t = translations[lang];
   const [starsAnim, setStarsAnim] = useState<any>(null);
@@ -377,7 +415,7 @@ function PremiumPurchaseView({ lang, onBack, onGoToHistory, user, premiumAnim, f
           )}
         </div>
         <div className="bg-zinc-900 px-6 py-2 rounded-full border border-white/10 flex items-center gap-2 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]">
-          <Gem className="w-5 h-5 text-blue-400" />
+          <PremiumLottieIcon className="w-5 h-5" />
           <span className="text-2xl font-black tracking-tighter uppercase">
             {selectedPlan} Oylik
           </span>

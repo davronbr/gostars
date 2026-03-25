@@ -106,6 +106,44 @@ function StarLottieIcon({ className }: { className?: string }) {
   );
 }
 
+function PremiumLottieIcon({ className }: { className?: string }) {
+  const [animationData, setAnimationData] = useState<any>(null);
+  const lottieRef = useRef<any>(null);
+
+  useEffect(() => {
+    fetch("https://lottie.host/71c610a3-f462-4807-898b-3755a6837ab8/JHBQAf41C0.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data))
+      .catch((err) => console.error("Premium Lottie error:", err));
+  }, []);
+
+  useEffect(() => {
+    if (!animationData) return;
+
+    const interval = setInterval(() => {
+      if (lottieRef.current) {
+        lottieRef.current.goToAndPlay(0);
+      }
+    }, 10000); // Har 10 soniyada
+
+    return () => clearInterval(interval);
+  }, [animationData]);
+
+  if (!animationData) return <Gem className={cn("w-5 h-5 text-blue-500", className)} />;
+
+  return (
+    <div className={cn("w-6 h-6 flex items-center justify-center", className)}>
+      <Lottie 
+        lottieRef={lottieRef}
+        animationData={animationData} 
+        loop={false} 
+        autoplay={true}
+        className="w-full h-full scale-150" 
+      />
+    </div>
+  );
+}
+
 export const translations = {
   uz: {
     market: "Go Stars",
@@ -263,7 +301,7 @@ export const translations = {
     addGiftsViaBot: "Вы можете добавить их через нашего бота",
     howToAddGifts: "Как добавить подарки?",
     allItems: "Все товары",
-    collections: "Коллекции",
+    collections: "Collections",
     symbol: "Символ",
     backdrop: "Фон",
     floorPrice: "Минимальная цена",
@@ -617,7 +655,7 @@ function HistoryView({ lang }: { lang: Language }) {
           size="sm"
           className="rounded-full px-6 flex items-center gap-2"
         >
-          <Gem className="w-4 h-4 text-blue-500" />
+          <PremiumLottieIcon className="w-4 h-4" />
           {t.premiumTab}
         </Button>
       </div>
@@ -637,7 +675,7 @@ function HistoryView({ lang }: { lang: Language }) {
                   {order.websiteId === "TELEGRAM_STARS" ? (
                     <StarLottieIcon className="w-8 h-8" />
                   ) : (
-                    <Gem className="w-6 h-6 text-blue-500" />
+                    <PremiumLottieIcon className="w-8 h-8" />
                   )}
                 </div>
                 <div className="flex flex-col">
