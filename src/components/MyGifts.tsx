@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Star } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import type { Language } from "@/app/page";
 import { translations } from "@/app/page";
@@ -16,6 +15,44 @@ interface GiftItem {
   price: number;
   icon: string;
   lottieUrl?: string;
+}
+
+function StarLottieIcon({ className }: { className?: string }) {
+  const [animationData, setAnimationData] = useState<any>(null);
+  const lottieRef = useRef<any>(null);
+
+  useEffect(() => {
+    fetch("https://lottie.host/8d258075-f9c1-4be7-bc2e-7419c6ae0c2a/ZrCWgaAqMT.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data))
+      .catch((err) => console.error("Star Lottie error:", err));
+  }, []);
+
+  useEffect(() => {
+    if (!animationData) return;
+
+    const interval = setInterval(() => {
+      if (lottieRef.current) {
+        lottieRef.current.goToAndPlay(0);
+      }
+    }, 10000); // Har 10 soniyada
+
+    return () => clearInterval(interval);
+  }, [animationData]);
+
+  if (!animationData) return <div className={cn("w-3 h-3 bg-yellow-500 rounded-full animate-pulse", className)} />;
+
+  return (
+    <div className={cn("w-4 h-4 flex items-center justify-center", className)}>
+      <Lottie 
+        lottieRef={lottieRef}
+        animationData={animationData} 
+        loop={false} 
+        autoplay={true}
+        className="w-full h-full scale-150" 
+      />
+    </div>
+  );
 }
 
 function GiftIcon({ gift }: { gift: GiftItem }) {
@@ -116,7 +153,7 @@ export function MyGifts({ lang }: { lang: Language }) {
             </h3>
 
             <Button size="sm" variant="default" className="w-full h-8 rounded-full gap-1">
-              <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+              <StarLottieIcon />
               <span className="text-[11px] font-black text-yellow-500">{gift.price}</span>
             </Button>
           </div>
