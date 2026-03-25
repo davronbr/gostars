@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import type { Language, NavTab } from "@/app/page";
 import { translations } from "@/app/page";
 import dynamic from "next/dynamic";
-import { Star, ChevronDown, X, ChevronLeft, Loader2 } from "lucide-react";
+import { Star, ChevronDown, X, ChevronLeft, Loader2, Plus, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFirebase, useFirestore, addDocumentNonBlocking } from "@/firebase";
 import { Input } from "@/components/ui/input";
@@ -56,7 +56,7 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
       sellerId: "SYSTEM",
       orderDate: new Date().toISOString(),
       status: "pending",
-      amount: 45000, // Example premium price
+      amount: 45000, 
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -83,6 +83,7 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
         onGoToHistory={() => onTabChange?.("profile")}
         user={user}
         starsAnim={starsAnim}
+        firestore={firestore}
       />
     );
   }
@@ -90,7 +91,7 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
   return (
     <div className="min-h-screen bg-black text-white font-body animate-in fade-in duration-700 pb-32">
       <div className="px-6 pt-12 flex flex-col items-center">
-        <div className="w-full max-sm bg-zinc-900 rounded-[2.8rem] border border-white/10 p-10 flex flex-col items-center text-center shadow-2xl relative overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
+        <div className="w-full max-w-sm bg-zinc-900 rounded-[2.8rem] border border-white/10 p-10 flex flex-col items-center text-center shadow-2xl relative overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
           
           <div className="relative w-40 h-40 mb-10 flex items-center justify-center">
             {subTab === "stars" ? (
@@ -130,10 +131,167 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
   );
 }
 
-// Internal reusable StarsPurchaseView from page.tsx (should ideally be shared via a separate file, but here for context)
-function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim }: any) {
-  // This is a placeholder since the actual implementation is in page.tsx for this specific setup
-  // In a real project, we would export StarsPurchaseView from a common file.
-  // For this XML block, I'll rely on the update in page.tsx which covers the main logic.
-  return null; 
+function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, firestore }: any) {
+  const t = translations[lang as Language];
+  const { toast } = useToast();
+  const [selectedStars, setSelectedStars] = useState<number | "custom">(50);
+  const [customAmount, setCustomAmount] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showAllPacks, setShowAllPacks] = useState(false);
+
+  const starPacks = [
+    { stars: 50, price: 10000 },
+    { stars: 100, price: 20000 },
+    { stars: 250, price: 50000 },
+    { stars: 500, price: 100000 },
+    { stars: 1000, price: 200000 },
+  ];
+
+  const currentPrice = selectedStars === "custom" 
+    ? (Number(customAmount) || 0) * 200 
+    : starPacks.find(p => p.stars === selectedStars)?.price || 0;
+
+  const handlePurchase = async () => {
+    if (!user) {
+      toast({ title: t.error, description: t.loginToConnect, variant: "destructive" });
+      return;
+    }
+
+    const starsToBuy = selectedStars === "custom" ? Number(customAmount) : selectedStars;
+    if (!starsToBuy || starsToBuy <= 0) {
+      toast({ title: t.error, description: "Miqdorni kiriting", variant: "destructive" });
+      return;
+    }
+
+    setIsProcessing(true);
+    const orderData = {
+      buyerId: user.uid,
+      websiteId: "TELEGRAM_STARS",
+      sellerId: "SYSTEM",
+      orderDate: new Date().toISOString(),
+      status: "pending",
+      amount: currentPrice,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      const ordersRef = collection(firestore, 'orders');
+      await addDocumentNonBlocking(ordersRef, orderData);
+      toast({ title: t.success, description: t.orderCreated });
+      setTimeout(() => {
+        setIsProcessing(false);
+        onGoToHistory();
+      }, 1500);
+    } catch (error) {
+      console.error("Order error:", error);
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white p-6 animate-in slide-in-from-right duration-500 pb-32">
+      <header className="flex items-center gap-4 mb-10 mt-6">
+        <Button size="icon" variant="ghost" className="rounded-full" onClick={onBack}>
+          <ChevronLeft className="w-6 h-6" />
+        </Button>
+        <h2 className="text-xl font-black tracking-tight">{t.buyStars}</h2>
+      </header>
+
+      <div className="flex flex-col items-center mb-10">
+        <div className="w-32 h-32 mb-6">
+          {starsAnim && <Lottie animationData={starsAnim} loop={true} className="w-full h-full scale-125" />}
+        </div>
+        <div className="bg-zinc-900 px-6 py-2 rounded-full border border-white/10 flex items-center gap-2">
+          <Star className="w-5 h-5 fill-yellow-500 text-yellow-500" />
+          <span className="text-2xl font-black tracking-tighter">
+            {selectedStars === "custom" ? (customAmount || "0") : selectedStars}
+          </span>
+        </div>
+      </div>
+
+      <div className="space-y-3 mb-8">
+        <div className="flex items-center justify-between px-2 mb-2">
+           <span className="text-xs font-black text-zinc-500 tracking-widest uppercase">Paketlar</span>
+           <button 
+             onClick={() => {
+               setShowAllPacks(!showAllPacks);
+               if (!showAllPacks) setSelectedStars(50);
+             }} 
+             className="text-[10px] font-black text-primary tracking-widest uppercase"
+           >
+             {showAllPacks ? "Yopish" : "Barcha to'plamlar"}
+           </button>
+        </div>
+
+        {showAllPacks && (
+          <div className="grid gap-2 animate-in fade-in zoom-in-95 duration-300">
+            {starPacks.map((pack) => (
+              <button
+                key={pack.stars}
+                onClick={() => setSelectedStars(pack.stars)}
+                className={cn(
+                  "flex items-center justify-between p-4 rounded-2xl border transition-all shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]",
+                  selectedStars === pack.stars ? "bg-zinc-800 border-zinc-500" : "bg-zinc-900 border-white/5 hover:bg-zinc-800"
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <Star className={cn("w-5 h-5", selectedStars === pack.stars ? "fill-yellow-500 text-yellow-500" : "text-zinc-500")} />
+                  <span className="font-bold">{pack.stars} Stars</span>
+                </div>
+                <span className="text-sm font-black text-zinc-400">{pack.price.toLocaleString()} UZS</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="relative mt-4">
+          <button
+            onClick={() => {
+              setSelectedStars("custom");
+              setShowAllPacks(false);
+            }}
+            className={cn(
+              "w-full flex items-center justify-between p-4 rounded-2xl border transition-all shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]",
+              selectedStars === "custom" ? "bg-zinc-800 border-zinc-500" : "bg-zinc-900 border-white/5 hover:bg-zinc-800"
+            )}
+          >
+            <div className="flex items-center gap-3">
+              <Plus className={cn("w-5 h-5", selectedStars === "custom" ? "text-primary" : "text-zinc-500")} />
+              <span className="font-bold">Boshqa miqdor</span>
+            </div>
+          </button>
+          
+          {selectedStars === "custom" && (
+            <div className="mt-3 animate-in slide-in-from-top-2 duration-300">
+              <Input
+                type="number"
+                placeholder="Yulduzlar miqdorini kiriting..."
+                className="bg-zinc-900 border-none h-14 font-black text-lg focus-visible:ring-primary rounded-2xl"
+                value={customAmount}
+                onChange={(e) => setCustomAmount(e.target.value)}
+                autoFocus
+              />
+              <p className="text-[10px] text-zinc-500 font-bold px-2 mt-2 tracking-widest uppercase">1 Star = 200 UZS</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="fixed bottom-32 left-0 right-0 px-6 max-w-2xl mx-auto">
+        <Button 
+          size="lg" 
+          className="w-full h-16 rounded-[2rem] bg-white text-black hover:bg-zinc-200 transition-all font-black"
+          disabled={isProcessing}
+          onClick={handlePurchase}
+        >
+          {isProcessing ? (
+            <Loader2 className="w-6 h-6 animate-spin" />
+          ) : (
+            `${currentPrice.toLocaleString()} UZS TO'LASH`
+          )}
+        </Button>
+      </div>
+    </div>
+  );
 }
