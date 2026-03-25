@@ -3,7 +3,9 @@
 ### 1. GitHub-ga kodni yuklash
 GitHub sizdan parolni terminalda so'raganda, oddiy parolingizni emas, **Personal Access Token** (ghp_...) kiritishingiz shart.
 
-**Kod yuklash buyrug'i (TOKENingizni qo'shib yozing):**
+**DIQQAT:** Telegram bot tokenini (`8711207347...`) GitHub-ga yozmang!
+
+**To'g'ri buyruq (TOKENingizni ghp_... deb yozing):**
 ```bash
 git remote set-url origin https://TOKENINGIZNI_SHU_YERGA_YOZING@github.com/davronbr/gostars.git
 git add .
