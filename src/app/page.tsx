@@ -912,7 +912,7 @@ function SettingsModal({ isOpen, onClose, lang, walletMethod, tgUser, user, onOp
                     key={iIdx} 
                     onClick={item.onClick}
                     disabled={item.disabled}
-                    className="w-full flex items-center justify-between p-4 bg-zinc-900 border border-white/10 transition-all text-left group rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)] mb-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-between p-4 bg-zinc-900 border border-white/10 transition-all text-left group rounded-[1.5rem] shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)] mb-1 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <div className="flex items-center gap-4">
                       <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shadow-lg", item.color)}>
