@@ -28,14 +28,15 @@ async def main():
 
     @client.on(events.NewMessage(pattern='/start'))
     async def start_handler(event):
-        """Start buyrug'iga javob berish (Rasmdagi formatda)."""
+        """Start buyrug'iga javob berish (Premium emojilar bilan)."""
         sender = await event.get_sender()
         name = sender.first_name if sender.first_name else "Foydalanuvchi"
         
+        # Premium emojilar HTML formati orqali yuboriladi
         welcome_text = (
-            f"🐥 Salom, {name}!\n\n"
-            "🛒 Pastdagi tugmalar orqali xizmatlarimizdan\n"
-            "foydalanishingiz mumkin: 👇"
+            f"<emoji id='5798587088077066898'>🐥</emoji> Salom, {name}!\n\n"
+            f"<emoji id='5767374504175078683'>🛒</emoji> Pastdagi tugmalar orqali xizmatlarimizdan\n"
+            f"foydalanishingiz mumkin: <emoji id='5470177992950946662'>👇</emoji>"
         )
         
         # Web App tugmasini yaratish
@@ -43,7 +44,7 @@ async def main():
             [types.KeyboardButtonWebView("🛒 Xarid qilish", url=WEB_APP_URL)]
         ]
         
-        await event.respond(welcome_text, buttons=button)
+        await event.respond(welcome_text, buttons=button, parse_mode='html')
 
     @client.on(events.NewMessage(pattern='/help'))
     async def help_handler(event):
