@@ -3,77 +3,61 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * Bu funksiya Telegram Bot Webhook orqali yuborilgan POST so'rovlarini qabul qiladi.
- * Foydalanuvchi botga xabar yuborganda, Telegram shu URL manzilga ma'lumot yuboradi.
+ * Ushbu API Telegram Webhook orqali botni boshqaradi.
+ * Render-ning bepul rejasida bot ishlashi uchun eng maqbul yo'l.
  */
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const botToken = "8711207347:AAH38kfcpBK04gB0Xm0wOSLPsz_VcYph80w";
+    const webAppUrl = "https://gostars.onrender.com";
 
-    // --- XAVFSIZLIK UCHUN MUHIM ---
-    // Production'ga chiqishdan oldin, Telegram'dan kelayotgan so'rovlarni tasdiqlash uchun
-    // maxfiy kalit (secret token) ishlatish zarur.
-    // const secretToken = req.headers.get('X-Telegram-Bot-Api-Secret-Token');
-    // if (secretToken !== process.env.TELEGRAM_SECRET_TOKEN) {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
-    // --- XAVFSIZLIK QISMI TUGADI ---
-
-    // 1. Telegram'dan kelgan xabarni ajratib olish
     const message = body.message;
-    if (!message || !message.from || !message.text) {
-      // Agar bu biz qayta ishlay olmaydigan xabar bo'lsa (masalan, kanal posti, stiker va hk),
-      // shunchaki "ok" javobini qaytaramiz.
-      return NextResponse.json({ status: 'ok', message: 'Qayta ishlanmaydigan xabar.' });
+    if (!message || !message.text) {
+      return NextResponse.json({ ok: true });
     }
 
-    const telegramUserId = message.from.id;
-    const telegramUsername = message.from.username;
-    const text = message.text; // Xabar matni
+    const chatId = message.chat.id;
+    const text = message.text;
+    const firstName = message.from.first_name || "Foydalanuvchi";
 
-    // 2. Xabar matnini tahlil qilib, sovg'a qo'shish buyrug'ini aniqlash.
-    // Masalan, foydalanuvchi "/addgift <sovg'a_id>" formatida xabar yuboradi deb faraz qilamiz.
-    if (text.startsWith('/addgift')) {
-      const giftId = text.split(' ')[1];
-      if (!giftId) {
-        // Haqiqiy botda foydalanuvchiga buyruqni qanday ishlatish haqida javob yuborish kerak.
-        return NextResponse.json({ status: 'error', message: "Sovg'a ID'si topilmadi." });
-      }
+    if (text === '/start') {
+      // Premium emojilar bilan salomlashish matni
+      // 5798587088077066898 -> Tovuq
+      // 5767374504175078683 -> Do'kon
+      // 5470177992950946662 -> Qo'l
+      const welcomeText = 
+        `<tg-emoji emoji-id="5798587088077066898">🐥</tg-emoji> Salom, ${firstName}!\n\n` +
+        `<tg-emoji emoji-id="5767374504175078683">🛒</tg-emoji> Pastdagi tugma orqali do'konimizga\n` +
+        `kirishingiz mumkin: <tg-emoji emoji-id="5470177992950946662">👇</tg-emoji>`;
 
-      // 3. Firestore (yoki boshqa) ma'lumotlar bazasidan foydalanuvchini topish.
-      // Bu yerda telegramUserId orqali qidirish logikasi bo'lishi kerak.
-      // Hozircha biz bu jarayonni simulyatsiya qilamiz va logga chiqaramiz.
-      // Haqiqiy kodda quyidagicha bo'lardi:
-      // const { firestore } = initializeFirebase(); // Firestore instance'ni olish
-      // const usersRef = collection(firestore, 'users');
-      // const q = query(usersRef, where("telegramUserId", "==", telegramUserId));
-      // const querySnapshot = await getDocs(q);
-      // if (querySnapshot.empty) {
-      //   return NextResponse.json({ status: 'error', message: `Bunday Telegram ID'li foydalanuvchi topilmadi.` });
-      // }
-      // const userDoc = querySnapshot.docs[0];
-      // const userRef = doc(firestore, 'users', userDoc.id);
+      const payload = {
+        chat_id: chatId,
+        text: welcomeText,
+        parse_mode: 'HTML',
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "🛒 Xarid qilish",
+                web_app: { url: webAppUrl }
+              }
+            ]
+          ]
+        }
+      };
 
-      console.log(`Foydalanuvchi (Telegram ID: ${telegramUserId}) uchun '${giftId}' sovg'asini qo'shishga harakat qilinmoqda.`);
-      
-      // 4. Sovg'ani foydalanuvchining inventariga qo'shish.
-      // Bu ham simulyatsiya. Haqiqiy kodda Firestore'dagi 'gifts' massiviga qo'shiladi.
-      // await updateDoc(userRef, {
-      //   gifts: arrayUnion(giftId) // arrayUnion takrorlanishni oldini oladi.
-      // });
-      console.log(`DATABASE'GA SO'ROV (SIMULYATSIYA): "users" kolleksiyasidagi foydalanuvchining "gifts" maydoniga '${giftId}' qo'shiladi.`);
-
-      // 5. Telegram'ga muvaffaqiyatli qabul qilinganlik haqida javob yuborish.
-      // Telegram'ga murakkab javob shart emas, 200 OK statusining o'zi kifoya.
-      return NextResponse.json({ status: 'success', message: `Sovg'a '${giftId}' ${telegramUsername} uchun muvaffaqiyatli qayta ishlandi.` });
+      // Telegram API-ga javob yuborish
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
     }
 
-    // Agar xabar bizning buyruqlarimizga to'g'ri kelmasa, shunchaki OK qaytaramiz.
-    return NextResponse.json({ status: 'ok', message: 'Xabar qabul dili, lekin hech qanday amal bajarilmadi.' });
-
+    return NextResponse.json({ ok: true });
   } catch (error: any) {
-    console.error("Telegram webhook'ni qayta ishlashda xatolik:", error);
-    // Xatolik yuz bersa, 500 status bilan javob qaytaramiz.
-    return NextResponse.json({ status: 'error', message: error.message }, { status: 500 });
+    console.error("Webhook error:", error);
+    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
   }
 }
