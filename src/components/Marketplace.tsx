@@ -89,7 +89,7 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white font-body animate-in fade-in duration-700 pb-32">
+    <div className="min-h-screen bg-black text-white font-body animate-in fade-in duration-700 pb-40">
       <div className="px-6 pt-12 flex flex-col items-center">
         <div className="w-full max-w-sm bg-zinc-900 rounded-[2.8rem] border border-white/10 p-10 flex flex-col items-center text-center shadow-2xl relative overflow-hidden shadow-[inset_0_1.5px_0_rgba(255,255,255,0.15)]">
           
@@ -190,7 +190,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, fires
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 animate-in slide-in-from-right duration-500 pb-32">
+    <div className="min-h-screen bg-black text-white p-6 animate-in slide-in-from-right duration-500 pb-64">
       <header className="flex items-center gap-4 mb-10 mt-6">
         <Button size="icon" variant="ghost" className="rounded-full" onClick={onBack}>
           <ChevronLeft className="w-6 h-6" />
@@ -278,7 +278,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, fires
         </div>
       </div>
 
-      <div className="fixed bottom-32 left-0 right-0 px-6 max-w-2xl mx-auto">
+      <div className="fixed bottom-32 left-0 right-0 px-6 max-w-2xl mx-auto z-50">
         <Button 
           size="lg" 
           className="w-full h-16 rounded-[2rem] bg-white text-black hover:bg-zinc-200 transition-all font-black"
