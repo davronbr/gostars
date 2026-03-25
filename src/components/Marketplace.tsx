@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import type { Language, NavTab } from "@/app/page";
 import { translations } from "@/app/page";
 import dynamic from "next/dynamic";
-import { Star, ChevronDown, X, ChevronLeft, Loader2, Plus, Check, Gem } from "lucide-react";
+import { ChevronDown, X, ChevronLeft, Loader2, Plus, Check, Gem } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFirebase, useFirestore, addDocumentNonBlocking } from "@/firebase";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,25 @@ interface MarketplaceProps {
   lang: Language;
   subTab: "stars" | "premium";
   onTabChange?: (tab: NavTab) => void;
+}
+
+function StarLottie({ className }: { className?: string }) {
+  const [animationData, setAnimationData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("https://lottie.host/8d258075-f9c1-4be7-bc2e-7419c6ae0c2a/ZrCWgaAqMT.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data))
+      .catch((err) => console.error("Star Lottie error:", err));
+  }, []);
+
+  if (!animationData) return <div className={cn("w-5 h-5 bg-yellow-500/20 rounded-full animate-pulse", className)} />;
+
+  return (
+    <div className={cn("w-5 h-5 flex items-center justify-center", className)}>
+      <Lottie animationData={animationData} loop={true} className="w-full h-full scale-150" />
+    </div>
+  );
 }
 
 export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
@@ -182,7 +201,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, fires
           {starsAnim && <Lottie animationData={starsAnim} loop={true} className="w-full h-full scale-125" />}
         </div>
         <div className="bg-zinc-900 px-6 py-2 rounded-full border border-white/10 flex items-center gap-2 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]">
-          <Star className="w-5 h-5 fill-yellow-500 text-yellow-500" />
+          <StarLottie className="w-6 h-6" />
           <span className="text-2xl font-black tracking-tighter">
             {selectedStars === "custom" ? (customAmount || "0") : selectedStars}
           </span>
@@ -215,7 +234,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, fires
                 )}
               >
                 <div className="flex items-center gap-3">
-                  <Star className={cn("w-5 h-5", selectedStars === pack.stars ? "fill-yellow-500 text-yellow-500" : "text-zinc-500")} />
+                  <StarLottie className="w-6 h-6" />
                   <span className="font-bold">{pack.stars} Stars</span>
                 </div>
                 <span className="text-sm font-black text-zinc-400">{pack.price.toLocaleString()} UZS</span>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -25,7 +26,8 @@ import {
   ChevronLeft,
   Loader2,
   Globe,
-  Link
+  Link,
+  Gem
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,6 +66,25 @@ declare global {
       WebApp: any;
     };
   }
+}
+
+function StarLottieIcon({ className }: { className?: string }) {
+  const [animationData, setAnimationData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("https://lottie.host/8d258075-f9c1-4be7-bc2e-7419c6ae0c2a/ZrCWgaAqMT.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data))
+      .catch((err) => console.error("Star Lottie error:", err));
+  }, []);
+
+  if (!animationData) return <StarIcon className={cn("w-5 h-5 fill-yellow-500 text-yellow-500", className)} />;
+
+  return (
+    <div className={cn("w-6 h-6 flex items-center justify-center", className)}>
+      <Lottie animationData={animationData} loop={true} className="w-full h-full scale-150" />
+    </div>
+  );
 }
 
 export const translations = {
@@ -568,7 +589,7 @@ function HistoryView({ lang }: { lang: Language }) {
           size="sm"
           className="rounded-full px-6 flex items-center gap-2"
         >
-          <StarIcon className="w-4 h-4 fill-yellow-500 text-yellow-500" />
+          <StarLottieIcon className="w-4 h-4" />
           {t.starsTab}
         </Button>
         <Button
@@ -577,7 +598,7 @@ function HistoryView({ lang }: { lang: Language }) {
           size="sm"
           className="rounded-full px-6 flex items-center gap-2"
         >
-          <StarIcon className="w-4 h-4 fill-blue-500 text-blue-500" />
+          <Gem className="w-4 h-4 text-blue-500" />
           {t.premiumTab}
         </Button>
       </div>
@@ -593,11 +614,12 @@ function HistoryView({ lang }: { lang: Language }) {
           filteredOrders.map((order: any) => (
             <div key={order.id} className="flex items-center justify-between p-4 border-b border-white/5 last:border-0">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center border border-white/10 shadow-lg">
-                  <StarIcon className={cn(
-                    "w-6 h-6",
-                    order.websiteId === "TELEGRAM_STARS" ? "fill-yellow-500 text-yellow-500" : "fill-blue-500 text-blue-500"
-                  )} />
+                <div className="w-12 h-12 bg-zinc-800 rounded-full flex items-center justify-center border border-white/10 shadow-lg overflow-hidden">
+                  {order.websiteId === "TELEGRAM_STARS" ? (
+                    <StarLottieIcon className="w-8 h-8" />
+                  ) : (
+                    <Gem className="w-6 h-6 text-blue-500" />
+                  )}
                 </div>
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
