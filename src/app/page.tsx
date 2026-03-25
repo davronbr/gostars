@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BottomNav } from "@/components/BottomNav";
 import { Marketplace } from "@/components/Marketplace";
 import { Leaderboard } from "@/components/Leaderboard";
@@ -70,6 +70,7 @@ declare global {
 
 function StarLottieIcon({ className }: { className?: string }) {
   const [animationData, setAnimationData] = useState<any>(null);
+  const lottieRef = useRef<any>(null);
 
   useEffect(() => {
     fetch("https://lottie.host/8d258075-f9c1-4be7-bc2e-7419c6ae0c2a/ZrCWgaAqMT.json")
@@ -78,11 +79,29 @@ function StarLottieIcon({ className }: { className?: string }) {
       .catch((err) => console.error("Star Lottie error:", err));
   }, []);
 
+  useEffect(() => {
+    if (!animationData) return;
+
+    const interval = setInterval(() => {
+      if (lottieRef.current) {
+        lottieRef.current.goToAndPlay(0);
+      }
+    }, 10000); // Har 10 soniyada
+
+    return () => clearInterval(interval);
+  }, [animationData]);
+
   if (!animationData) return <StarIcon className={cn("w-5 h-5 fill-yellow-500 text-yellow-500", className)} />;
 
   return (
     <div className={cn("w-6 h-6 flex items-center justify-center", className)}>
-      <Lottie animationData={animationData} loop={true} className="w-full h-full scale-150" />
+      <Lottie 
+        lottieRef={lottieRef}
+        animationData={animationData} 
+        loop={false} 
+        autoplay={true}
+        className="w-full h-full scale-150" 
+      />
     </div>
   );
 }
