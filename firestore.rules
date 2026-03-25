@@ -13,14 +13,6 @@ service cloud.firestore {
      * - Private Data: Nested under /users/{userId}/ for strict path-based ownership.
      * - Public Marketplace: Top-level /websites/ and /developerProfiles/ for open discovery.
      * - Transactional Data: /orders/ are top-level and shared between buyers and sellers via denormalized IDs.
-     *
-     * Key Security Decisions:
-     * - User Privacy: Listing the root /users collection is strictly forbidden to prevent user harvesting.
-     * - Structural Segregation: Websites are split between a public top-level collection (published) 
-     *   and private user subcollections (drafts) to ensure clean query results.
-     * - Self-Creation: Users can create their own profiles if the document ID matches their authenticated UID.
-     * - Telegram Integration: The /users/{userId} document serves as the hub for integrations, including 
-     *   Telegram ID mapping, accessible only by the account owner.
      */
 
     // --- Global Helper Functions ---
@@ -44,11 +36,7 @@ service cloud.firestore {
     // --- Collection Rules ---
 
     /**
-     * @description Rules for core user profiles. Allows users to manage their own data, including Telegram integration fields.
      * @path /users/{userId}
-     * @allow Authenticated user with matching UID (get, create, update, delete).
-     * @deny Any user attempting to list all users or access another user's profile.
-     * @principle Path-based ownership and self-creation logic.
      */
     match /users/{userId} {
       allow list: if false;
@@ -57,13 +45,6 @@ service cloud.firestore {
       allow update: if isOwner(userId);
       allow delete: if isExistingOwner(userId);
 
-      /**
-       * @description Private draft websites and archives owned by the user.
-       * @path /users/{userId}/draftWebsites/{websiteId}
-       * @allow Owner listing and modifying their own drafts.
-       * @deny Public users or other developers viewing drafts.
-       * @principle Structural segregation for private vs public content.
-       */
       match /draftWebsites/{websiteId} {
         allow list, get: if isOwner(userId);
         allow create: if isOwner(userId) && request.resource.data.sellerId == userId;
@@ -73,11 +54,7 @@ service cloud.firestore {
     }
 
     /**
-     * @description Public professional profiles for developers.
      * @path /developerProfiles/{developerId}
-     * @allow Public read access. Creator must own the associated User account.
-     * @deny Unauthorized modification of professional details.
-     * @principle Public Read with Owner-Only Writes.
      */
     match /developerProfiles/{developerId} {
       allow get, list: if true;
@@ -85,13 +62,6 @@ service cloud.firestore {
       allow update: if isOwner(developerId) && request.resource.data.userId == resource.data.userId;
       allow delete: if isExistingOwner(developerId);
 
-      /**
-       * @description Reviews for a developer. Publicly readable, only review author can edit.
-       * @path /developerProfiles/{developerId}/reviews/{reviewId}
-       * @allow Anyone to read; review author to update/delete.
-       * @deny Users modifying reviews they didn't write.
-       * @principle Denormalized ownership (reviewerId) for write authorization.
-       */
       match /reviews/{reviewId} {
         allow get, list: if true;
         allow create: if isSignedIn() && request.resource.data.reviewerId == request.auth.uid;
@@ -99,13 +69,6 @@ service cloud.firestore {
         allow delete: if resource != null && isOwner(resource.data.reviewerId);
       }
 
-      /**
-       * @description Portfolio items showcased by a developer.
-       * @path /developerProfiles/{developerId}/portfolioItems/{portfolioItemId}
-       * @allow Public read access; developer-owner write access.
-       * @deny Non-owners modifying a developer's portfolio.
-       * @principle Path-based parent authorization.
-       */
       match /portfolioItems/{portfolioItemId} {
         allow get, list: if true;
         allow create: if isOwner(developerId);
@@ -115,11 +78,7 @@ service cloud.firestore {
     }
 
     /**
-     * @description Publicly listed website assets for sale.
      * @path /websites/{websiteId}
-     * @allow Public read access. Seller can manage their own listings.
-     * @deny Unauthorized listing creation or deletion.
-     * @principle Denormalized ownership (sellerId) for authorization independence.
      */
     match /websites/{websiteId} {
       allow get, list: if true;
@@ -129,11 +88,7 @@ service cloud.firestore {
     }
 
     /**
-     * @description Global library of technologies and frameworks.
      * @path /technologies/{technologyId}
-     * @allow Public read access for all users.
-     * @deny Client-side writes. Data managed by system/admin.
-     * @principle Read-only global reference data.
      */
     match /technologies/{technologyId} {
       allow get, list: if true;
@@ -141,26 +96,26 @@ service cloud.firestore {
     }
 
     /**
-     * @description Transaction records for website purchases.
      * @path /orders/{orderId}
-     * @allow Buyers and Sellers involved in the transaction (get, list, create, update).
-     * @deny Third parties viewing private financial transactions.
-     * @principle Shared access model via denormalized participant IDs.
+     * Users can read (get/list) orders where they are either the buyer or the seller.
      */
     match /orders/{orderId} {
-      allow get: if isParticipant(resource.data);
-      // Removed 'query.filters' as it is an invalid variable in Firestore Security Rules.
-      // For 'list' operations on collections with sensitive data, the rule must allow the
-      // operation broadly, and rely on the 'get' rule to filter accessible documents.
-      // If a client performs an unfiltered 'list' query, it will fail if the authenticated
-      // user is not a participant in *all* documents returned by the query. This effectively
-      // forces clients to include explicit filters (e.g., by buyerId or sellerId) to list
-      // only relevant orders.
-      allow list: if isSignedIn();
-      allow create: if isSignedIn() && (request.resource.data.buyerId == request.auth.uid || request.resource.data.sellerId == request.auth.uid);
-      allow update: if isParticipant(resource.data) && request.resource.data.buyerId == resource.data.buyerId && request.resource.data.sellerId == resource.data.sellerId;
-      allow delete: if false; // Transactions are immutable for audit trails.
+      allow read: if isSignedIn() && (
+        resource.data.buyerId == request.auth.uid || 
+        resource.data.sellerId == request.auth.uid
+      );
+      allow create: if isSignedIn() && (
+        request.resource.data.buyerId == request.auth.uid || 
+        request.resource.data.sellerId == request.auth.uid
+      );
+      allow update: if isSignedIn() && (
+        resource.data.buyerId == request.auth.uid || 
+        resource.data.sellerId == request.auth.uid
+      ) && (
+        request.resource.data.buyerId == resource.data.buyerId && 
+        request.resource.data.sellerId == resource.data.sellerId
+      );
+      allow delete: if false;
     }
   }
 }
-    
