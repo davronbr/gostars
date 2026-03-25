@@ -24,9 +24,10 @@ function GiftIcon({ gift }: { gift: GiftItem }) {
 
   useEffect(() => {
     if (gift.lottieUrl) {
+      // Telegram sovg'alari uchun animatsiya yuklash
       fetch(gift.lottieUrl)
         .then((res) => {
-          if (!res.ok) throw new Error("Network response was not ok");
+          if (!res.ok) throw new Error("Animatsiyani yuklab bo'lmadi");
           return res.json();
         })
         .then((data) => {
@@ -34,7 +35,8 @@ function GiftIcon({ gift }: { gift: GiftItem }) {
           setHasError(false);
         })
         .catch((err) => {
-          // CORS yoki tarmoq xatoligi bo'lsa, fallback emoji ko'rsatiladi
+          // Xatolik yuz bersa, fallback emoji ko'rsatiladi
+          console.warn("Lottie yuklashda xatolik:", err.message);
           setHasError(true);
         });
     }
@@ -42,8 +44,13 @@ function GiftIcon({ gift }: { gift: GiftItem }) {
 
   if (gift.lottieUrl && animationData && !hasError) {
     return (
-      <div className="w-full h-full flex items-center justify-center scale-150">
-        <Lottie animationData={animationData} loop={true} />
+      <div className="w-full h-full flex items-center justify-center scale-150 pointer-events-none">
+        <Lottie 
+          animationData={animationData} 
+          loop={true} 
+          autoplay={true}
+          style={{ width: '100%', height: '100%' }}
+        />
       </div>
     );
   }
@@ -64,7 +71,6 @@ export function MyGifts({ lang }: { lang: Language }) {
       name: "HEART GIFT", 
       price: 15, 
       icon: "💖", 
-      // Fragment/Telegram animatsiyalari ba'zan CORS tufayli fetch bo'lmasligi mumkin
       lottieUrl: "https://nft.fragment.com/gift/Heart-5170145012310081615.lottie.json" 
     },
     { id: "2", name: "TEDDY BEAR", price: 15, icon: "🧸" },
