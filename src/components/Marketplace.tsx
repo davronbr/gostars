@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import type { Language, NavTab } from "@/app/page";
 import { translations } from "@/app/page";
 import dynamic from "next/dynamic";
-import { Star, ChevronDown, X, ChevronLeft, Loader2, Plus, Check } from "lucide-react";
+import { Star, ChevronDown, X, ChevronLeft, Loader2, Plus, Check, Gem } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFirebase, useFirestore, addDocumentNonBlocking } from "@/firebase";
 import { Input } from "@/components/ui/input";
@@ -26,7 +26,6 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
   const [starsAnim, setStarsAnim] = useState<any>(null);
   const [premiumAnim, setPremiumAnim] = useState<any>(null);
   const [showPurchase, setShowPurchase] = useState(false);
-  const [isPurchasing, setIsPurchasing] = useState(false);
   const { user } = useFirebase();
   const firestore = useFirestore();
   const { toast } = useToast();
@@ -43,38 +42,6 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
       .catch((err) => console.error("Premium Lottie error:", err));
   }, []);
 
-  const handleBuyPremium = () => {
-    if (!user) {
-      toast({ title: t.error, description: t.loginToConnect, variant: "destructive" });
-      return;
-    }
-
-    setIsPurchasing(true);
-    const orderData = {
-      buyerId: user.uid,
-      websiteId: "TELEGRAM_PREMIUM",
-      sellerId: "SYSTEM",
-      orderDate: new Date().toISOString(),
-      status: "pending",
-      amount: 45000, 
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    const ordersRef = collection(firestore, 'orders');
-    addDocumentNonBlocking(ordersRef, orderData)
-      .then(() => {
-        toast({ title: t.success, description: t.orderCreated });
-        setTimeout(() => {
-          setIsPurchasing(false);
-          onTabChange?.("profile");
-        }, 1500);
-      })
-      .catch(() => {
-        setIsPurchasing(false);
-      });
-  };
-
   if (showPurchase && subTab === "stars") {
     return (
       <StarsPurchaseView 
@@ -83,6 +50,19 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
         onGoToHistory={() => onTabChange?.("profile")}
         user={user}
         starsAnim={starsAnim}
+        firestore={firestore}
+      />
+    );
+  }
+
+  if (showPurchase && subTab === "premium") {
+    return (
+      <PremiumPurchaseView 
+        lang={lang} 
+        onBack={() => setShowPurchase(false)} 
+        onGoToHistory={() => onTabChange?.("profile")}
+        user={user}
+        premiumAnim={premiumAnim}
         firestore={firestore}
       />
     );
@@ -120,10 +100,9 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
           <Button 
             size="lg"
             className="w-full"
-            disabled={isPurchasing}
-            onClick={() => subTab === "stars" ? setShowPurchase(true) : handleBuyPremium()}
+            onClick={() => setShowPurchase(true)}
           >
-            {isPurchasing ? <Loader2 className="w-5 h-5 animate-spin" /> : (subTab === "stars" ? t.buyStars : "Premium sotib olish")}
+            {subTab === "stars" ? t.buyStars : "Premium sotib olish"}
           </Button>
         </div>
       </div>
@@ -190,7 +169,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, fires
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 animate-in slide-in-from-right duration-500 pb-64">
+    <div className="min-h-screen bg-black text-white p-6 animate-in slide-in-from-right duration-500 pb-64 overflow-y-auto no-scrollbar">
       <header className="flex items-center gap-4 mb-10 mt-6">
         <Button size="icon" variant="ghost" className="rounded-full" onClick={onBack}>
           <ChevronLeft className="w-6 h-6" />
@@ -202,7 +181,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, fires
         <div className="w-32 h-32 mb-6">
           {starsAnim && <Lottie animationData={starsAnim} loop={true} className="w-full h-full scale-125" />}
         </div>
-        <div className="bg-zinc-900 px-6 py-2 rounded-full border border-white/10 flex items-center gap-2">
+        <div className="bg-zinc-900 px-6 py-2 rounded-full border border-white/10 flex items-center gap-2 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]">
           <Star className="w-5 h-5 fill-yellow-500 text-yellow-500" />
           <span className="text-2xl font-black tracking-tighter">
             {selectedStars === "custom" ? (customAmount || "0") : selectedStars}
@@ -281,7 +260,129 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, fires
       <div className="fixed bottom-32 left-0 right-0 px-6 max-w-2xl mx-auto z-50">
         <Button 
           size="lg" 
-          className="w-full h-16 rounded-[2rem] bg-white text-black hover:bg-zinc-200 transition-all font-black"
+          className="w-full h-16 rounded-[2rem] bg-white text-black hover:bg-zinc-200 transition-all font-black shadow-2xl"
+          disabled={isProcessing}
+          onClick={handlePurchase}
+        >
+          {isProcessing ? (
+            <Loader2 className="w-6 h-6 animate-spin" />
+          ) : (
+            `${currentPrice.toLocaleString()} UZS TO'LASH`
+          )}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function PremiumPurchaseView({ lang, onBack, onGoToHistory, user, premiumAnim, firestore }: any) {
+  const t = translations[lang as Language];
+  const { toast } = useToast();
+  const [selectedPlan, setSelectedPlan] = useState(3); // Months
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const premiumPlans = [
+    { months: 3, price: 120000, label: "3 OY" },
+    { months: 6, price: 180000, label: "6 OY" },
+    { months: 12, price: 300000, label: "12 OY" },
+  ];
+
+  const currentPrice = premiumPlans.find(p => p.months === selectedPlan)?.price || 0;
+
+  const handlePurchase = async () => {
+    if (!user) {
+      toast({ title: t.error, description: t.loginToConnect, variant: "destructive" });
+      return;
+    }
+
+    setIsProcessing(true);
+    const orderData = {
+      buyerId: user.uid,
+      websiteId: "TELEGRAM_PREMIUM",
+      sellerId: "SYSTEM",
+      orderDate: new Date().toISOString(),
+      status: "pending",
+      amount: currentPrice,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      const ordersRef = collection(firestore, 'orders');
+      await addDocumentNonBlocking(ordersRef, orderData);
+      toast({ title: t.success, description: t.orderCreated });
+      setTimeout(() => {
+        setIsProcessing(false);
+        onGoToHistory();
+      }, 1500);
+    } catch (error) {
+      console.error("Order error:", error);
+      setIsProcessing(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white p-6 animate-in slide-in-from-right duration-500 pb-64 overflow-y-auto no-scrollbar">
+      <header className="flex items-center gap-4 mb-10 mt-6">
+        <Button size="icon" variant="ghost" className="rounded-full" onClick={onBack}>
+          <ChevronLeft className="w-6 h-6" />
+        </Button>
+        <h2 className="text-xl font-black tracking-tight">Premium Sotib Olish</h2>
+      </header>
+
+      <div className="flex flex-col items-center mb-10">
+        <div className="w-32 h-32 mb-6 flex items-center justify-center">
+          {premiumAnim ? (
+            <Lottie animationData={premiumAnim} loop={true} className="w-full h-full scale-150" />
+          ) : (
+            <div className="w-24 h-24 bg-white/5 rounded-full animate-pulse" />
+          )}
+        </div>
+        <div className="bg-zinc-900 px-6 py-2 rounded-full border border-white/10 flex items-center gap-2 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]">
+          <Gem className="w-5 h-5 text-blue-400" />
+          <span className="text-2xl font-black tracking-tighter uppercase">
+            {selectedPlan} Oylik
+          </span>
+        </div>
+      </div>
+
+      <div className="space-y-3 mb-8">
+        <div className="px-2 mb-2">
+           <span className="text-xs font-black text-zinc-500 tracking-widest uppercase">Obuna Rejalari</span>
+        </div>
+
+        <div className="grid gap-3">
+          {premiumPlans.map((plan) => (
+            <button
+              key={plan.months}
+              onClick={() => setSelectedPlan(plan.months)}
+              className={cn(
+                "flex items-center justify-between p-5 rounded-[1.8rem] border transition-all shadow-[inset_0_1.5px_0_rgba(255,255,255,0.05)]",
+                selectedPlan === plan.months ? "bg-zinc-800 border-blue-500/50" : "bg-zinc-900 border-white/5 hover:bg-zinc-800"
+              )}
+            >
+              <div className="flex items-center gap-4">
+                <div className={cn(
+                  "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
+                  selectedPlan === plan.months ? "border-blue-500" : "border-white/20"
+                )}>
+                  {selectedPlan === plan.months && <div className="w-3 h-3 rounded-full bg-blue-500" />}
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="font-black text-white text-lg tracking-tight">{plan.label}</span>
+                  <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Premium Obuna</span>
+                </div>
+              </div>
+              <span className="text-base font-black text-white">{plan.price.toLocaleString()} UZS</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="fixed bottom-32 left-0 right-0 px-6 max-w-2xl mx-auto z-50">
+        <Button 
+          size="lg" 
+          className="w-full h-16 rounded-[2rem] bg-white text-black hover:bg-zinc-200 transition-all font-black shadow-2xl"
           disabled={isProcessing}
           onClick={handlePurchase}
         >
