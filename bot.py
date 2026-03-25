@@ -40,12 +40,13 @@ async def main():
         # 5470177992950946662 -> Qo'l (pastga qaragan)
         
         welcome_text = (
-            f"<emoji id='5798587088077066898'>🐥</emoji> Salom, {name}!\n\n"
-            f"<emoji id='5767374504175078683'>🛒</emoji> Pastdagi tugma orqali do'konimizga\n"
-            f"kirishingiz mumkin: <emoji id='5470177992950946662'>👇</emoji>"
+    
+            f"<tg-emoji id='5798587088077066898'>🐥</tg-emoji> Salom, {name}!\n\n"
+            f"<tg-emoji id='5767374504175078683'>🛒</tg-emoji> Pastdagi tugma orqali do'konimizga\n"
+            f"kirishingiz mumkin: <tg-emoji id='5470177992950946662'>👇</tg-emoji>"
         )
         
-        # Web App tugmasini yaratish
+        # Web App tugmasi (Telethon types orqali)
         buttons = [
             [types.KeyboardButtonWebView("🛒 Xarid qilish", url=WEB_APP_URL)]
         ]
