@@ -7,11 +7,11 @@ Ushbu loyihani Render platformasiga chiqarish uchun quyidagi qadamlarni bajaring
 Agar hali yuklamagan bo'lsangiz, terminalda:
 ```bash
 git add .
-git commit -m "Fix: build configuration"
+git commit -m "Fix: build configuration and add bot.py"
 git push origin main
 ```
 
-### 2. Render-da sozlash
+### 2. Render-da sozlash (Web Service)
 1. [Render.com](https://render.com) ga kiring.
 2. **New +** -> **Web Service** tanlang.
 3. GitHub repozitoriyangizni ulang.
@@ -20,11 +20,16 @@ git push origin main
    - **Build Command:** `npm install && npm run build`
    - **Start Command:** `npm run start`
 
-### 3. Environment Variables (Environment bo'limi)
+### 3. Telegram Botni ishga tushirish (Background Worker)
+Agar `bot.py` ni Render-da ishlatmoqchi bo'lsangiz, alohida **Background Worker** yarating:
+- **Runtime:** `Python`
+- **Build Command:** `pip install telethon python-dotenv`
+- **Start Command:** `python bot.py`
+
+### 4. Environment Variables (Environment bo'limi)
 - `GEMINI_API_KEY`: Google AI kalitingiz.
+- `TELEGRAM_BOT_TOKEN`: BotFather'dan olingan token.
 
-### 4. Xatolik yuz bersa (Logs)
-Agar "Could not find a production build" xatosi chiqsa, Render dashboard-dagi **Events** bo'limida build jarayoni "Live" bo'lganini yoki xatolik bilan tugaganini tekshiring. Build muvaffaqiyatli o'tishi shart.
-
-### 5. Telegram Bot Webhook
+### 5. Telegram Bot Webhook (Ixtiyoriy)
+Agar API route-dan foydalanmoqchi bo'lsangiz:
 `https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://SIZNING_URL.onrender.com/api/telegram`
