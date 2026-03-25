@@ -27,7 +27,8 @@ import {
   Loader2,
   Globe,
   Link,
-  Gem
+  Gem,
+  Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -239,6 +240,9 @@ export const translations = {
     devDirectoryDesc: "Katalog to'ldirilmoqda...",
     success: "Muvaffaqiyatli",
     orderCreated: "Buyurtma yaratildi. To'lovni kuting.",
+    activateBot: "Botni faollashtirish",
+    botActivated: "Bot yoqildi!",
+    botActivatedDesc: "Endi botingiz xabarlarga javob beradi.",
   },
   ru: {
     market: "Go Stars",
@@ -334,6 +338,9 @@ export const translations = {
     devDirectoryDesc: "Каталог наполняется...",
     success: "Успешно",
     orderCreated: "Заказ создан. Ожидайте оплаты.",
+    activateBot: "Активировать бота",
+    botActivated: "Бот активирован!",
+    botActivatedDesc: "Теперь ваш бот будет отвечать на сообщения.",
   },
   en: {
     market: "Go Stars",
@@ -429,6 +436,9 @@ export const translations = {
     devDirectoryDesc: "Directory is being populated...",
     success: "Success",
     orderCreated: "Order created. Awaiting payment.",
+    activateBot: "Activate Bot",
+    botActivated: "Bot Activated!",
+    botActivatedDesc: "Your bot will now respond to messages.",
   }
 };
 
@@ -725,6 +735,7 @@ function SettingsModal({ isOpen, onClose, lang, walletMethod, tgUser, user, onOp
   const t = translations[lang];
   const { toast } = useToast();
   const firestore = useFirestore();
+  const [isActivating, setIsActivating] = useState(false);
 
   const userProfileRef = useMemoFirebase(() => 
     user ? doc(firestore, 'users', user.uid) : null, 
@@ -733,6 +744,33 @@ function SettingsModal({ isOpen, onClose, lang, walletMethod, tgUser, user, onOp
   const { data: userProfile } = useDoc<{telegramUserId?: string}>(userProfileRef);
 
   const isTelegramConnected = !!userProfile?.telegramUserId;
+
+  const handleActivateBot = async () => {
+    setIsActivating(true);
+    try {
+      const token = "8711207347:AAH38kfcpBK04gB0Xm0wOSLPsz_VcYph80w";
+      const webhookUrl = "https://gostars.onrender.com/api/telegram";
+      const response = await fetch(`https://api.telegram.org/bot${token}/setWebhook?url=${webhookUrl}`);
+      const data = await response.json();
+      
+      if (data.ok) {
+        toast({
+          title: t.botActivated,
+          description: t.botActivatedDesc,
+        });
+      } else {
+        throw new Error(data.description);
+      }
+    } catch (err: any) {
+      toast({
+        title: t.error,
+        description: err.message,
+        variant: "destructive"
+      });
+    } finally {
+      setIsActivating(false);
+    }
+  };
 
   const handleConnectTelegram = () => {
     if (user && tgUser?.id) {
@@ -778,6 +816,14 @@ function SettingsModal({ isOpen, onClose, lang, walletMethod, tgUser, user, onOp
           color: "bg-blue-500",
           onClick: onOpenWalletModal,
           disabled: false,
+        },
+        {
+          icon: Zap,
+          label: t.activateBot,
+          value: "",
+          color: "bg-yellow-500",
+          onClick: handleActivateBot,
+          disabled: isActivating,
         },
         {
           icon: Link,
