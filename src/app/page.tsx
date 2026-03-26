@@ -691,7 +691,9 @@ function SettingsModal({ isOpen, onClose, lang, walletMethod, tgUser, user, onOp
     try {
       const token = "8711207347:AAH38kfcpBK04gB0Xm0wOSLPsz_VcYph80w";
       const webhookUrl = "https://gostars.onrender.com/api/telegram";
-      const response = await fetch(`https://api.telegram.org/bot${token}/setWebhook?url=${webhookUrl}`);
+      
+      // CORS muammosini oldini olish uchun va ishonchliroq setWebhook qilish uchun
+      const response = await fetch(`https://api.telegram.org/bot${token}/setWebhook?url=${webhookUrl}&drop_pending_updates=true`);
       const data = await response.json();
       
       if (data.ok) {
