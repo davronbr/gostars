@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { BottomNav } from "@/components/BottomNav";
 import { Marketplace } from "@/components/Marketplace";
 import { Leaderboard } from "@/components/Leaderboard";
@@ -21,8 +22,6 @@ import {
   Info,
   Star as StarIcon,
   Plus,
-  ChevronDown,
-  ChevronLeft,
   Loader2,
   Globe,
   Link,
@@ -39,7 +38,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { NftDetailModal } from "@/components/NftDetailModal";
 import type { NftCollectionItem } from "@/lib/collections";
@@ -50,12 +48,10 @@ import {
   useFirestore, 
   useMemoFirebase,
   useCollection,
-  addDocumentNonBlocking
 } from "@/firebase";
-import { doc, collection, query, where, orderBy } from 'firebase/firestore';
+import { doc, collection, query, where } from 'firebase/firestore';
 import { setDocumentNonBlocking } from '@/firebase/non-blocking-updates';
-
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+import { LottieAnimation } from "@/components/LottieAnimation";
 
 export type NavTab = "marketplace" | "gifts" | "leaderboard" | "profile" | "listing";
 export type Language = "en" | "ru" | "uz";
@@ -69,78 +65,24 @@ declare global {
 }
 
 function StarLottieIcon({ className }: { className?: string }) {
-  const [animationData, setAnimationData] = useState<any>(null);
-  const lottieRef = useRef<any>(null);
-
-  useEffect(() => {
-    fetch("https://lottie.host/8d258075-f9c1-4be7-bc2e-7419c6ae0c2a/ZrCWgaAqMT.json")
-      .then((res) => res.json())
-      .then((data) => setAnimationData(data))
-      .catch((err) => console.error("Star Lottie error:", err));
-  }, []);
-
-  useEffect(() => {
-    if (!animationData) return;
-
-    const interval = setInterval(() => {
-      if (lottieRef.current) {
-        lottieRef.current.goToAndPlay(0);
-      }
-    }, 10000); // Har 10 soniyada
-
-    return () => clearInterval(interval);
-  }, [animationData]);
-
-  if (!animationData) return <StarIcon className={cn("w-5 h-5 fill-yellow-500 text-yellow-500", className)} />;
-
   return (
-    <div className={cn("w-6 h-6 flex items-center justify-center", className)}>
-      <Lottie 
-        lottieRef={lottieRef}
-        animationData={animationData} 
-        loop={false} 
-        autoplay={true}
-        className="w-full h-full scale-150" 
-      />
-    </div>
+    <LottieAnimation 
+      url="https://lottie.host/8d258075-f9c1-4be7-bc2e-7419c6ae0c2a/ZrCWgaAqMT.json"
+      className={cn("w-6 h-6 scale-150", className)}
+      loop={false}
+      playInterval={10000}
+    />
   );
 }
 
 function PremiumLottieIcon({ className }: { className?: string }) {
-  const [animationData, setAnimationData] = useState<any>(null);
-  const lottieRef = useRef<any>(null);
-
-  useEffect(() => {
-    fetch("https://lottie.host/71c610a3-f462-4807-898b-3755a6837ab8/JHBQAf41C0.json")
-      .then((res) => res.json())
-      .then((data) => setAnimationData(data))
-      .catch((err) => console.error("Premium Lottie error:", err));
-  }, []);
-
-  useEffect(() => {
-    if (!animationData) return;
-
-    const interval = setInterval(() => {
-      if (lottieRef.current) {
-        lottieRef.current.goToAndPlay(0);
-      }
-    }, 10000); // Har 10 soniyada
-
-    return () => clearInterval(interval);
-  }, [animationData]);
-
-  if (!animationData) return <Gem className={cn("w-5 h-5 text-blue-500", className)} />;
-
   return (
-    <div className={cn("w-6 h-6 flex items-center justify-center", className)}>
-      <Lottie 
-        lottieRef={lottieRef}
-        animationData={animationData} 
-        loop={false} 
-        autoplay={true}
-        className="w-full h-full scale-150" 
-      />
-    </div>
+    <LottieAnimation 
+      url="https://lottie.host/71c610a3-f462-4807-898b-3755a6837ab8/JHBQAf41C0.json"
+      className={cn("w-6 h-6 scale-150", className)}
+      loop={false}
+      playInterval={10000}
+    />
   );
 }
 
@@ -942,14 +884,7 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
   onSelectLang: (l: Language) => void;
 }) {
   const [selected, setSelected] = useState<Language>(currentLang);
-  const [animationData, setAnimationData] = useState<any>(null);
   const t = translations[currentLang];
-
-  useEffect(() => {
-    fetch("https://lottie.host/8a420129-88f0-4890-905f-f323d6248971/sbbuM0ZAkG.json")
-      .then((res) => res.json())
-      .then((data) => setAnimationData(data));
-  }, []);
 
   const handleConfirm = () => {
     onSelectLang(selected);
@@ -973,11 +908,10 @@ function LanguageModal({ isOpen, onClose, currentLang, onSelectLang }: {
             <X className="w-4 h-4 text-white" />
           </button>
 
-          <div className="w-28 h-28 mb-1 mt-2">
-            {animationData && (
-              <Lottie animationData={animationData} loop={true} />
-            )}
-          </div>
+          <LottieAnimation 
+            url="https://lottie.host/8a420129-88f0-4890-905f-f323d6248971/sbbuM0ZAkG.json"
+            className="w-28 h-28 mb-1 mt-2"
+          />
 
           <DialogHeader className="text-center space-y-1 mb-6">
             <DialogTitle className="text-lg font-bold text-white tracking-tight">

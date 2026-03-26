@@ -1,19 +1,17 @@
 
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { Language, NavTab } from "@/app/page";
 import { translations } from "@/app/page";
-import dynamic from "next/dynamic";
-import { ChevronDown, X, ChevronLeft, Loader2, Plus, Check, Gem } from "lucide-react";
+import { ChevronLeft, Loader2, Plus, Gem } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFirebase, useFirestore, addDocumentNonBlocking } from "@/firebase";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { collection } from "firebase/firestore";
-
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+import { LottieAnimation } from "@/components/LottieAnimation";
 
 interface MarketplaceProps {
   lang: Language;
@@ -22,101 +20,32 @@ interface MarketplaceProps {
 }
 
 function StarLottie({ className }: { className?: string }) {
-  const [animationData, setAnimationData] = useState<any>(null);
-  const lottieRef = useRef<any>(null);
-
-  useEffect(() => {
-    fetch("https://lottie.host/8d258075-f9c1-4be7-bc2e-7419c6ae0c2a/ZrCWgaAqMT.json")
-      .then((res) => res.json())
-      .then((data) => setAnimationData(data))
-      .catch((err) => console.error("Star Lottie error:", err));
-  }, []);
-
-  useEffect(() => {
-    if (!animationData) return;
-
-    const interval = setInterval(() => {
-      if (lottieRef.current) {
-        lottieRef.current.goToAndPlay(0);
-      }
-    }, 10000); // Har 10 soniyada
-
-    return () => clearInterval(interval);
-  }, [animationData]);
-
-  if (!animationData) return <div className={cn("w-5 h-5 bg-yellow-500/20 rounded-full animate-pulse", className)} />;
-
   return (
-    <div className={cn("w-5 h-5 flex items-center justify-center", className)}>
-      <Lottie 
-        lottieRef={lottieRef}
-        animationData={animationData} 
-        loop={false} 
-        autoplay={true}
-        className="w-full h-full scale-150" 
-      />
-    </div>
+    <LottieAnimation 
+      url="https://lottie.host/8d258075-f9c1-4be7-bc2e-7419c6ae0c2a/ZrCWgaAqMT.json"
+      className={cn("w-5 h-5", className)}
+      loop={false}
+      playInterval={10000}
+    />
   );
 }
 
 function PremiumLottieIcon({ className }: { className?: string }) {
-  const [animationData, setAnimationData] = useState<any>(null);
-  const lottieRef = useRef<any>(null);
-
-  useEffect(() => {
-    fetch("https://lottie.host/71c610a3-f462-4807-898b-3755a6837ab8/JHBQAf41C0.json")
-      .then((res) => res.json())
-      .then((data) => setAnimationData(data))
-      .catch((err) => console.error("Premium Lottie error:", err));
-  }, []);
-
-  useEffect(() => {
-    if (!animationData) return;
-
-    const interval = setInterval(() => {
-      if (lottieRef.current) {
-        lottieRef.current.goToAndPlay(0);
-      }
-    }, 10000); // Har 10 soniyada
-
-    return () => clearInterval(interval);
-  }, [animationData]);
-
-  if (!animationData) return <Gem className={cn("w-5 h-5 text-blue-500", className)} />;
-
   return (
-    <div className={cn("w-5 h-5 flex items-center justify-center", className)}>
-      <Lottie 
-        lottieRef={lottieRef}
-        animationData={animationData} 
-        loop={false} 
-        autoplay={true}
-        className="w-full h-full scale-150" 
-      />
-    </div>
+    <LottieAnimation 
+      url="https://lottie.host/71c610a3-f462-4807-898b-3755a6837ab8/JHBQAf41C0.json"
+      className={cn("w-5 h-5", className)}
+      loop={false}
+      playInterval={10000}
+    />
   );
 }
 
 export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
   const t = translations[lang];
-  const [starsAnim, setStarsAnim] = useState<any>(null);
-  const [premiumAnim, setPremiumAnim] = useState<any>(null);
   const [showPurchase, setShowPurchase] = useState(false);
   const { user } = useFirebase();
   const firestore = useFirestore();
-  const { toast } = useToast();
-
-  useEffect(() => {
-    fetch("https://lottie.host/fb94bf98-c523-488c-8ab6-df7218649653/al2EJYZN81.json")
-      .then((res) => res.json())
-      .then((data) => setStarsAnim(data))
-      .catch((err) => console.error("Stars Lottie error:", err));
-
-    fetch("https://lottie.host/361e7ecf-6af1-4413-9008-017aad9cd3c5/U1vvCnDPk3.json")
-      .then((res) => res.json())
-      .then((data) => setPremiumAnim(data))
-      .catch((err) => console.error("Premium Lottie error:", err));
-  }, []);
 
   if (showPurchase && subTab === "stars") {
     return (
@@ -125,7 +54,6 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
         onBack={() => setShowPurchase(false)} 
         onGoToHistory={() => onTabChange?.("profile")}
         user={user}
-        starsAnim={starsAnim}
         firestore={firestore}
       />
     );
@@ -138,7 +66,6 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
         onBack={() => setShowPurchase(false)} 
         onGoToHistory={() => onTabChange?.("profile")}
         user={user}
-        premiumAnim={premiumAnim}
         firestore={firestore}
       />
     );
@@ -151,17 +78,15 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
           
           <div className="relative w-40 h-40 mb-10 flex items-center justify-center">
             {subTab === "stars" ? (
-              starsAnim ? (
-                <Lottie animationData={starsAnim} loop={true} className="w-full h-full scale-125" />
-              ) : (
-                <div className="w-24 h-24 bg-white/5 rounded-full animate-pulse" />
-              )
+              <LottieAnimation 
+                url="https://lottie.host/fb94bf98-c523-488c-8ab6-df7218649653/al2EJYZN81.json"
+                className="w-full h-full scale-125"
+              />
             ) : (
-              premiumAnim ? (
-                <Lottie animationData={premiumAnim} loop={true} className="w-full h-full scale-125" />
-              ) : (
-                <div className="w-24 h-24 bg-white/5 rounded-full animate-pulse" />
-              )
+              <LottieAnimation 
+                url="https://lottie.host/361e7ecf-6af1-4413-9008-017aad9cd3c5/U1vvCnDPk3.json"
+                className="w-full h-full scale-125"
+              />
             )}
           </div>
 
@@ -186,7 +111,7 @@ export function Marketplace({ lang, subTab, onTabChange }: MarketplaceProps) {
   );
 }
 
-function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, firestore }: any) {
+function StarsPurchaseView({ lang, onBack, onGoToHistory, user, firestore }: any) {
   const t = translations[lang as Language];
   const { toast } = useToast();
   const [selectedStars, setSelectedStars] = useState<number | "custom">(50);
@@ -254,9 +179,10 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, fires
       </header>
 
       <div className="flex flex-col items-center mb-10">
-        <div className="w-32 h-32 mb-6">
-          {starsAnim && <Lottie animationData={starsAnim} loop={true} className="w-full h-full scale-125" />}
-        </div>
+        <LottieAnimation 
+          url="https://lottie.host/fb94bf98-c523-488c-8ab6-df7218649653/al2EJYZN81.json"
+          className="w-32 h-32 mb-6 scale-125"
+        />
         <div className="bg-zinc-900 px-6 py-2 rounded-full border border-white/10 flex items-center gap-2 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]">
           <StarLottie className="w-6 h-6" />
           <span className="text-2xl font-black tracking-tighter">
@@ -351,7 +277,7 @@ function StarsPurchaseView({ lang, onBack, onGoToHistory, user, starsAnim, fires
   );
 }
 
-function PremiumPurchaseView({ lang, onBack, onGoToHistory, user, premiumAnim, firestore }: any) {
+function PremiumPurchaseView({ lang, onBack, onGoToHistory, user, firestore }: any) {
   const t = translations[lang as Language];
   const { toast } = useToast();
   const [selectedPlan, setSelectedPlan] = useState(3); // Months
@@ -407,13 +333,10 @@ function PremiumPurchaseView({ lang, onBack, onGoToHistory, user, premiumAnim, f
       </header>
 
       <div className="flex flex-col items-center mb-10">
-        <div className="w-32 h-32 mb-6 flex items-center justify-center">
-          {premiumAnim ? (
-            <Lottie animationData={premiumAnim} loop={true} className="w-full h-full scale-125" />
-          ) : (
-            <div className="w-24 h-24 bg-white/5 rounded-full animate-pulse" />
-          )}
-        </div>
+        <LottieAnimation 
+          url="https://lottie.host/361e7ecf-6af1-4413-9008-017aad9cd3c5/U1vvCnDPk3.json"
+          className="w-32 h-32 mb-6 scale-125"
+        />
         <div className="bg-zinc-900 px-6 py-2 rounded-full border border-white/10 flex items-center gap-2 shadow-[inset_0_1.5px_0_rgba(255,255,255,0.1)]">
           <PremiumLottieIcon className="w-5 h-5" />
           <span className="text-2xl font-black tracking-tighter uppercase">

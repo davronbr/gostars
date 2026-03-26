@@ -1,7 +1,6 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import {
   Dialog,
   DialogContent,
@@ -13,8 +12,7 @@ import { X, Eye, Share2 } from "lucide-react";
 import type { Language } from "@/app/page";
 import { translations } from "@/app/page";
 import type { NftCollectionItem } from "@/lib/collections";
-
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+import { LottieAnimation } from "@/components/LottieAnimation";
 
 interface NftDetailModalProps {
   isOpen: boolean;
@@ -24,20 +22,7 @@ interface NftDetailModalProps {
 }
 
 export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalProps) {
-  const [animationData, setAnimationData] = useState<any>(null);
   const t = translations[lang];
-
-  useEffect(() => {
-    if (isOpen && nft?.lottieUrl) {
-      fetch(nft.lottieUrl)
-        .then((res) => res.json())
-        .then((data) => setAnimationData(data))
-        .catch(console.error);
-    }
-    if (!isOpen) {
-      setAnimationData(null);
-    }
-  }, [isOpen, nft]);
 
   if (!nft) return null;
 
@@ -67,10 +52,8 @@ export function NftDetailModal({ isOpen, onClose, nft, lang }: NftDetailModalPro
               </button>
               
               <div className="w-full h-full">
-                  {animationData ? (
-                  <Lottie animationData={animationData} loop={true} className="w-full h-full" />
-                  ) : (
-                  <div className="w-full h-full animate-pulse" />
+                  {nft.lottieUrl && (
+                    <LottieAnimation url={nft.lottieUrl} className="w-full h-full" />
                   )}
               </div>
           </div>
